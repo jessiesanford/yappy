@@ -1,0 +1,21 @@
+.navbar {
+    background: #202020;
+    padding: 20px;
+    color: #fff;
+    font-family: Lato
+}
+
+.navbar__content {
+    margin: auto 0px;
+    display: flex;
+}
+
+.navbar__panel {
+    margin-left: auto;
+}
+
+.logo {
+    font-size: 18pt;
+    font-weight: bold;
+    color: #fff;
+}
