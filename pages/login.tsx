@@ -1,43 +1,75 @@
-import BaseLayout from "../components/layouts/baseLayout";
-import {FormEvent, useCallback, useEffect} from "react";
-import { useRouter } from "next/router";
+import { FormEvent, useCallback, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import BareLayout from '../components/layouts/bareLayout';
+import {signIn} from 'next-auth/react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
+type LoginForm = {
+  email: string,
+  password: string,
+}
 
 export default function Index({ user }: { user: any }) {
-  const router = useRouter()
-  const handleSubmit = useCallback((e: FormEvent) => {
-    e.preventDefault()
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<LoginForm>({
+    reValidateMode: 'onSubmit',
+  });
 
-    fetch('/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        /* Form data */
-      }),
-    }).then((res) => {
-      // Do a fast client-side transition to the already prefetched dashboard page
-      if (res.ok) router.push('/dashboard')
-    })
-  }, [])
+  const submitLoginForm: SubmitHandler<LoginForm> = useCallback((data) => {
+    signIn('credentials', { email: data.email, password: data.password }).then((e) => {
+      router.push('/studio');
+    }).catch((e) => {
+      console.log(e);
+    });
+  }, [router]);
 
   useEffect(() => {
-    // Prefetch the dashboard page
-    router.prefetch('/dashboard')
-  }, [])
+    router.prefetch('/studio');
+  }, [router]);
+
+  const renderFieldRequired = (msg = 'This field is required') => {
+    return (
+      <div className={'form__error'}>
+        {msg}
+      </div>
+    );
+  };
 
   return (
-    <BaseLayout>
-      <div>
-        <div>Login</div>
-        <form onSubmit={(e) => handleSubmit(e)}>
-          <div>
-            <input type={'text'} name={'email'}/>
-          </div>
-          <div>
-            <input type={'password'} name={'password'}/>
-          </div>
-          <button type={'submit'}>Login</button>
-        </form>
+    <BareLayout>
+      <div className={'flex-container'}>
+        <div className={'signup-container'}>
+          <h1>Login</h1>
+          <form onSubmit={handleSubmit(submitLoginForm)}>
+            <div className={'input-container'}>
+              <label htmlFor={'password'}>Email</label>
+              <input type={'text'}
+                     {...register('email', {
+                       required: true,
+                     })}
+              />
+              {errors?.email?.type === 'required' && renderFieldRequired()}
+            </div>
+            <div className={'input-container'}>
+              <label htmlFor={'password'}>Password</label>
+              <input type={'password'}
+                     {...register('password', {
+                       required: true,
+                     })}
+              />
+              {errors?.password?.type === 'required' && renderFieldRequired()}
+            </div>
+            <div className={'form-row'}>
+              <button type={'submit'}>Login</button>
+            </div>
+          </form>
+        </div>
       </div>
-    </BaseLayout>
-  )
+    </BareLayout>
+  );
 }

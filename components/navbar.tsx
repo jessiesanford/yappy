@@ -1,28 +1,25 @@
 import styles from '../styles/Navbar.module.css'
+import { useSession } from 'next-auth/react';
 
-export default function Navbar({ user }: any) {
+export default function Navbar() {
+  const { data: session } = useSession();
+  const user = session?.user;
+
   const generateUserPanel = () => {
     return (
       <div className={styles.navbar__panel}>
-        User
+        {user.name}
       </div>
-    )
-  }
+    );
+  };
 
-  const generateGuestPanel = () => {
-    return (
-      <div className={styles.navbar__panel}>
-        Guest
-      </div>
-    )
-  }
 
   return (
     <div className={styles.navbar}>
       <div className={styles.navbar__content}>
         <div className={styles.logo}> Celtx Gem</div>
-        {user ? generateUserPanel() : generateGuestPanel()}
+        {generateUserPanel()}
       </div>
     </div>
-  )
+  );
 }

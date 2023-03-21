@@ -1,42 +1,91 @@
-import BaseLayout from "../components/layouts/baseLayout";
-import StudioLayout from "../components/layouts/studioLayout";
-import {ProjectFeedMock} from "../static/projectMocks";
+import { useSession, signIn, signOut } from "next-auth/react";
+import StudioLayout from '../components/layouts/studioLayout';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { ProjectItem } from '../components/projectFeed/projectItem';
+import { ProjectFeedEvents, ProjectFeedUpdated } from '../static/events';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './api/auth/[...nextauth]';
+import { GetServerSidePropsContext } from 'next';
+import { ProjectFeedMock } from "../static/projectMocks";
 
-export default function Studio() {
-  const renderProjectFeed = ((projectFeed: Array<any>) => {
-    return projectFeed.map((projectItem) => {
-      return <ProjectItem key={projectItem.id} data={projectItem}/>
-    })
+const ProjectFeedContextProps = {
+  getProjects: () => {
+  },
+  setProjects: () => {
+  },
+  deleteProject: () => {
+  },
+};
+
+export const ProjectFeedContext = createContext(ProjectFeedContextProps);
+export const useProjectFeedContext = () => useContext(ProjectFeedContext);
+
+const getProjects = async () => {
+  const dev = process.env.NODE_ENV !== 'production';
+  const server = dev ? 'http://localhost:3000' : 'https://your_deployment.server.com';
+
+  const results = await fetch(`${server}/api/project/get`, {
+    method: 'GET',
   });
-
-  return (
-    <StudioLayout>
-      <div className={'project-list'}>
-        {renderProjectFeed(ProjectFeedMock)}
-      </div>
-    </StudioLayout>
-  )
+  return await results.json();
 }
 
-export function ProjectItem(props: any) {
+const deleteProject = async (id: number) => {
+  await fetch('/api/project/delete', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      id
+    }),
+  });
+  ProjectFeedUpdated();
+};
+
+export default function Studio(props) {
+  // const { data: session } = useSession();
+  const [projects, setProjects] = useState(ProjectFeedMock);
+
+  useEffect(() => {
+    document.addEventListener(ProjectFeedEvents.PROJECT_FEED_UPDATED, () => {
+      getProjects().then((projects) => {
+        setProjects(ProjectFeedMock.concat(projects));
+      });
+    });
+  }, []);
+
+  const renderProjectFeed = () => {
+    return projects.map((projectItem) => {
+      return <ProjectItem key={projectItem.id} data={projectItem}/>
+    });
+  };
+
   return (
-    <div className={'project-item'}>
-      <div className={'project-item__img-container'}>
-        <div className={'project-item__ctx-anchor'}>
-          <i className="fa-solid fa-user"></i>
+    <ProjectFeedContext.Provider value={{ getProjects: getProjects, setProjects, deleteProject }}>
+      <StudioLayout>
+        <div className={'project-list'}>
+          {renderProjectFeed()}
         </div>
-        <div className={'project-item__img'}>
-          <img src={props.data.img}/>
-        </div>
-      </div>
-      <div className={'project-item__info'}>
-        <div className={'project-item__name'}>
-          {props.data.name}
-        </div>
-        <div className={'project-item__desc'}>
-          {props.data.desc}
-        </div>
-      </div>
-    </div>
-  )
+      </StudioLayout>
+    </ProjectFeedContext.Provider>
+  );
 }
+
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (session) {
+    return {
+      props: {
+        session
+      }
+    };
+  } else {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/login',
+      }
+    };
+  }
+
+};

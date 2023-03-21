@@ -1,17 +1,22 @@
+import { CreateProjectModal } from './studio/createProjectModal';
+import { useModalContext } from './modal/modalProvider';
 
 
-export default function Sidebar({ something } : any) {
+export default function Sidebar() {
+  const { showModal } = useModalContext();
+
   return (
     <div className={'sidebar'}>
       <div className={'sidebar-create'}>
-        <button onClick={() => openCreateProjectModal()}>Create</button>
+        <button
+          onClick={() => {
+            showModal(CreateProjectModal)
+          }
+        }>Create</button>
       </div>
       <div className={'nav'}>
-        <NavItem name={'Projects'}>
-          <NavItem name={'Home'}/>
-          <NavItem name={'Archive'}/>
-          <NavItem name={'Trash'}/>
-        </NavItem>
+        <NavItem name={'Projects'}/>
+        <NavItem name={'Trash'}/>
         <NavItem name={'Settings'} />
         <NavItem name={'Team'} />
       </div>
@@ -21,7 +26,7 @@ export default function Sidebar({ something } : any) {
 
 export function NavItem(props: any) {
   const renderNavItemChildren = () => {
-    const childrenItems = props.children.map((child : any) => {
+    const childrenItems = props.children.map((child) => {
       return child;
     });
     return (

@@ -1,11 +1,164 @@
 import { v4 as uuidv4 } from 'uuid';
+import * as _ from 'lodash';
+import { Point, Rectangle } from './mathUtils';
+import crypto from 'crypto';
 
 export const generateId = () => {
   return uuidv4(); // a formality
 }
 
-export const formatDate = (date: number) => {
-  new Date(date).toDateString();
+/**
+ * Make draggable function with optional boundaries, and options for creating a dynamically updating
+ * scrollable (or variable height; like the breakdown items) element
+ * when dragging occurs (so the area doesn't go below the viewport);
+ * @param {string} dragEl
+ * @param {string | string[]} triggerEls
+ * @param {object} opt_containerSelectors keep the draggable element within certain box boundaries
+ *  left, right, top, bottom
+ * all boundary numbers need to be pixel units
+ * @param {function?} opt_callback opt_callback a callback function to execute on a drag mouse up event
+ */
+export function makeDraggable(dragSelector: string, opt_triggerSelectors: _.Many<string> = null, opt_containerSelectors: _.Many<string> = null, opt_callback: (top: string) => void = _.stubObject) {
+  const dragEl = document.querySelector<HTMLElement>(dragSelector);
+  const triggerSelectors = _.compact(_.castArray(opt_triggerSelectors)).join(", ");
+  const containerSelectors = _.compact(_.castArray(opt_containerSelectors)).join(", ");
+  const triggerEls = _.isEmpty(triggerSelectors) ? [] : Array.from(document.querySelectorAll<HTMLElement>(triggerSelectors));
+
+  const OFFSET = {
+    TOP: 0,
+    LEFT: 0
+  };
+  let BOUNDARY = new Rectangle(document.body.getBoundingClientRect());
+  function onMouseDown(e: MouseEvent) {
+    const TARGET = e.target as HTMLElement;
+    if (!_.some(triggerEls, triggerEl => triggerEl.className.includes(TARGET.className))) {
+      return;
+    }
+    const containerEls = _.isEmpty(containerSelectors) ? [] : Array.from(document.querySelectorAll<HTMLElement>(containerSelectors));
+    if (!_.isEmpty(containerEls)) {
+      const RECTANGLES = _.map(_.concat(containerEls, document.body), element => new Rectangle(element.getBoundingClientRect()));
+      const CORNERS = _.map(RECTANGLES, r => r.Corners).flat();
+      const VALUES = {
+        X: _.map(CORNERS, c => c.x),
+        Y: _.map(CORNERS, c => c.y)
+      };
+      const AVERAGE = {
+        X: _.sum(VALUES.X) / _.size(VALUES.X),
+        Y: _.sum(VALUES.Y) / _.size(VALUES.Y)
+      }
+      const [LEFT, RIGHT, TOP, BOTTOM] = [
+        _.filter(VALUES.X, X => X <= AVERAGE.X),
+        _.filter(VALUES.X, X => X >= AVERAGE.X),
+        _.filter(VALUES.Y, Y => Y <= AVERAGE.Y),
+        _.filter(VALUES.Y, Y => Y >= AVERAGE.Y)
+      ];
+      BOUNDARY = new Rectangle({
+        left: _.max(LEFT),
+        right: _.min(RIGHT),
+        top: _.max(TOP),
+        bottom: _.min(BOTTOM)
+      });
+    }
+    const DRAG = new Rectangle(dragEl.getBoundingClientRect());
+    OFFSET.LEFT = e.clientX - DRAG.Left;
+    OFFSET.TOP = e.clientY - DRAG.Top;
+    e.preventDefault();
+    window.addEventListener("mouseup", onMouseUp);
+    window.addEventListener("pointerup", onMouseUp);
+    window.addEventListener("mousemove", onMouseMove);
+  }
+
+  function onMouseMove(e: MouseEvent) {
+    e.preventDefault();
+    const CHANGED = {
+      HORIZONTAL: false,
+      VERTICAL: false
+    };
+    const SIZE = new Point(dragEl.offsetWidth, dragEl.offsetHeight);
+    const [LEFT, TOP, RIGHT, BOTTOM] = [
+      e.clientX - OFFSET.LEFT,
+      e.clientY - OFFSET.TOP,
+      e.clientX - OFFSET.LEFT + SIZE.x,
+      e.clientY - OFFSET.TOP + SIZE.y
+    ];
+    switch (true) {
+      case TOP > BOUNDARY.Top && BOTTOM < BOUNDARY.Bottom:
+        dragEl.style.top = `${TOP}px`;
+        CHANGED.VERTICAL = true;
+        break;
+      case TOP <= BOUNDARY.Top:
+        dragEl.style.top = `${BOUNDARY.Top}px`;
+        CHANGED.VERTICAL = true;
+        break;
+      case BOTTOM >= BOUNDARY.Bottom:
+        dragEl.style.top = `${BOUNDARY.Bottom - SIZE.y}px`;
+        CHANGED.VERTICAL = true;
+        break;
+    }
+    switch (true) {
+      case LEFT > BOUNDARY.Left && RIGHT < BOUNDARY.Right:
+        dragEl.style.left = `${LEFT}px`;
+        CHANGED.HORIZONTAL = true;
+        break;
+      case LEFT <= BOUNDARY.Left:
+        dragEl.style.left = `${BOUNDARY.Left}px`;
+        CHANGED.HORIZONTAL = true;
+        break;
+      case RIGHT >= BOUNDARY.Right:
+        dragEl.style.left = `${BOUNDARY.Right - SIZE.x}px`;
+        CHANGED.HORIZONTAL = true;
+        break;
+    }
+    if (CHANGED.HORIZONTAL || CHANGED.VERTICAL) {
+      const STYLE = {
+        get BOTTOM() { return dragEl.style.bottom; },
+        set BOTTOM(v: string) { dragEl.style.bottom = v; },
+        get RIGHT() { return dragEl.style.right; },
+        set RIGHT(v: string) { dragEl.style.right = v; }
+      };
+      if (CHANGED.VERTICAL && STYLE.BOTTOM !== "initial") {
+        STYLE.BOTTOM = 'initial';
+      }
+      if (CHANGED.HORIZONTAL && STYLE.RIGHT !== "initial") {
+        STYLE.RIGHT = 'initial';
+      }
+    }
+  }
+
+  function onMouseUp(e: MouseEvent)  {
+    /* stop moving when mouse button is released */
+    window.removeEventListener("mouseup", onMouseUp);
+    window.removeEventListener("mousemove", onMouseMove);
+    window.removeEventListener("pointerup", onMouseUp);
+    if (opt_callback) {
+      opt_callback(dragEl.style.top);
+    }
+  }
+
+  if (triggerEls) {
+    /* if present, the header is where you move the DIV from:*/
+    _.each(triggerEls, el => {
+      el.onmousedown = onMouseDown;
+      el.onmouseup = onMouseUp;
+    })
+  }
 }
+
+export function isValidEmail(str: string) {
+  const VALID_EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  return !!str.match(VALID_EMAIL_REGEX);
+}
+
+export const hashPassword = (password: string = '') => {
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+  return { salt, hash };
+};
+
+// export const validatePassword = (password: string, salt: string) => {
+//   const inputHash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+// }
+
+
 
 
