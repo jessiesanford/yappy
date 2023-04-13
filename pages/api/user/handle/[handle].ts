@@ -22,7 +22,6 @@ export default async function (req: NextApiRequest, res: NextApiResponse<Data | 
   });
 
   if (user) {
-    console.log(user);
     res.json(user);
   } else {
     res.json({});

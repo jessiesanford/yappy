@@ -10,18 +10,13 @@ import { ProjectFeedMock } from '../static/projectMocks';
 import { getProjects, deleteProject } from './api/project/projectApiHandler';
 import { useAppContext } from '../components/appProvider';
 
-interface IProjectFeedContext {
-  deleteProject: (id: number) => Promise<void>;
-}
-
 const ProjectFeedContextProps = {
-  deleteProject: deleteProject,
+  deleteProject: (id: string) => Promise<void>,
 };
 
-export const ProjectFeedContext = createContext<IProjectFeedContext>(ProjectFeedContextProps);
-export const useProjectFeedContext = () => useContext(ProjectFeedContext);
+export const ProjectFeedContext = createContext(ProjectFeedContextProps);
 
-export default function Studio(props: any) {
+export default function Trash(props: any) {
   const {
     store,
   } = useAppContext();

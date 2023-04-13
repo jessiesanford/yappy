@@ -1,15 +1,15 @@
-@import 'font-awesome';
-
 html,
 body {
   padding: 0;
   margin: 0;
   height: 100%;
-  font-family: Lato, Arial, sans-serif;
+  font-family: $defaultFont;
+  color: #a0a0a0;
 }
 
 .wrapper {
   height: 100vh;
+  background: #202020;
 }
 
 a {
@@ -27,100 +27,6 @@ a {
   padding: 40px 0;
 }
 
-.sidebar {
-  background: #101010;
-  position: absolute;
-  height: 100%;
-  left: 0;
-  width: 240px;
-}
-
-.sidebar-create {
-  padding: 20px;
-  margin: auto;
-  text-align: center;
-}
-
-.sidebar-create button {
-  border-radius: 30px;
-  width: 140px;
-  padding: 10px 20px;
-  font-size: 12pt;
-  text-align: center;
-  border: 0;
-  font-family: Lato;
-  font-weight: 400;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.nav-item {
-  color: #fff;
-  padding: 10px 30px;
-  font-size: 12pt;
-  transition: background-color 0.1s ease-in;
-
-  &:hover {
-    background: #202020;
-    cursor: pointer;
-  }
-}
-
-.studio-container {
-  margin-left: 240px;
-}
-
-.project-list {
-
-}
-
-.project-item {
-  margin: 5px;
-  padding: 20px;
-  background: #eaeaea;
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-
-.project-item:hover {
-  background: #e0e0e0;
-  cursor: pointer;
-}
-
-.project-item__img img {
-  max-width: 100px;
-}
-
-.project-item__img-container {
-  display: flex;
-  flex: 0 0 120px;
-  align-items: center;
-  width: 120px;
-  height: 100px;
-}
-
-.project-item__name {
-  font-size: 16pt;
-  margin-bottom: 10px;
-}
-
-.project-item__desc {
-  font-size: 10pt;
-  color: #606060;
-}
-
-.project-item__ctx-anchor {
-  cursor: pointer;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 18pt;
-  background: #0070f3;
-  color: #fff;
-  padding: 5px 10px;
-  border-radius: 5px;
-}
 
 @media (prefers-color-scheme: dark) {
   html {

@@ -1,0 +1,30 @@
+.studio-toolbar {
+  background: transparent;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+
+  button.create-project {
+    margin-right: 10px;
+  }
+
+  .studio-toolbar__button {
+    background: $ourBlue;
+    padding: 5px 8px;
+    border-radius: 3px;
+    display: flex;
+    width: fit-content;
+    color: #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.1s ease-in;
+
+    &.disabled {
+      background: #303030;
+      color: #606060;
+    }
+
+    &:hover {
+      background: #404040;
+    }
+  }
+}

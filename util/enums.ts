@@ -103,3 +103,10 @@ export enum KeyCodes {
 export enum KeyNames {
   ESCAPE = 'Escape',
 }
+
+export enum AppPages {
+  PROJECTS = 'projects',
+  TRASH = 'trash',
+  SETTINGS = 'settings',
+  TEAM = 'team',
+}

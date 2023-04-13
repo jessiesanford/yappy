@@ -1,9 +1,16 @@
-export default function BaseLayout({ children }: any) {
+import Head from 'next/head';
+import Header from '../header/header';
+
+export default function BaseLayout({ children, title }: any) {
   return (
-    <div className={'wrapper'}>
-      <div className={'alert-root'}/>
-      {children}
-      <div className={'modal-root'}/>
-    </div>
+    <>
+      <Head>
+        <title>{title}</title>
+      </Head>
+      <div className={'wrapper'}>
+        <Header/>
+        {children}
+      </div>
+    </>
   );
 }

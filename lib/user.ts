@@ -21,7 +21,6 @@ export async function createUser({ email, password }: { email: string, password:
       query: 'INSERT INTO users (id, createdAt, email, hash, salt) VALUES(?, ?, ?, ?, ?)',
       values: [user.id, user.createdAt.toString(), user.email, user.hash, user.salt],
     });
-    console.log( result );
   } catch ( error ) {
     console.log( error );
   }

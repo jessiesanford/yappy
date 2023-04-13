@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-
+import React, { ReactElement, useState } from 'react';
 import { createContext, useContext } from 'react';
+import { EmptyModal } from './emptyModal';
 
 const ModalContextProps = {
-  showModal: () => {},
+  showModal: (type: ReactElement) => {
+
+  },
   hideModal: () => {},
   store: {},
 };
@@ -11,8 +13,10 @@ const ModalContextProps = {
 export const ModalContext = createContext(ModalContextProps);
 export const useModalContext = () => useContext(ModalContext);
 
-export const ModalProvider: React.FC<{}> = ({ children }) => {
-  const [store, setStore] = useState();
+export const ModalProvider: React.FC<{children: ReactElement}> = ({ children }) => {
+  const [store, setStore] = useState({});
+  // const modalType = EmptyModal;
+  // const modalProps = {};
   const { modalType, modalProps } = store || {};
 
   const showModal = (modalType: string, modalProps: any = {}) => {

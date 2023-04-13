@@ -45,7 +45,6 @@ export default function Index({ user }: { user: any }) {
       }),
     }).then((res) => {
       // Do a fast client-side transition to the already prefetched dashboard page
-      console.log(res);
       if (res.ok) router.push('/studio');
     }).catch(() => {
     });

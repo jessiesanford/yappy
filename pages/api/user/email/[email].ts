@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
-import { useRouter } from 'next/router';
 
 const prisma = new PrismaClient();
 

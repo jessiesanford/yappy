@@ -1,16 +1,20 @@
 import { Session } from 'next-auth';
-import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
+import { AppProvider } from '../components/appProvider';
+import { SessionProvider } from 'next-auth/react';
 import { ModalProvider } from '../components/modal/modalProvider';
+import { ContextMenu } from '../components/contextMenu/contextMenu';
 import '../styles/index.scss';
-import { hashPassword } from '../util/baseUtils';
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps<{ session: Session }>) {
   return (
-    <SessionProvider session={session}>
-      <ModalProvider>
-        <Component {...pageProps} />
-      </ModalProvider>
-    </SessionProvider>
+    <AppProvider>
+      <SessionProvider session={session}>
+        <ContextMenu/>
+        <ModalProvider>
+          <Component {...pageProps} />
+        </ModalProvider>
+      </SessionProvider>
+    </AppProvider>
   );
 }

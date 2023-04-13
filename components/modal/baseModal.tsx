@@ -25,8 +25,8 @@ export const BaseModal = (props: BaseModalProps) => {
     document.addEventListener('keydown', handleKeyDown)
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [])
+    };
+  }, []);
 
   useEffect(() => {
     if (scrimRef.current) {
@@ -36,18 +36,18 @@ export const BaseModal = (props: BaseModalProps) => {
 
   useEffect(() => {
     makeDraggable('.modal', '.modal-heading', );
-  }, [])
+  }, []);
 
   const doModalAction = () => {
     if (props.action) {
       props.action();
     }
     hideModal();
-  }
+  };
 
   const closeModal = () => {
     hideModal();
-  }
+  };
 
   return (
     <div className={'modal-scrim'} ref={scrimRef}>
@@ -72,5 +72,5 @@ export const BaseModal = (props: BaseModalProps) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

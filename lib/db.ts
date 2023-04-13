@@ -11,7 +11,6 @@ const connection = mysql.createConnection({
 
 export default async function excuteQuery({ query, values }: any) {
   return connection.promise().query(query, values).then((results) => {
-    console.log(results);
     return results
   });
 }
