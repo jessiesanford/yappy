@@ -3,17 +3,20 @@ import { useAppContext } from '../appProvider';
 import { useEffect, useRef, useState } from 'react';
 import { FiMoreVertical, FiShare, FiTrash } from 'react-icons/fi';
 import { observer } from 'mobx-react-lite';
+import { useRouter } from 'next/router';
 
 export function ProjectItem(props: any) {
   return <ProjectItem_ {...props}/>;
 }
 
-export const ProjectItem_ = observer((props: any) => {
+export const ProjectItem_ = observer(({ data }: { data: any }) => {
   const {
     deleteProject,
     // selectedProjectItems,
     // handleProjectItemSelection,
   } = useProjectFeedContext();
+
+  const router = useRouter();
 
   const {
     store
@@ -41,7 +44,7 @@ export const ProjectItem_ = observer((props: any) => {
       icon: <FiTrash/>,
       onClick: () => {
         setDeleted(true);
-        // deleteProject(props.data.id);
+        deleteProject(data.id);
         store.ContextMenu.setHidden(true);
       },
     },
@@ -50,7 +53,7 @@ export const ProjectItem_ = observer((props: any) => {
       label: 'Share',
       icon: <FiShare/>,
       onClick: () => {
-        console.log('test');
+
       },
     }
   ];
@@ -70,24 +73,28 @@ export const ProjectItem_ = observer((props: any) => {
            }}>
         <FiMoreVertical />
       </div>
-      <div className={'project-item__select'} onClick={() => toggleProjectItemSelected(props.data.id)}>
+      <div className={`project-item__select ${selectedProjectItems.includes(data.id) ? 'selected' : null}`}
+           onClick={() => toggleProjectItemSelected(data.id)}>
         <input type={'checkbox'}
-               checked={selectedProjectItems.includes(props.data.id)}
+               checked={selectedProjectItems.includes(data.id)}
                onChange={() => {}}
         />
       </div>
       <div className={'project-item__content'}>
         <div className={'project-item__img-container'}>
           <div className={'project-item__img'}>
-            <img src={props.data.img}/>
+            <img src={data.img}/>
           </div>
         </div>
         <div className={'project-item__info'}>
-          <div className={'project-item__name'}>
-            {props.data.name}
+          <div className={'project-item__name'}
+               onClick={() => {
+                 router.push(`/project/${data.id}`);
+               }}>
+            {data.name}
           </div>
           <div className={'project-item__desc'}>
-            {props.data.desc}
+            {data.desc}
           </div>
         </div>
       </div>

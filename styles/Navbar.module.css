@@ -12,17 +12,6 @@
     margin-left: auto;
 }
 
-.logo {
-    background: #0070f3;
-    align-self: center;
-    font-size: 18pt;
-    color: #fff;
-    width: 280px;
-    padding: 10px 20px;
-    text-transform: uppercase;
-    font-weight: 300;
-}
-
 .push {
     flex: 1;
 }

@@ -8,6 +8,9 @@ import BareLayout from '../components/layouts/bareLayout';
 import { isEmailUnique, isHandleUnique } from './api/user/userApiHandler';
 import crypto, { Sign } from 'crypto';
 import { hashPassword } from '../util/baseUtils';
+import { GetServerSidePropsContext } from 'next';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './api/auth/[...nextauth]';
 
 type SignupForm = {
   email: string,
@@ -126,3 +129,21 @@ export default function Index({ user }: { user: any }) {
     </BareLayout>
   );
 }
+
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (!session) {
+    return {
+      props: {
+      }
+    };
+  } else {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/studio',
+      }
+    };
+  }
+};

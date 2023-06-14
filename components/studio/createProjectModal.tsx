@@ -26,9 +26,10 @@ export const CreateProjectModal = () => {
         ProjectFeedUpdated();
       }
 
-    }).catch(() => {
-    })
-  }
+    }).catch((e) => {
+      console.log(e);
+    });
+  };
 
   return (
     <BaseModal title={'Create Project'} action={action}>

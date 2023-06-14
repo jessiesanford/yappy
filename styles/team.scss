@@ -1,0 +1,18 @@
+.team-table {
+  padding: 20px;
+
+  .user-results {
+    margin-top: 20px;
+
+    .user-row {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #505050;
+
+      .user-cell {
+        padding: 0 10px;
+      }
+    }
+  }
+}

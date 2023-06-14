@@ -1,15 +1,19 @@
 html,
 body {
+  background: #202020;
   padding: 0;
   margin: 0;
   height: 100%;
   font-family: $defaultFont;
-  color: #a0a0a0;
+  color: #e0e0e0;
 }
 
 .wrapper {
-  height: 100vh;
   background: #202020;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
 }
 
 a {

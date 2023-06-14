@@ -8,18 +8,23 @@ type Data = {
 }
 
 export default async function (req: NextApiRequest, res: NextApiResponse<Data>) {
-  const PROJECTS = await prisma.project.findMany();
-  res.send(JSON.stringify(PROJECTS, null, 2));
+  const { projectId } = req.query;
+  console.log(projectId);
+  const PROJECT = await prisma.project.findUnique({
+    where: {
+      id: projectId
+    }
+  });
+  res.send(JSON.stringify(PROJECT, null, 2));
 };
 
-// local - db
 // export default function handler(
 //   req: NextApiRequest,
 //   res: NextApiResponse<Data>
 // ) {
 //   excuteQuery({
-//     query: 'SELECT * FROM projects',
+//     query: 'SELECT * FROM projects WHERE id = 1',
 //   }).then((queryResults) => {
-//     res.status(200).json(queryResults[0])
+//     res.status(200).json(queryResults[0]);
 //   });
 // }

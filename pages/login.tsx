@@ -3,6 +3,9 @@ import { useRouter } from 'next/router';
 import BareLayout from '../components/layouts/bareLayout';
 import {signIn} from 'next-auth/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { GetServerSidePropsContext } from 'next';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './api/auth/[...nextauth]';
 
 type LoginForm = {
   email: string,
@@ -73,3 +76,21 @@ export default function Index({ user }: { user: any }) {
     </BareLayout>
   );
 }
+
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (!session) {
+    return {
+      props: {
+      }
+    };
+  } else {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/studio',
+      }
+    };
+  }
+};

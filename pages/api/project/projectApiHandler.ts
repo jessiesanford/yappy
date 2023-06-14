@@ -18,5 +18,6 @@ export const deleteProject = async (id: number) => {
       id
     }),
   });
+  console.log('Project deleted:', id);
   ProjectFeedUpdated();
 };

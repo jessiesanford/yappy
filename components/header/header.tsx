@@ -41,7 +41,6 @@ export const HeaderNavigation = () => {
   return (
     <div className={'header-nav'}>
       <HeaderNavItem name={'Studio'} link={'/studio'} />
-      <HeaderNavItem name={'Account'} link={'/account'} />
     </div>
   );
 };

@@ -35,8 +35,18 @@ export const BaseModal = (props: BaseModalProps) => {
   }, []);
 
   useEffect(() => {
-    makeDraggable('.modal', '.modal-heading', );
+    makeDraggable('.modal', '.modal-heading');
+    handleAfterOpen();
   }, []);
+
+  function handleAfterOpen() {
+    const modal = modalRef.current;
+    const windowHeight = window.innerHeight;
+    if (modal) {
+      const modalHeight = modal.clientHeight;
+      modal.style.top = `${(windowHeight / 2) - (modalHeight / 2)}px`;
+    }
+  }
 
   const doModalAction = () => {
     if (props.action) {
@@ -67,7 +77,7 @@ export const BaseModal = (props: BaseModalProps) => {
           </div>
           <div className={'right-controls'}>
             <button onClick={closeModal}>Cancel</button>
-            <button onClick={doModalAction}>Ok</button>
+            <button className={'last'} onClick={doModalAction}>Ok</button>
           </div>
         </div>
       </div>

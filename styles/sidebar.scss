@@ -1,9 +1,9 @@
 .sidebar {
-  background: #101010;
+  background: #202020;
   position: absolute;
-  height: 100%;
+  height: calc(100vh - 60px);
   left: 0;
-  width: 280px;
+  width: 240px;
 }
 
 .sidebar-create {
@@ -25,7 +25,7 @@
 }
 
 .sidebar-nav {
-  padding-top: 20px;
+  padding-top: 10px;
 }
 
 .nav-item {

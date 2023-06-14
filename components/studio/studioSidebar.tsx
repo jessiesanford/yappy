@@ -5,13 +5,17 @@ import { useAppContext } from '../appProvider';
 import { observer } from 'mobx-react-lite';
 import { AppPages } from '../../util/enums';
 import { useRouter } from 'next/router';
-import { FiDisc, FiPackage, FiSettings, FiTrash, FiUsers } from 'react-icons/fi';
+import { FiActivity, FiPackage, FiSettings, FiTrash, FiUsers } from 'react-icons/fi';
+import { useSession } from 'next-auth/react';
 
 
 export default function StudioSidebar() {
   const {
     store
   } = useAppContext();
+
+  const { data: session } = useSession();
+  const user = session?.user;
 
   const { showModal } = useModalContext();
 
@@ -20,7 +24,7 @@ export default function StudioSidebar() {
       <div className={'sidebar-nav'}>
         <NavItem id={AppPages.PROJECTS} label={'Projects'} icon={<FiPackage/>} link={'/studio'} />
         <NavItem id={AppPages.TRASH} label={'Trash'} icon={<FiTrash/>} link={'/trash'} />
-        <NavItem id={AppPages.SETTINGS} label={'Settings'} icon={<FiSettings/>} link={'/settings'} />
+        <NavItem id={AppPages.SETTINGS} label={'Settings'} icon={<FiSettings/>} link={'/account'} />
         <NavItem id={AppPages.TEAM} label={'Team'} icon={<FiUsers/>} link={'/team'} />
       </div>
     </div>

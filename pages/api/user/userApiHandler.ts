@@ -15,3 +15,10 @@ export const isEmailUnique = async (email: string) => {
   const json = await res.json();
   return json.email === null;
 };
+
+export const findUsersByEmail = async (searchText: string) => {
+  const res = await fetch(`/api/user/find/${searchText}`, {
+    method: 'GET',
+  });
+  return await res.json();
+};

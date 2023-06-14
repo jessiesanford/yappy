@@ -9,20 +9,8 @@ import { GetServerSidePropsContext } from 'next';
 import { ProjectFeedMock } from '../static/projectMocks';
 import { getProjects, deleteProject } from './api/project/projectApiHandler';
 import { useAppContext } from '../components/appProvider';
-import { StudioToolbar } from '../components/studio/studioToolbar';
 
-interface IProjectFeedContext {
-  deleteProject: (id: number) => Promise<void>;
-}
-
-const ProjectFeedContextProps = {
-  deleteProject: deleteProject,
-};
-
-export const ProjectFeedContext = createContext<IProjectFeedContext>(ProjectFeedContextProps);
-export const useProjectFeedContext = () => useContext(ProjectFeedContext);
-
-function Studio(props: any) {
+export default function Project(props: any) {
   const {
     store,
   } = useAppContext();
@@ -43,24 +31,17 @@ function Studio(props: any) {
     });
   };
 
-  const provided = {
-    deleteProject,
-  };
-
   return (
-    <ProjectFeedContext.Provider value={provided}>
-      <StudioLayout>
-        <StudioToolbar/>
-        <div className={'project-list'}>
-          {renderProjectFeed()}
-        </div>
-      </StudioLayout>
-    </ProjectFeedContext.Provider>
+    <StudioLayout>
+      <div className={'project-list'}>
+        {renderProjectFeed()}
+      </div>
+    </StudioLayout>
   );
 }
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  // const session = await getServerSession(context.req, context.res, authOptions);
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   const dev = process.env.NODE_ENV !== 'production';
   const server = dev ? 'http://localhost:3000' : 'https://your_deployment.server.com';
@@ -70,23 +51,19 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   });
   const projects = await results.json();
 
-  // if (session) {
+  if (session) {
     return {
       props: {
-        // session,
+        session,
         projects,
       }
     };
-  // }
-  // else {
-  //   return {
-  //     redirect: {
-  //       permanent: false,
-  //       destination: '/login',
-  //     }
-  //   };
-  // }
+  } else {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/login',
+      }
+    };
+  }
 };
-
-Studio.requireAuth = true;
-export default Studio;
