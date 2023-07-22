@@ -12,13 +12,13 @@ type Data = {
 
 export default async function (req: NextApiRequest, res: NextApiResponse<Data>) {
   if (req.method === 'POST') {
-    const { name } = req.body;
+    const { name, createdBy } = req.body;
     await prisma.project.create({
       data: {
         name,
         description: '',
         createdAt: new Date(moment().format('YYYY-MM-DD HH:mm:ss')),
-        createdBy: '',
+        createdBy,
         updatedAt: new Date(moment().format('YYYY-MM-DD HH:mm:ss')),
         updatedBy: '',
       },

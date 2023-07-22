@@ -36,7 +36,11 @@ export const authOptions: NextAuthOptions = {
 
         // If no error and we have user data, return it
         if (res.ok && user) {
-          return {email: user.email, name: user.handle, image: null};
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.handle,
+          };
         }
         return null;
       }
@@ -59,9 +63,16 @@ export const authOptions: NextAuthOptions = {
     colorScheme: 'light',
   },
   callbacks: {
-    async jwt({ token }) {
+    async jwt({ token, user }) {
+      console.log(user);
       token.userRole = 'admin';
       return token;
+    },
+    async session({ session, token, user }) {
+      if (session?.user) {
+        session.user.id = token.sub;
+      }
+      return session;
     },
   },
 };

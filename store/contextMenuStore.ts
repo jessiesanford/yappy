@@ -26,9 +26,8 @@ export class ContextMenuStore {
   }
 
   setup = (props: ctxSetupProps) => {
-    if (props.id === this.id && !this.hidden) {
-      this.setId(null);
-      this.setHidden(true);
+    if (props.id === this.id) {
+      this.destroy();
     } else {
       let position = { x: 0, y: 0 };
       if (props.position) {
@@ -64,4 +63,9 @@ export class ContextMenuStore {
   setPosition = (position: { x: number, y: number }) => {
     this.position = position;
   };
+
+  destroy = () => {
+    this.setHidden(true);
+    this.setId(null);
+  }
 }

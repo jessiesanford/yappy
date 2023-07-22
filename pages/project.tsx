@@ -15,12 +15,12 @@ export default function Project(props: any) {
     store,
   } = useAppContext();
 
-  const [projects, setProjects] = useState(ProjectFeedMock.concat(props.projects));
+  const [projects, setProjects] = useState(props.projects);
 
   useEffect(() => {
     document.addEventListener(ProjectFeedEvents.PROJECT_FEED_UPDATED, () => {
       getProjects().then((projects) => {
-        setProjects(ProjectFeedMock.concat(projects));
+        setProjects(projects);
       });
     });
   }, []);

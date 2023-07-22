@@ -1,25 +1,35 @@
-import { useEffect, useRef } from 'react';
+import { ReactElement, useEffect, useRef } from 'react';
+import { observer } from 'mobx-react-lite';
 import { KeyNames } from '../../util/enums';
 import { useModalContext } from './modalProvider';
 import { makeDraggable } from '../../util/baseUtils';
+import { useAppContext } from "../appProvider";
 
 type BaseModalProps = {
   title?: string;
   children: JSX.Element | JSX.Element[];
   action?: () => void;
+  cancel?: () => void;
+  renderModalHeading?: () => ReactElement;
+  renderModalControls?: () => ReactElement;
 };
 
-export const BaseModal = (props: BaseModalProps) => {
-  const { hideModal } = useModalContext();
+export const BaseModal = observer((props: BaseModalProps) => {
+  const {
+    store
+  } = useAppContext();
+
+  const {
+    doAction,
+    doCancel,
+    handleKeyDown
+  } = useModalContext();
+
+  const MODAL_STORE = store.Modal;
+
   const scrimRef = useRef(null);
   const headingRef = useRef(null);
   const modalRef = useRef(null);
-
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === KeyNames.ESCAPE) {
-      hideModal();
-    }
-  };
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown)
@@ -29,15 +39,25 @@ export const BaseModal = (props: BaseModalProps) => {
   }, []);
 
   useEffect(() => {
-    if (scrimRef.current) {
-      scrimRef.current.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-    }
+    // fadein
+    setTimeout(() => {
+      if (scrimRef.current) {
+        scrimRef.current.style.opacity = '1';
+      }
+      if (modalRef.current) {
+        modalRef.current.style.opacity = '1';
+      }
+    }, 0);
   }, []);
 
   useEffect(() => {
     makeDraggable('.modal', '.modal-heading');
     handleAfterOpen();
   }, []);
+
+  function handleModalClosing() {
+    MODAL_STORE.setError({ msg: '', hidden: true });
+  }
 
   function handleAfterOpen() {
     const modal = modalRef.current;
@@ -49,38 +69,80 @@ export const BaseModal = (props: BaseModalProps) => {
   }
 
   const doModalAction = () => {
+    handleModalClosing();
     if (props.action) {
       props.action();
+      doAction();
+    } else {
+      doAction();
     }
-    hideModal();
   };
 
-  const closeModal = () => {
-    hideModal();
+  const doModalCancel = () => {
+    handleModalClosing();
+    if (props.cancel) {
+      props.cancel();
+      doCancel();
+    } else {
+      doCancel();
+    }
+  };
+
+  const renderModalHeading = () => {
+    if (props.renderModalHeading) {
+      return props.renderModalHeading();
+    }
+
+    return (
+      <div className={'modal-heading'} ref={headingRef}>
+        <div className={'modal-title'}>
+          {props.title}
+        </div>
+      </div>
+    );
+  };
+
+  const renderModalControls = () => {
+    if (props.renderModalControls) {
+      return props.renderModalControls();
+    }
+
+    return (
+      <div className={'modal-controls'}>
+        <div className={'left-controls'}>
+
+        </div>
+        <div className={'right-controls'}>
+          <button className={'action-btn cancel'} onClick={doModalCancel}>Cancel</button>
+          <button className={'action-btn confirm-action'} onClick={doModalAction}>Ok</button>
+        </div>
+      </div>
+    );
+  };
+
+  const renderModalErrorContainer = () => {
+    return (
+      <div className={'modal-error-container'}
+           style={{
+             color: "#db5252",
+             padding: "20px",
+             fontWeight: "bold",
+             textAlign: "center",
+             // display: error?.hidden ? "none" : "block"
+           }}
+      >
+        {/*{error?.msg}*/}
+      </div>
+    );
   };
 
   return (
     <div className={'modal-scrim'} ref={scrimRef}>
       <div className={'modal'} ref={modalRef}>
-        <div className={'modal-heading'} ref={headingRef}>
-          <div className={'modal-title'}>
-            {props.title}
-          </div>
-          <div className={'modal-close-anchor'} onClick={closeModal}>
-            <i className={'fa fa-close'} />
-          </div>
-        </div>
+        {renderModalHeading()}
         {props.children}
-        <div className={'modal-controls'}>
-          <div className={'left-controls'}>
-
-          </div>
-          <div className={'right-controls'}>
-            <button onClick={closeModal}>Cancel</button>
-            <button className={'last'} onClick={doModalAction}>Ok</button>
-          </div>
-        </div>
+        {renderModalControls()}
       </div>
     </div>
   );
-};
+});

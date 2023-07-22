@@ -3,8 +3,7 @@ export const ProjectFeedEvents = {
 }
 
 const dispatchEvent = (type: string, data?) => {
-  let event = new CustomEvent(type, {detail: data});
-  document.dispatchEvent(new CustomEvent(type));
+  document.dispatchEvent(new CustomEvent(type, {detail: data}));
 }
 
 export const ProjectFeedUpdated = () => {

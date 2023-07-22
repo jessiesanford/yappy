@@ -1,8 +1,15 @@
 import { makeAutoObservable } from 'mobx';
 import { AppPages } from '../util/enums';
 
+export enum ProjectFilters {
+  ALL = 'ALL',
+  TRASHED = 'TRASH',
+  ARCHIVED = 'ARCHIVED',
+}
+
 export class StudioStore {
   currentPage: AppPages = AppPages.PROJECTS;
+  projectFilter: ProjectFilters = ProjectFilters.ALL;
   selectedProjectItems: string[] = [];
 
   constructor() {
@@ -11,6 +18,10 @@ export class StudioStore {
 
   setCurrentPage(page: AppPages) {
     this.currentPage = page;
+  }
+
+  setProjectFilter(filter: ProjectFilters) {
+    this.projectFilter = filter;
   }
 
   toggleProjectItemSelected = (id: string) => {

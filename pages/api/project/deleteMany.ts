@@ -1,6 +1,4 @@
-import excuteQuery from '../../../lib/db';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import moment from "moment";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -11,15 +9,16 @@ type Data = {
 
 export default async function (req: NextApiRequest, res: NextApiResponse<Data>) {
   const body = req.body;
-  const { id } = body;
+  const { ids } = body;
 
   if (req.method === 'POST') {
-    const { name } = req.body;
-    await prisma.project.delete({
+    await prisma.project.deleteMany({
       where: {
-        id: id
+        id: {
+          in: ids
+        }
       }
     });
-    res.status(200).json({ success: 'very true' });
+    res.status(200).json({ success: 'Endpoint Resolved Successfully' });
   }
 };

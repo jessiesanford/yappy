@@ -6,6 +6,7 @@ import React from 'react';
 import { IconType } from 'react-icons';
 import { CreateProjectModal } from './createProjectModal';
 import { useModalContext } from '../modal/modalProvider';
+import { deleteProjects } from "../../pages/api/project/projectApiHandler";
 
 type TStudioToolbarButton = {
   label: string, onClick: () => void, disabled: boolean,
@@ -17,23 +18,28 @@ export const StudioToolbar = observer(() => {
     store
   } = useAppContext();
 
-  const {
-    showModal
-  } = useModalContext();
+  // const {
+  //   showModal
+  // } = useModalContext();
+
+  const MODAL_STORE = store.Modal;
+  const STUDIO_STORE = store.studioStore;
 
   return (
     <div className={'studio-toolbar'}>
       <button
         className={'create-project'}
         onClick={() => {
-          showModal(CreateProjectModal);
+          MODAL_STORE.showModal(CreateProjectModal, {});
         }
         }>
         Create Project
       </button>
       <StudioToolbarButton
         icon={<FiTrash/>}
-        onClick={() => {}}
+        onClick={() => {
+          deleteProjects(STUDIO_STORE.selectedProjectItems)
+        }}
         disabled={store.Studio.selectedProjectItems.length === 0}
       />
     </div>
@@ -60,8 +66,8 @@ export const StudioToolbarButton = ({ label, icon, onClick, disabled }: TStudioT
   return (
     <div className={`studio-toolbar__button ${disabled ? 'disabled' : ''}`}
          onClick={() => {
-           if (disabled) {
-            alert('ueahj buddy');
+           if (!disabled) {
+              onClick();
            }
          }
     }>

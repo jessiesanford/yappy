@@ -8,8 +8,13 @@ type Data = {
 }
 
 export default async function (req: NextApiRequest, res: NextApiResponse<Data>) {
-  const PROJECTS = await prisma.project.findMany();
-  res.send(JSON.stringify(PROJECTS, null, 2));
+  try {
+    const PROJECTS = await prisma.project.findMany();
+    res.send(JSON.stringify(PROJECTS, null, 2));
+  } catch (e) {
+    console.log(e);
+    res.status(400).json([]);
+  }
 };
 
 // local - db

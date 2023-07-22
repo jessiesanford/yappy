@@ -1,9 +1,44 @@
-.sidebar {
+.studio-sidebar {
   background: #202020;
   position: absolute;
   height: calc(100vh - 60px);
   left: 0;
   width: 240px;
+
+  .studio-sidebar__nav {
+    padding-top: 10px;
+
+    .nav-item {
+      color: #d0d0d0;
+      padding: 0px 30px;
+      font-size: 12pt;
+      transition: background-color 0.1s ease-in;
+
+      .nav-item__header {
+        display: flex;
+        align-content: center;
+        padding: 10px 0;
+      }
+
+      &.active {
+        color: $ourBlue;
+        filter: brightness(1.25);
+      }
+
+      .nav-item__icon {
+        margin-right: 10px;
+        width: 20px;
+        text-align: center;
+        align-self: center;
+        display: flex;
+      }
+
+      &:hover {
+        background: #202020;
+        cursor: pointer;
+      }
+    }
+  }
 }
 
 .sidebar-create {
@@ -22,35 +57,4 @@
   font-weight: 400;
   text-transform: uppercase;
   cursor: pointer;
-}
-
-.sidebar-nav {
-  padding-top: 10px;
-}
-
-.nav-item {
-  display: flex;
-  align-content: center;
-  color: #d0d0d0;
-  padding: 10px 30px;
-  font-size: 12pt;
-  transition: background-color 0.1s ease-in;
-
-  &.active {
-    color: $ourBlue;
-    filter: brightness(1.25);
-  }
-
-  .nav-item__icon {
-    margin-right: 10px;
-    width: 20px;
-    text-align: center;
-    align-self: center;
-    display: flex;
-  }
-
-  &:hover {
-    background: #202020;
-    cursor: pointer;
-  }
 }

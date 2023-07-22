@@ -1,0 +1,57 @@
+import { observer } from "mobx-react-lite";
+import { useEffect, useState } from "react";
+import { getProjects } from "../api/project/projectApiHandler";
+import { ProjectItem } from "../../components/projectFeed/projectItem";
+import { useAppContext } from "../../components/appProvider";
+import { ProjectFeedEvents } from "../../static/events";
+import { ProjectFilters } from "../../store/studioStore";
+import { TProjectItem } from '../../types/projectTypes';
+
+export const ProjectFeed = observer(() => {
+  const {
+    store
+  } = useAppContext();
+
+  const [projects, setProjects] = useState([]);
+
+  function handleProjectFeedUpdated() {
+    getProjects().then((projects) => {
+      switch (store.Studio.projectFilter) {
+        case ProjectFilters.ALL:
+          projects = projects.filter((project: TProjectItem) => {
+            return !project.isTrashed;
+          });
+          break;
+        case ProjectFilters.TRASHED:
+          projects = projects.filter((project: TProjectItem) => {
+            return project.isTrashed;
+          });
+      }
+      setProjects(projects);
+    });
+  }
+
+  useEffect(() => {
+    document.addEventListener(ProjectFeedEvents.PROJECT_FEED_UPDATED, handleProjectFeedUpdated);
+    return () => {
+      document.removeEventListener(ProjectFeedEvents.PROJECT_FEED_UPDATED, handleProjectFeedUpdated);
+    }
+  }, []);
+
+  // load projects in
+  useEffect(() => {
+    handleProjectFeedUpdated();
+  }, [store.Studio.projectFilter]);
+
+  const renderProjectFeed = () => {
+    return projects.map((projectItem: ProjectItem) => {
+      return <ProjectItem key={projectItem.id} data={projectItem}/>;
+    });
+  };
+
+  return (
+    <div className={'project-list'}>
+      {renderProjectFeed()}
+    </div>
+  );
+});

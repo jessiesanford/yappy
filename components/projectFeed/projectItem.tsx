@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import { FiMoreVertical, FiShare, FiTrash } from 'react-icons/fi';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
+import { convertDateFormat, stringToColor } from "../../util/baseUtils";
+import { trashProject } from "../../pages/api/project/projectApiHandler";
 
 export function ProjectItem(props: any) {
   return <ProjectItem_ {...props}/>;
@@ -43,8 +45,12 @@ export const ProjectItem_ = observer(({ data }: { data: any }) => {
       label: 'Delete',
       icon: <FiTrash/>,
       onClick: () => {
-        setDeleted(true);
-        deleteProject(data.id);
+        trashProject(data.id).then(() => {
+          setDeleted(true);
+        });
+        // deleteProject(data.id).then(() => {
+        //   setDeleted(true);
+        // });
         store.ContextMenu.setHidden(true);
       },
     },
@@ -75,15 +81,16 @@ export const ProjectItem_ = observer(({ data }: { data: any }) => {
       </div>
       <div className={`project-item__select ${selectedProjectItems.includes(data.id) ? 'selected' : null}`}
            onClick={() => toggleProjectItemSelected(data.id)}>
-        <input type={'checkbox'}
-               checked={selectedProjectItems.includes(data.id)}
-               onChange={() => {}}
-        />
+        <div>
+          <input type={'checkbox'}
+                 checked={selectedProjectItems.includes(data.id)}
+                 onChange={() => {}}
+          />
+        </div>
       </div>
       <div className={'project-item__content'}>
-        <div className={'project-item__img-container'}>
+        <div className={'project-item__img-container'} style={{backgroundColor: stringToColor(data.name)}}>
           <div className={'project-item__img'}>
-            <img src={data.img}/>
           </div>
         </div>
         <div className={'project-item__info'}>
@@ -95,6 +102,9 @@ export const ProjectItem_ = observer(({ data }: { data: any }) => {
           </div>
           <div className={'project-item__desc'}>
             {data.desc}
+          </div>
+          <div className={'project-item__updated-at'}>
+            Last modified on {convertDateFormat(data.updatedAt)}
           </div>
         </div>
       </div>

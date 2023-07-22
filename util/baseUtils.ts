@@ -149,6 +149,38 @@ export function isValidEmail(str: string) {
   return !!str.match(VALID_EMAIL_REGEX);
 }
 
+// write a function that converts postgres timestamp to javascript date
+export function convertDateFormat(inputDate: string) {
+  const date = new Date(inputDate);
+
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    timeZone: 'UTC'
+  };
+
+  return date.toLocaleString('en-US', options);
+}
+
+// give a string, generate a color based on it
+export function stringToColor(str: string) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  const c = (hash & 0x00FFFFFF)
+    .toString(16)
+    .toUpperCase();
+
+  return '#' + '00000'.substring(0, 6 - c.length) + c;
+}
+
+
 export const hashPassword = (password: string = '') => {
   const salt = crypto.randomBytes(16).toString('hex');
   const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
@@ -158,7 +190,6 @@ export const hashPassword = (password: string = '') => {
 // export const validatePassword = (password: string, salt: string) => {
 //   const inputHash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
 // }
-
 
 
 

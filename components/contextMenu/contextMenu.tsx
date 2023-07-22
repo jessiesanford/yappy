@@ -9,7 +9,7 @@ export const ContextMenu = observer(() => {
   } = useAppContext();
 
   const handleClickOutside = useCallback(() => {
-    store.ContextMenu.setHidden(true);
+    store.ContextMenu.destroy();
   }, []);
 
   const contextMenuRef = useOutsideClick(handleClickOutside);

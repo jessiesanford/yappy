@@ -9,7 +9,6 @@ type Data = {
 
 export default async function (req: NextApiRequest, res: NextApiResponse<Data>) {
   const { projectId } = req.query;
-  console.log(projectId);
   const PROJECT = await prisma.project.findUnique({
     where: {
       id: projectId

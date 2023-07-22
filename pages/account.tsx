@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]';
 import { GetServerSidePropsContext } from 'next';
 import { useSession } from 'next-auth/react';
+import StudioLayout from "../components/layouts/studioLayout";
 
 export default function Account() {
   const { data: session } = useSession();
@@ -13,11 +14,11 @@ export default function Account() {
   }
 
   return (
-    <BaseLayout title={'Account'}>
+    <StudioLayout title={'Account'}>
       <div className={'account-container'}>
         <div className={'info-row'}>
           <div className={'info-row__header'}>
-            Handle
+            Full Name
           </div>
           <div className={'info-row__value'}>
             {user.name}
@@ -32,7 +33,7 @@ export default function Account() {
           </div>
         </div>
       </div>
-    </BaseLayout>
+    </StudioLayout>
   );
 }
 

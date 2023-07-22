@@ -43,3 +43,11 @@ button {
     filter: brightness(1.25);
   }
 }
+
+button.action-btn {
+  background: $ourBlue;
+
+  &.cancel {
+    background: #505050;
+  }
+}

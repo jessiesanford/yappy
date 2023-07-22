@@ -3,13 +3,12 @@ import StudioLayout from '../components/layouts/studioLayout';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { ProjectItem } from '../components/projectFeed/projectItem';
 import { ProjectFeedEvents } from '../static/events';
-import { getServerSession } from 'next-auth';
-import { authOptions } from './api/auth/[...nextauth]';
 import { GetServerSidePropsContext } from 'next';
-import { ProjectFeedMock } from '../static/projectMocks';
-import { getProjects, deleteProject } from './api/project/projectApiHandler';
+import { deleteProject, getProjects } from './api/project/projectApiHandler';
 import { useAppContext } from '../components/appProvider';
 import { StudioToolbar } from '../components/studio/studioToolbar';
+import { AppPages } from "../util/enums";
+import { ProjectFeed } from "./project/projectFeed";
 
 interface IProjectFeedContext {
   deleteProject: (id: number) => Promise<void>;
@@ -27,41 +26,41 @@ function Studio(props: any) {
     store,
   } = useAppContext();
 
-  const [projects, setProjects] = useState(ProjectFeedMock.concat(props.projects));
+  const [projects, setProjects] = useState(props.projects);
 
-  useEffect(() => {
-    document.addEventListener(ProjectFeedEvents.PROJECT_FEED_UPDATED, () => {
-      getProjects().then((projects) => {
-        setProjects(ProjectFeedMock.concat(projects));
-      });
+  const handleProjectFeedUpdated = () => {
+    getProjects().then((projects) => {
+      setProjects(projects);
     });
-  }, []);
-
-  const renderProjectFeed = () => {
-    return projects.map((projectItem) => {
-      return <ProjectItem key={projectItem.id} data={projectItem}/>;
-    });
-  };
+  }
 
   const provided = {
     deleteProject,
   };
 
+  const generateSubView = () => {
+    switch (store.Studio.currentPage) {
+      case AppPages.PROJECTS:
+        return <ProjectFeed/>;
+      case AppPages.SETTINGS:
+        return <div>Settings</div>;
+      case AppPages.TRASH:
+      default:
+        return <div>Project</div>;
+    }
+  }
+
   return (
     <ProjectFeedContext.Provider value={provided}>
       <StudioLayout>
         <StudioToolbar/>
-        <div className={'project-list'}>
-          {renderProjectFeed()}
-        </div>
+        {generateSubView()}
       </StudioLayout>
     </ProjectFeedContext.Provider>
   );
 }
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  // const session = await getServerSession(context.req, context.res, authOptions);
-
   const dev = process.env.NODE_ENV !== 'production';
   const server = dev ? 'http://localhost:3000' : 'https://your_deployment.server.com';
 
@@ -70,22 +69,12 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   });
   const projects = await results.json();
 
-  // if (session) {
-    return {
-      props: {
-        // session,
-        projects,
-      }
-    };
-  // }
-  // else {
-  //   return {
-  //     redirect: {
-  //       permanent: false,
-  //       destination: '/login',
-  //     }
-  //   };
-  // }
+  return {
+    props: {
+      projects,
+    }
+  };
+
 };
 
 Studio.requireAuth = true;

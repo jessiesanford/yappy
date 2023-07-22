@@ -1,12 +1,15 @@
 .account-container {
-  width: 80%;
   margin: auto;
-  background: #303030;
-  color: #a0a0a0;
   padding: 20px;
+  width: 80%;
 
   .info-row {
     padding: 10px;
+    border-bottom: 1px solid #d0d0d0;
 
+    .info-row__header {
+      margin-bottom: 10px;
+      font-size: 14pt;
+    }
   }
 }
