@@ -1,15 +1,13 @@
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]';
-import StudioLayout from "../../components/layouts/studioLayout";
+import { StudioLayout } from '../../components/layouts/';
 
-export default function Project({ session, project }) {
+export default function Project({ project }) {
   const router = useRouter();
 
   return (
     <StudioLayout>
-      <div style={{padding: '20px'}}>
+      <div style={{ padding: '20px' }}>
         My post {project.name}
       </div>
     </StudioLayout>
@@ -18,7 +16,6 @@ export default function Project({ session, project }) {
 
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
   const query = context.query;
 
   const dev = process.env.NODE_ENV !== 'production';
@@ -29,19 +26,9 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   });
   const project = await results.json();
 
-  if (session) {
-    return {
-      props: {
-        session,
-        project,
-      }
-    };
-  } else {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/login',
-      }
-    };
-  }
+  return {
+    props: {
+      project,
+    }
+  };
 };

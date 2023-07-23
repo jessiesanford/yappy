@@ -21,7 +21,11 @@ export const CreateProjectModal = () => {
   };
 
   return (
-    <BaseModal title={'Create Project'} action={action}>
+    <BaseModal
+      title={'Create Project'}
+      action={action}
+      actionLabel={'Create'}
+    >
       <div className={'modal-content'}>
         <div className={'input-container'}>
           <input type={'text'}

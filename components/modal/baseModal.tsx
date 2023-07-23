@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { KeyNames } from '../../util/enums';
 import { useModalContext } from './modalProvider';
 import { makeDraggable } from '../../util/baseUtils';
-import { useAppContext } from "../appProvider";
+import { useAppContext } from '../appProvider';
 
 type BaseModalProps = {
   title?: string;
@@ -12,6 +12,7 @@ type BaseModalProps = {
   cancel?: () => void;
   renderModalHeading?: () => ReactElement;
   renderModalControls?: () => ReactElement;
+  actionLabel?: string;
 };
 
 export const BaseModal = observer((props: BaseModalProps) => {
@@ -114,7 +115,7 @@ export const BaseModal = observer((props: BaseModalProps) => {
         </div>
         <div className={'right-controls'}>
           <button className={'action-btn cancel'} onClick={doModalCancel}>Cancel</button>
-          <button className={'action-btn confirm-action'} onClick={doModalAction}>Ok</button>
+          <button className={'action-btn confirm-action'} onClick={doModalAction}>{props.actionLabel ? props.actionLabel : 'Ok'}</button>
         </div>
       </div>
     );
