@@ -1,9 +1,6 @@
-import BaseLayout from '../components/layouts/baseLayout';
-import { getServerSession } from 'next-auth';
-import { authOptions } from './api/auth/[...nextauth]';
 import { GetServerSidePropsContext } from 'next';
 import { useSession } from 'next-auth/react';
-import StudioLayout from "../components/layouts/studioLayout";
+import StudioLayout from '../components/layouts/studioLayout';
 
 export default function Account() {
   const { data: session } = useSession();
@@ -38,20 +35,8 @@ export default function Account() {
 }
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
-
-  if (session) {
-    return {
-      props: {
-        session,
-      }
-    };
-  } else {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/login',
-      }
-    };
-  }
+  return {
+    props: {
+    }
+  };
 }
