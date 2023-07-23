@@ -4,13 +4,14 @@ const dev = process.env.NODE_ENV !== 'production';
 const server = dev ? 'http://localhost:3000' : 'https://your_deployment.server.com';
 
 // write an api call to create a project
-export const createProject = async (name: string, createdBy: string) => {
+export const createProject = async (name: string, userId: string) => {
   await fetch('/api/project/create', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       name,
-      createdBy,
+      createdBy: userId,
+      updatedBy: userId,
     }),
   }).catch((e) => {
     console.log(e);
@@ -23,6 +24,12 @@ export const getProjects = async () => {
   });
   return await results.json();
 }
+
+export const getProjectsForUser = async (userId: number) => {
+  const results = await fetch(`${server}/api/project/getForUser/${userId}`, {
+    method: 'GET'
+  });
+};
 
 export const deleteProject = async (id: string) => {
   await fetch('/api/project/delete', {

@@ -18,7 +18,8 @@ model User {
   salt              String
   registeredAt      DateTime @default(now())
   lastActiveAt      DateTime?
-  projects          Project[]
+  projects          Project[] @relation(name: "createdBy")
+  updatedProjects   Project[] @relation(name: "updatedBy")
 }
 
 model Project {
@@ -27,11 +28,14 @@ model Project {
   name              String
   color             String?
   description       String
-  createdAt         DateTime @default(now())
-  createdUser       User @relation(fields: [createdBy], references: [id])
+
+  createdUser       User @relation("createdBy", fields: [createdBy], references: [id])
   createdBy         String
-  updatedAt         DateTime @updatedAt
+  updatedUser       User @relation("updatedBy", fields: [updatedBy], references: [id])
   updatedBy         String
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
   isTrashed         Boolean  @default(false)
   isArchived        Boolean  @default(false)
 }

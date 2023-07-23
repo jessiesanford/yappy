@@ -2,6 +2,7 @@ import moment from 'moment';
 import excuteQuery from '../../../lib/db';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
+import { getSession } from "next-auth/react";
 
 const prisma = new PrismaClient();
 
@@ -12,7 +13,7 @@ type Data = {
 
 export default async function (req: NextApiRequest, res: NextApiResponse<Data>) {
   if (req.method === 'POST') {
-    const { name, createdBy } = req.body;
+    const { name, createdBy, updatedBy, ownerId } = req.body;
     await prisma.project.create({
       data: {
         name,
@@ -20,7 +21,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse<Data>) 
         createdAt: new Date(moment().format('YYYY-MM-DD HH:mm:ss')),
         createdBy,
         updatedAt: new Date(moment().format('YYYY-MM-DD HH:mm:ss')),
-        updatedBy: '',
+        updatedBy,
       },
     });
     res.status(200).json({ success: 'very true' });
