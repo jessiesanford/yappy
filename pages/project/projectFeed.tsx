@@ -16,6 +16,10 @@ export const ProjectFeed = observer(() => {
 
   function handleProjectFeedUpdated() {
     getProjects().then((projects) => {
+      projects = projects.sort((a: TProjectItem, b: TProjectItem) => {
+        return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+      });
+
       switch (store.Studio.projectFilter) {
         case ProjectFilters.ALL:
           projects = projects.filter((project: TProjectItem) => {
@@ -35,7 +39,7 @@ export const ProjectFeed = observer(() => {
     document.addEventListener(ProjectFeedEvents.PROJECT_FEED_UPDATED, handleProjectFeedUpdated);
     return () => {
       document.removeEventListener(ProjectFeedEvents.PROJECT_FEED_UPDATED, handleProjectFeedUpdated);
-    }
+    };
   }, []);
 
   // load projects in

@@ -22,3 +22,10 @@ export const findUsersByEmail = async (searchText: string) => {
   });
   return await res.json();
 };
+
+export const getUserByEmail = async (email: string) => {
+  const res = await fetch(`/api/user/getByEmail/${email}`, {
+    method: 'GET',
+  });
+  return await res.json();
+}

@@ -1,18 +1,19 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import { useModalContext } from '../modal/modalProvider';
 import { BaseModal } from '../modal/baseModal';
 import words from 'random-words';
 import { useRouter } from 'next/router';
 import { ProjectFeedUpdated } from '../../static/events';
-import { createProject } from "../../pages/api/project/projectApiHandler";
-import { useSession } from "next-auth/react";
+import { createProject } from '../../pages/api/project/projectApiHandler';
+import { useSession } from 'next-auth/react';
+import { capitalizeEachWord } from "../../util/baseUtils";
 
 export const CreateProjectModal = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const user = session?.user;
 
-  const [name, setName] = useState(words({exactly: 3, join: ' '}));
+  const [name, setName] = useState(capitalizeEachWord(words({exactly: 3, join: ' '})));
 
   const action = () => {
     createProject(name, user.id).then((res) => {

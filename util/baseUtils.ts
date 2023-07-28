@@ -3,9 +3,22 @@ import * as _ from 'lodash';
 import { Point, Rectangle } from './mathUtils';
 import crypto from 'crypto';
 
+/**
+ * Generates a random UUID using the uuidv4 library
+ */
 export const generateId = () => {
   return uuidv4(); // a formality
-}
+};
+
+/**
+ * Capitalize the first letter of each word in a string
+ * @param str
+ */
+export const capitalizeEachWord = (str: string) => {
+  return str.split(' ').map((word) => {
+    return word[0].toUpperCase() + word.slice(1);
+  }).join(' ');
+};
 
 /**
  * Make draggable function with optional boundaries, and options for creating a dynamically updating
@@ -185,6 +198,18 @@ export const hashPassword = (password: string = '') => {
   const salt = crypto.randomBytes(16).toString('hex');
   const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
   return { salt, hash };
+};
+
+export const sortObjectArrayByDate = (array: object[], key: string, asc: boolean) => {
+  array.sort((a, b) => {
+    const dateA = new Date(a[key]);
+    const dateB = new Date(a[key]);
+    if (asc) {
+      return dateA.getTime() - dateB.getTime();
+    } else {
+      return dateB.getTime() - dateA.getTime();
+    }
+  });
 };
 
 // export const validatePassword = (password: string, salt: string) => {

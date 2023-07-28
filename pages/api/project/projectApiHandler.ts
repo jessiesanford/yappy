@@ -1,4 +1,5 @@
 import { ProjectFeedUpdated } from '../../../static/events';
+import { findUsersByEmail, getUserByEmail } from "../user/userApiHandler";
 
 const dev = process.env.NODE_ENV !== 'production';
 const server = dev ? 'http://localhost:3000' : 'https://your_deployment.server.com';
@@ -62,7 +63,46 @@ export const trashProject = async (id: number) => {
     }),
   });
   ProjectFeedUpdated();
-}
+};
+
+export const trashProjects = async (ids: string[]) => {
+  await fetch('/api/project/trashMany', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      ids
+    }),
+  });
+  ProjectFeedUpdated();
+};
+
+export const shareProject = async (projectId: string, emails: string[]) => {
+  const users = {};
+
+  for (const email of emails) {
+    const user = await getUserByEmail(email);
+    if (user) {
+      users[email] = user;
+    }
+  }
+
+  await fetch('/api/project/share', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      projectId,
+      emails,
+      users,
+    }),
+  });
+};
+
+export const getProjectShares = async (projectId: string) => {
+  const results = await fetch(`${server}/api/project/getShares/${projectId}`, {
+    method: 'GET'
+  });
+  return await results.json();
+};
 
 // write an api call to update a project
 export const updateProject = async (id: number, name: string, description: string, status: string, startDate: string, endDate: string, priority: string, projectManager: string, team: string) => {

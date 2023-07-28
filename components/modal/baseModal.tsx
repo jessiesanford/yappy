@@ -23,7 +23,7 @@ export const BaseModal = observer((props: BaseModalProps) => {
   const {
     doAction,
     doCancel,
-    handleKeyDown
+    handleKeyDown,
   } = useModalContext();
 
   const MODAL_STORE = store.Modal;
@@ -129,10 +129,10 @@ export const BaseModal = observer((props: BaseModalProps) => {
              padding: "20px",
              fontWeight: "bold",
              textAlign: "center",
-             // display: error?.hidden ? "none" : "block"
+             display: MODAL_STORE.error?.hidden ? "none" : "block"
            }}
       >
-        {/*{error?.msg}*/}
+        {MODAL_STORE.error?.msg}
       </div>
     );
   };
@@ -143,6 +143,7 @@ export const BaseModal = observer((props: BaseModalProps) => {
         {renderModalHeading()}
         {props.children}
         {renderModalControls()}
+        {renderModalErrorContainer()}
       </div>
     </div>
   );

@@ -37,7 +37,7 @@ const UserSearchResults = ({ searchText }) => {
 
   return (
     <div className={'user-results'}>
-      {users.map((u: User) => <UserRow user={u} />)}
+      {users.map((u: User, i: number) => <UserRow key={i} user={u} />)}
     </div>
   )
 }

@@ -2,7 +2,7 @@ import { makeAutoObservable } from 'mobx';
 import { ReactElement } from 'react';
 
 export type BaseModalProps = {
-  title: string,
+  title?: string,
   readOnly?: boolean,
   action?: (data) => void,
   cancel?: (data) => void,

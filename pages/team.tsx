@@ -22,20 +22,8 @@ export default function Studio(props: any) {
 }
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
-
-  if (session) {
-    return {
-      props: {
-        session,
-      }
-    };
-  } else {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/login',
-      }
-    };
-  }
+  return {
+    props: {
+    }
+  };
 };

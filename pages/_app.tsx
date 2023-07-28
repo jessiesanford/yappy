@@ -23,11 +23,9 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
 
   useEffect(() => {
     const start = () => {
-      console.log('start');
       setLoading(true);
     };
     const end = () => {
-      console.log('finished');
       setLoading(false);
     };
     Router.events.on('routeChangeStart', start);

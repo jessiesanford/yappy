@@ -1,7 +1,9 @@
 .account-container {
-  margin: auto;
+  background: #fff;
+  margin: 20px auto;
   padding: 20px;
   width: 80%;
+  box-shadow: $smallBoxShadow;
 
   .info-row {
     padding: 10px;

@@ -13,7 +13,6 @@ export default function BaseLayout({ children, title }: any) {
       <div className={'wrapper'}>
         {children}
       </div>
-      Hello
     </>
   );
 }

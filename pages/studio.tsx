@@ -6,7 +6,7 @@ import { ProjectFeedEvents } from '../static/events';
 import { GetServerSidePropsContext } from 'next';
 import { deleteProject, getProjects } from './api/project/projectApiHandler';
 import { useAppContext } from '../components/appProvider';
-import { StudioToolbar } from '../components/studio/studioToolbar';
+import { BaseStudioToolbar } from '../components/studio/toolbar/baseStudioToolbar';
 import { AppPages } from "../util/enums";
 import { ProjectFeed } from "./project/projectFeed";
 
@@ -53,7 +53,7 @@ function Studio(props: any) {
   return (
     <ProjectFeedContext.Provider value={provided}>
       <StudioLayout>
-        <StudioToolbar/>
+        <BaseStudioToolbar/>
         {generateSubView()}
       </StudioLayout>
     </ProjectFeedContext.Provider>

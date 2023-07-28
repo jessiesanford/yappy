@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 import { convertDateFormat, stringToColor } from "../../util/baseUtils";
 import { trashProject } from "../../pages/api/project/projectApiHandler";
+import { ShareProjectModal } from "../studio/shareProjectModal";
 
 export function ProjectItem(props: any) {
   return <ProjectItem_ {...props}/>;
@@ -14,8 +15,6 @@ export function ProjectItem(props: any) {
 export const ProjectItem_ = observer(({ data }: { data: any }) => {
   const {
     deleteProject,
-    // selectedProjectItems,
-    // handleProjectItemSelection,
   } = useProjectFeedContext();
 
   const router = useRouter();
@@ -41,6 +40,15 @@ export const ProjectItem_ = observer(({ data }: { data: any }) => {
 
   const ctxMenuOpts = [
     {
+      id: 'share',
+      label: 'Share',
+      icon: <FiShare/>,
+      onClick: () => {
+        store.Modal.showModal(ShareProjectModal, { projectId: data.id });
+        store.ContextMenu.setHidden(true);
+      },
+    },
+    {
       id: 'delete',
       label: 'Delete',
       icon: <FiTrash/>,
@@ -48,20 +56,9 @@ export const ProjectItem_ = observer(({ data }: { data: any }) => {
         trashProject(data.id).then(() => {
           setDeleted(true);
         });
-        // deleteProject(data.id).then(() => {
-        //   setDeleted(true);
-        // });
         store.ContextMenu.setHidden(true);
       },
     },
-    {
-      id: 'share',
-      label: 'Share',
-      icon: <FiShare/>,
-      onClick: () => {
-
-      },
-    }
   ];
 
   return (
