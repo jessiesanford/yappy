@@ -1,7 +1,6 @@
-import { CreateProjectModal } from '../createProjectModal';
 import { StudioToolbarButton } from './baseStudioToolbar';
 import { FiRotateCcw, FiTrash } from 'react-icons/fi';
-import { deleteProjects } from '../../../pages/api/project/projectApiHandler';
+import { deleteProjects, restoreProjects } from '../../../pages/api/project/projectApiHandler';
 import React from 'react';
 import { useAppContext } from '../../appProvider';
 import { observer } from "mobx-react-lite";
@@ -18,14 +17,17 @@ export const TrashToolbar = observer(() => {
       <StudioToolbarButton
         icon={<FiTrash/>}
         onClick={() => {
-          deleteProjects(STUDIO_STORE.selectedProjectItems);
+          STUDIO_STORE.setProcessingStatus(true, 'Deleting Projects');
+          deleteProjects(STUDIO_STORE.selectedProjectItems).then(() => {
+            STUDIO_STORE.resetProcessingStatus();
+          });
         }}
         disabled={STUDIO_STORE.selectedProjectItems.length === 0}
       />
       <StudioToolbarButton
         icon={<FiRotateCcw/>}
         onClick={() => {
-          deleteProjects(STUDIO_STORE.selectedProjectItems);
+          restoreProjects(STUDIO_STORE.selectedProjectItems);
         }}
         disabled={STUDIO_STORE.selectedProjectItems.length === 0}
       />

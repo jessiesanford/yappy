@@ -15,9 +15,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse<Data>) 
       data: {
         name,
         description: '',
-        createdAt: new Date(moment().format('YYYY-MM-DD HH:mm:ss')),
         createdBy,
-        updatedAt: new Date(moment().format('YYYY-MM-DD HH:mm:ss')),
         updatedBy,
       },
     });

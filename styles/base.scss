@@ -1,13 +1,4 @@
-button {
-  background: #61b7e7;
-  color: #fff;
-  padding: 5px 10px;
-  margin: 2px 0;
-  border-radius: 2px;
-  border: 0;
-  box-shadow: none;
-  font-family: Lato, Arial, sans-serif;
-}
+
 
 input[type='text'],
 input[type='password'] {
@@ -30,24 +21,3 @@ input[type='password'] {
   color: #ff8080;
 }
 
-button {
-  background: $ourBlue;
-  padding: 10px 20px;
-  outline: none;
-  border: none;
-  box-shadow: none;
-  cursor: pointer;
-  transition: filter 0.1s ease-in;
-
-  &:hover {
-    filter: brightness(1.25);
-  }
-}
-
-button.action-btn {
-  background: $ourBlue;
-
-  &.cancel {
-    background: #505050;
-  }
-}

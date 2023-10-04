@@ -1,12 +1,12 @@
 import { useAppContext } from '../../appProvider';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { TrashToolbar } from "./trashToolbar";
-import { ProjectsToolbar } from "./projectsToolbar";
-import { ProjectFilters } from "../../../store/studioStore";
+import { TrashToolbar } from './trashToolbar';
+import { ProjectsToolbar } from './projectsToolbar';
+import { ProjectFilters } from '../../../store/studioStore';
 
 type TStudioToolbarButton = {
-  label: string, onClick: () => void, disabled: boolean,
+  label?: string, onClick: () => void, disabled: boolean,
   icon?: React.ReactElement,
 };
 

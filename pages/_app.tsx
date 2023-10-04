@@ -6,10 +6,10 @@ import { AppProvider } from '../components/appProvider';
 import { SessionProvider } from 'next-auth/react';
 import { ModalProvider } from '../components/modal/modalProvider';
 import { ContextMenu } from '../components/contextMenu/contextMenu';
-import '../styles/index.scss';
 import { ProtectedLayout } from '../components/layouts/';
 import LoadingSplash from '../components/global/loadingSplash';
-
+import { ProcessingIndicator } from '../components/processingIndicator/processingIndicator';
+import '../styles/index.scss';
 
 type AppPropsWithAuth = AppProps & {
   Component: {
@@ -41,10 +41,11 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
   return (
     <>
       {
-        loading ? (<LoadingSplash/>) :
+        // loading ? (<LoadingSplash/>) :
           <AppProvider>
             <SessionProvider session={session}>
               <ContextMenu/>
+              <ProcessingIndicator/>
               <ModalProvider>
                 {Component.requireAuth ?
                   <ProtectedLayout>

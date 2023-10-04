@@ -6,6 +6,7 @@
 }
 
 .project-list {
+  margin-top: 60px;
   padding: 10px;
 }
 
@@ -60,7 +61,17 @@
     }
 
     .project-item__name {
+      display: flex;
+      align-items: center;
       font-size: 16pt;
+
+      input {
+        border: 1px solid #e0e0e0;
+      }
+
+      .edit-anchor {
+        font-size: 12pt;
+      }
     }
 
     .project-item__desc {
@@ -70,7 +81,7 @@
 
     .project-item__updated-at {
       font-size: 10pt;
-      color: #808080;
+      color: #a0a0a0;
     }
   }
 
@@ -83,5 +94,16 @@
     color: #202020;
     padding: 5px;
     border-radius: 5px;
+  }
+}
+
+.empty-project-feed {
+  padding: 40px;
+  text-align: center;
+
+  .empty-project-feed__heading {
+    font-size: 24pt;
+    font-weight: 600;
+    margin-bottom: 20px;
   }
 }

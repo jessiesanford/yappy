@@ -1,5 +1,3 @@
-// import { useSession, signIn, signOut } from "next-auth/react";
-import StudioLayout from '../components/layouts/studioLayout';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { ProjectItem } from '../components/projectFeed/projectItem';
 import { ProjectFeedEvents } from '../static/events';
@@ -9,6 +7,7 @@ import { GetServerSidePropsContext } from 'next';
 import { ProjectFeedMock } from '../static/projectMocks';
 import { getProjects, deleteProject } from './api/project/projectApiHandler';
 import { useAppContext } from '../components/appProvider';
+import { BaseLayout } from '../components/layouts';
 
 export default function Project(props: any) {
   const {
@@ -32,11 +31,11 @@ export default function Project(props: any) {
   };
 
   return (
-    <StudioLayout>
+    <BaseLayout>
       <div className={'project-list'}>
         {renderProjectFeed()}
       </div>
-    </StudioLayout>
+    </BaseLayout>
   );
 }
 

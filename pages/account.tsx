@@ -1,12 +1,25 @@
 import { GetServerSidePropsContext } from 'next';
-import { useSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import StudioLayout from '../components/layouts/studioLayout';
+import { AccountService } from '../services/accountService';
+import { useEffect } from 'react';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './api/auth/[...nextauth]';
 
-export default function Account() {
+
+
+export default function Account({ account } : { account: AccountService } ) {
   const { data: session } = useSession();
-  const user = session?.user;
+  const ACCOUNT = new AccountService(session?.user);
+  let user;
 
-  if (!user) {
+  useEffect(() => {
+    ACCOUNT.init().then(() => {
+      user = ACCOUNT;
+    });
+  }, []);
+
+  if (!account) {
     return null;
   }
 
@@ -18,7 +31,15 @@ export default function Account() {
             Full Name
           </div>
           <div className={'info-row__value'}>
-            {user.name}
+            {account.Name}
+          </div>
+        </div>
+        <div className={'info-row'}>
+          <div className={'info-row__header'}>
+            Handle
+          </div>
+          <div className={'info-row__value'}>
+            {account.Handle}
           </div>
         </div>
         <div className={'info-row'}>
@@ -26,7 +47,7 @@ export default function Account() {
             Email
           </div>
           <div className={'info-row__value'}>
-            {user.email}
+            {account.Email}
           </div>
         </div>
       </div>
@@ -35,8 +56,18 @@ export default function Account() {
 }
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  // const session = await getServerSession(context.req, context.res, authOptions);
+  const session = await getSession(context);
+  let accountService;
+
+  if (session) {
+    accountService = new AccountService(session.user.id);
+    await accountService.init();
+  }
+
   return {
     props: {
+      accountService,
     }
   };
 }

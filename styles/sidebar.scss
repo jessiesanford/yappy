@@ -1,5 +1,5 @@
 .studio-sidebar {
-  background: #202020;
+  background: #fff;
   position: absolute;
   height: calc(100vh - 60px);
   left: 0;
@@ -9,7 +9,7 @@
     padding-top: 10px;
 
     .nav-item {
-      color: #d0d0d0;
+      color: #101010;
       padding: 0px 30px;
       font-size: 12pt;
       transition: background-color 0.1s ease-in;
@@ -34,7 +34,6 @@
       }
 
       &:hover {
-        background: #202020;
         cursor: pointer;
       }
     }

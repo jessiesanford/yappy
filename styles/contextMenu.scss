@@ -3,7 +3,7 @@ $zIndexCtxMenu: 10500;
 .context-menu {
   width: 200px;
   position: absolute;
-  z-index: $zIndexCtxMenu;
+  z-index: $z-index-popover;
   font-size: 10pt;
 
   .context-menu__option {

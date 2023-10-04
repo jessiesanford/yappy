@@ -173,7 +173,7 @@ export function convertDateFormat(inputDate: string) {
     hour: 'numeric',
     minute: 'numeric',
     second: 'numeric',
-    timeZone: 'UTC'
+    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
   };
 
   return date.toLocaleString('en-US', options);
@@ -212,9 +212,20 @@ export const sortObjectArrayByDate = (array: object[], key: string, asc: boolean
   });
 };
 
-// export const validatePassword = (password: string, salt: string) => {
-//   const inputHash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
-// }
+export function debounce(func: () => void, delay: number) {
+  let timeoutId;
+
+  return function() {
+    const context = this;
+    const args = arguments;
+
+    clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(() => {
+      func.apply(context, args);
+    }, delay);
+  };
+}
 
 
 

@@ -6,6 +6,7 @@ import { useAppContext } from "../../components/appProvider";
 import { ProjectFeedEvents } from "../../static/events";
 import { ProjectFilters } from "../../store/studioStore";
 import { TProjectItem } from '../../types/projectTypes';
+import { CreateProjectModal } from "../../components/studio/createProjectModal";
 
 export const ProjectFeed = observer(() => {
   const {
@@ -48,6 +49,9 @@ export const ProjectFeed = observer(() => {
   }, [store.Studio.projectFilter]);
 
   const renderProjectFeed = () => {
+    if (projects.length === 0) {
+      return <EmptyProjectFeedDisplay/>;
+    }
     return projects.map((projectItem: ProjectItem) => {
       return <ProjectItem key={projectItem.id} data={projectItem}/>;
     });
@@ -59,3 +63,22 @@ export const ProjectFeed = observer(() => {
     </div>
   );
 });
+
+const EmptyProjectFeedDisplay = () => {
+  const {
+    store
+  } = useAppContext();
+
+  const MODAL_STORE = store.Modal;
+
+  return (
+    <div className={'empty-project-feed'}>
+      <div className={'empty-project-feed__heading'}>
+        You have no projects :(
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <button className={'outlined'}onClick={() => MODAL_STORE.showModal(CreateProjectModal, {})}>Create New Project</button>
+      </div>
+    </div>
+  )
+}

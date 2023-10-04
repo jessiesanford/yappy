@@ -11,6 +11,14 @@ export default async function (req: NextApiRequest, res: NextApiResponse<Data>) 
   const { ids } = body;
 
   if (req.method === 'POST') {
+    // delete project shares associated with project
+    await prisma.projectShare.deleteMany({
+      where: {
+        projectId: {
+          in: ids
+        }
+      }
+    });
     await prisma.project.deleteMany({
       where: {
         id: {

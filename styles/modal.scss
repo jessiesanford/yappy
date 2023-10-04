@@ -55,6 +55,10 @@
 
     .right-controls {
       margin-left: auto;
+
+      button:last-of-type {
+        margin-right: 0;
+      }
     }
 
     button {

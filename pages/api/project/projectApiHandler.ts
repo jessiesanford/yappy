@@ -1,5 +1,5 @@
 import { ProjectFeedUpdated } from '../../../static/events';
-import { findUsersByEmail, getUserByEmail } from "../user/userApiHandler";
+import { findUsersByEmail, getUserByEmail } from '../user/userApiHandler';
 
 const dev = process.env.NODE_ENV !== 'production';
 const server = dev ? 'http://localhost:3000' : 'https://your_deployment.server.com';
@@ -31,6 +31,13 @@ export const getProjectsForUser = async (userId: number) => {
     method: 'GET'
   });
 };
+
+export const searchUserProjects = async (queryString: string) => {
+  const results = await fetch(`${server}/api/project/search?text=${queryString}`, {
+    method: 'GET',
+  });
+  return await results.json();
+}
 
 export const deleteProject = async (id: string) => {
   await fetch('/api/project/delete', {
@@ -76,6 +83,17 @@ export const trashProjects = async (ids: string[]) => {
   ProjectFeedUpdated();
 };
 
+export const restoreProjects = async(ids: string[]) => {
+  await fetch('/api/project/restoreMany', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      ids
+    }),
+  });
+  ProjectFeedUpdated();
+}
+
 export const shareProject = async (projectId: string, emails: string[]) => {
   const users = {};
 
@@ -105,21 +123,24 @@ export const getProjectShares = async (projectId: string) => {
 };
 
 // write an api call to update a project
-export const updateProject = async (id: number, name: string, description: string, status: string, startDate: string, endDate: string, priority: string, projectManager: string, team: string) => {
+export const updateProject = async (id: number, data: any = {}) => {
   await fetch('/api/project/update', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       id,
-      name,
-      description,
-      status,
-      startDate,
-      endDate,
-      priority,
-      projectManager,
-      team
+      data
     }),
   });
   ProjectFeedUpdated();
+};
+
+export const deleteProjectSharesByProjectId = async (projectId: string) => {
+  await fetch('/api/projectShare/deleteMany', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      projectId
+    }),
+  });
 }

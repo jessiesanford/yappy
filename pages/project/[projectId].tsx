@@ -1,19 +1,138 @@
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next';
-import { StudioLayout } from '../../components/layouts/';
+import { StudioLayout } from '../../components/layouts';
+import { TProjectItem } from '../../types/projectTypes';
+import { FiCheck, FiDatabase, FiEdit, FiEdit2, FiFileText, FiPackage, FiPieChart } from "react-icons/fi";
+import { ReactElement, useState } from "react";
+import { updateProject } from "../api/project/projectApiHandler";
 
-export default function Project({ project }) {
-  const router = useRouter();
+type TProjectProps = {
+  project: TProjectItem
+};
+
+type TProjectModuleGridProps = {
+  children: JSX.Element[],
+}
+
+type TProjectModuleProps = {
+  name: string,
+  icon?: ReactElement,
+}
+
+export default function Project({ project }: TProjectProps) {
+  const [showNameTools, setShowNameTools] = useState(false);
+  const [editNameMode, setEditNameMode] = useState(false);
+  const [name, setName] = useState(project.name);
+
+  const renderNameTools = () => {
+    if (showNameTools) {
+      return (
+        <div className={''} style={{marginLeft: '20px'}}>
+          {!editNameMode ?
+            <div onClick={(e) => {
+              e.stopPropagation();
+              setEditNameMode(true);
+            }} className={'edit-anchor'}>
+              <FiEdit2/>
+            </div> :
+            <div onClick={(e) => {
+              e.stopPropagation();
+              setEditNameMode(false);
+            }} className={'edit-anchor'}>
+              <FiCheck/>
+            </div>
+          }
+        </div>
+      );
+    }
+
+    return null;
+  };
 
   return (
-    <StudioLayout>
-      <div style={{ padding: '20px' }}>
-        My post {project.name}
+    <StudioLayout title={project.name}>
+      <div className={'project-view'}>
+        <div className={'project-heading'}
+             onMouseOver={() => setShowNameTools(true)}
+             onMouseOut={() => setShowNameTools(false)}
+        >
+          <div className={'project-name'}>
+            {editNameMode ?
+              <input value={name}
+                     style={{ width: '400px' }}
+                     onChange={(e) => {
+                       setName(e.target.value);
+                     }}
+                     autoFocus={true}
+                     onClick={(e) => {
+                       e.stopPropagation();
+                     }}
+                     onKeyDown={(e) => {
+                       if (e.key === 'Enter') {
+                         updateProject(project.id, { name });
+                         setEditNameMode(false);
+                       }
+                     }}
+              /> :
+              name}
+          </div>
+          {renderNameTools()}
+        </div>
+        <ProjectModuleGrid>
+          <ProjectModule name={'Editor'}
+                         icon={<FiFileText size={20}/>}
+          />
+          <ProjectModule name={'Catalog'}
+                         icon={<FiDatabase size={20}/>}
+          />
+          <ProjectModule name={'Reports'}
+                         icon={<FiPieChart size={20}/>}
+          />
+          <ProjectModule name={'Assets'}
+                         icon={<FiPackage size={20}/>}
+          />
+        </ProjectModuleGrid>
       </div>
     </StudioLayout>
   );
 }
 
+export function ProjectModuleGrid({ children }: TProjectModuleGridProps) {
+  return (
+    <div>
+      <div className={'project-modules__container'}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+export function ProjectModule({ name, icon }: TProjectModuleProps) {
+  const renderIcon = () => {
+    if (icon) {
+      return (
+        <div className={'module__icon'}>
+          {icon}
+        </div>
+      );
+    }
+
+    return null;
+  };
+
+  return (
+    <div className={'module__container'}>
+      <div className={'module__block'}>
+        <div className={'module__heading'}>
+          {renderIcon()}
+          <div>
+            {name}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const query = context.query;

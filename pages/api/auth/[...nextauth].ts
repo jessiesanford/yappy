@@ -17,14 +17,20 @@ export const authOptions: NextAuthOptions = {
     Credentials({
       name: 'Credentials',
       credentials: {
-        email: { label: 'email', type: 'text' },
-        password: { label: 'password', type: 'password' }
+        email: {
+          label: 'email',
+          type: 'text'
+        },
+        password: {
+          label: 'password',
+          type: 'password'
+        }
       },
       async authorize(credentials, req) {
         const email = credentials ? credentials.email : '';
         const password = credentials ? credentials.password : '';
 
-        const res = await fetch('http://localhost:3000/api/auth/signin2', {
+        const res = await fetch('http://localhost:3000/api/auth/signin', {
           method: 'POST',
           body: JSON.stringify({ email, password }),
           headers: {
@@ -34,37 +40,34 @@ export const authOptions: NextAuthOptions = {
 
         const user = await res.json();
 
-        // If no error and we have user data, return it
         if (res.ok && user) {
-          return {
-            id: user.id,
-            email: user.email,
-            name: user.handle,
-          };
+          return user;
         }
         return null;
       }
     }),
-    GithubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
-    }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
-    }),
-    Auth0Provider({
-      clientId: process.env.AUTH0_ID,
-      clientSecret: process.env.AUTH0_SECRET,
-      issuer: process.env.AUTH0_ISSUER,
-    }),
+    // GithubProvider({
+    //   clientId: process.env.GITHUB_ID,
+    //   clientSecret: process.env.GITHUB_SECRET,
+    // }),
+    // GoogleProvider({
+    //   clientId: process.env.GOOGLE_ID,
+    //   clientSecret: process.env.GOOGLE_SECRET,
+    // }),
+    // Auth0Provider({
+    //   clientId: process.env.AUTH0_ID,
+    //   clientSecret: process.env.AUTH0_SECRET,
+    //   issuer: process.env.AUTH0_ISSUER,
+    // }),
   ],
   theme: {
     colorScheme: 'light',
   },
+  session: {
+    jwt: true
+  },
   callbacks: {
     async jwt({ token, user }) {
-      token.userRole = 'admin';
       return token;
     },
     async session({ session, token, user }) {

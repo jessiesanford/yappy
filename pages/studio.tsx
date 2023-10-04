@@ -32,7 +32,7 @@ function Studio(props: any) {
     getProjects().then((projects) => {
       setProjects(projects);
     });
-  }
+  };
 
   const provided = {
     deleteProject,

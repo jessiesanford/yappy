@@ -1,8 +1,8 @@
 import { useSession } from 'next-auth/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
-import { HeaderNavItem } from '../header/headerNavItem';
+import { HeaderNavItem } from './headerNavItem';
 import { FiActivity } from 'react-icons/fi';
 
 type DropdownItemProps = {
@@ -10,10 +10,33 @@ type DropdownItemProps = {
   onClick?: () => void,
 }
 
+const generateIntials = (name: string) => {
+  // Split the name into words
+  const words = name.split(' ');
+
+  // Initialize an empty string to store the initials
+  let initials = '';
+
+  // Loop through the words and extract the first character of each word
+  for (let i = 0; i < words.length && initials.length < 2; i++) {
+    initials += words[i][0];
+  }
+
+  return initials;
+}
+
 export function StudioHeader() {
   const { data: session } = useSession();
   const user = session?.user;
   const router = useRouter();
+
+  useEffect(() => {
+    window.user = user;
+
+    return () => {
+      delete window.user;
+    };
+  }, [user]);
 
   // gotta implement user menu
   const [userMenuHidden, setUserMenuHidden] = useState(true);
@@ -21,12 +44,13 @@ export function StudioHeader() {
   const generateUserPanel = () => {
     return (
       <div className={'user-panel'}>
-        <div className={'user-panel__avatar'}>
-          <img src={''} />
+        <div className={'user-panel__avatar'} onClick={() => setUserMenuHidden(!userMenuHidden)}>
+          <div className={'avatar__initials'}>
+            {generateIntials(user?.name || 'Unknown User')}
+          </div>
         </div>
         <div className={'user-panel__handle'}
              onClick={() => setUserMenuHidden(!userMenuHidden)}>
-          <div>{user?.name}</div>
           <div className={`user-panel__dropdown ${userMenuHidden ? 'hidden' : null}`}>
             <DropdownItem label={'Settings'}
                           onClick={() => {
@@ -65,7 +89,6 @@ export const HeaderNavigation = () => {
   return (
     <div className={'header-nav'}>
       <HeaderNavItem name={'Studio'} link={'/studio'} />
-      <HeaderNavItem name={'Account'} link={'/account'} />
     </div>
   );
 };

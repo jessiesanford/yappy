@@ -1,8 +1,12 @@
 .studio-toolbar {
-  background: transparent;
+  background: #e0e0e0;
   padding: 10px;
   display: flex;
   align-items: center;
+  //position: absolute;
+  width: 100%;
+  height: 50px;
+  z-index: $z-index-layer1;
 
   button.create-project {
     margin-right: 10px;
@@ -14,17 +18,23 @@
     border-radius: 3px;
     display: flex;
     width: fit-content;
-    color: #f0f0f0;
+    color: #fff;
     cursor: pointer;
-    transition: background-color 0.1s ease-in;
+    margin-right: 10px;
+    transition: all 0.1s ease-in;
 
     &.disabled {
-      background: #303030;
-      color: #606060;
+      background: #a0a0a0;
+      color: #404040;
+      cursor: default;
+
+      &:hover {
+        filter: none;
+      }
     }
 
     &:hover {
-      background: #404040;
+      filter: brightness(1.2);
     }
   }
 }

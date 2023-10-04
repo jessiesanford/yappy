@@ -1,8 +1,10 @@
 import { BaseModal } from '../modal/baseModal';
-import React, { useRef, useState } from 'react';
-import { shareProject } from '../../pages/api/project/projectApiHandler';
+import React, { useEffect, useRef, useState } from 'react';
+import { getProjects, shareProject } from '../../pages/api/project/projectApiHandler';
 import { useAppContext } from '../appProvider';
 import { FiCrosshair, FiDelete, FiPlus, FiTrash, FiX } from 'react-icons/fi';
+import { getProjectShares } from '../../pages/api/project/projectApiHandler';
+import { getUserByEmail, getUsersByIds } from '../../pages/api/user/userApiHandler';
 
 export const ShareProjectModal = (props) => {
   const {
@@ -13,6 +15,22 @@ export const ShareProjectModal = (props) => {
   const [emails, setEmails] = useState([]);
   const [error, setError] = useState(null);
   const emailInputRef = useRef();
+
+  useEffect(() => {
+    getProjectShares(props.projectId).then(async (shares) => {
+      const userIds = shares.filter((share) => share.userId).reduce((result, obj) => {
+        result.push(obj.userId);
+        return result;
+      }, []);
+      const emails = shares.filter((share) => share.email);
+      const users = await getUsersByIds(userIds);
+      const userEmails = users.reduce((result, obj) => {
+        result.push(obj.email);
+        return result;
+      }, []);
+      setEmails(emails.concat(userEmails));
+    });
+  }, []);
 
   const handleInputChange = (e: InputEvent) => {
     setEmail(e.target.value);
@@ -26,7 +44,7 @@ export const ShareProjectModal = (props) => {
   };
 
   const handleAddEmail = () => {
-    let formattedEmail = email.trim().toLowerCase();
+    const formattedEmail = email.trim().toLowerCase();
     if (!validateEmail(formattedEmail)) {
       // store.Modal.setError({ msg: 'Invalid email address.', hidden: false });
       setError('Invalid email address.');

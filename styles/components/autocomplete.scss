@@ -1,0 +1,31 @@
+.autocomplete {
+  position: relative;
+  input[type='text'] {
+    height: 30px;
+    font-size: 10pt;
+    width: 240px;
+  }
+
+  .autocomplete-results {
+    position: absolute;
+    background: #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    width: 360px;
+    right: 0;
+    top: 36px;
+
+    .result-container {
+      padding: 15px;
+      font-size: 10pt;
+
+      .result-title {
+
+      }
+
+      &:hover {
+        cursor: pointer;
+        background: #f0f0f0;
+      }
+    }
+  }
+}

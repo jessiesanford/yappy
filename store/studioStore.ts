@@ -11,9 +11,20 @@ export class StudioStore {
   currentPage: AppPages = AppPages.PROJECTS;
   projectFilter: ProjectFilters = ProjectFilters.ALL;
   selectedProjectItems: string[] = [];
+  processingStatus: { hidden: boolean, msg: string | undefined } = { hidden: true };
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  setProcessingStatus(hidden: boolean, msg: string) {
+    this.processingStatus = { hidden, msg };
+  }
+
+  resetProcessingStatus(timeout = 0) {
+    setTimeout(() => {
+      this.processingStatus = { hidden: true, msg: '' };
+    }, timeout);
   }
 
   setCurrentPage(page: AppPages) {
@@ -22,6 +33,7 @@ export class StudioStore {
 
   setProjectFilter(filter: ProjectFilters) {
     this.projectFilter = filter;
+    this.setSelectedProjectItems([]);
   }
 
   toggleProjectItemSelected = (id: string) => {
@@ -34,4 +46,8 @@ export class StudioStore {
     }
     this.selectedProjectItems = projectItems;
   };
+
+  setSelectedProjectItems = (ids: string[]) => {
+    this.selectedProjectItems = ids;
+  }
 }
