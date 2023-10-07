@@ -142,3 +142,23 @@ export const ProjectItem = observer(({ data }: { data: any }) => {
     </div>
   );
 });
+
+export const GhostProjectItem = () => {
+  return (
+    <div className={'project-item'}>
+      <div className={'project-item__select'}>
+      </div>
+      <div className={'project-item__content project-item__ghost-content'}>
+        <div className={'project-item__img-container'} style={{backgroundColor: '#e0e0e0'}}>
+          <div className={'project-item__img'}>
+          </div>
+        </div>
+        <div className={'project-item__info'}>
+          <div className={'project-item__ghost-name'}/>
+          <div className={'project-item__ghost-desc'}/>
+          <div className={'project-item__ghost-desc'}/>
+        </div>
+      </div>
+    </div>
+  );
+};

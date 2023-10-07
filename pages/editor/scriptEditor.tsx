@@ -1,22 +1,27 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Editor } from './editor';
 
 export const ScriptEditor = () => {
+  const [editor, setEditor] = useState<Editor>(new Editor());
 
   useEffect(() => {
-    const editor = new Editor();
-    editor.init(SCRIPT_REF.current);
+    if (!editor.loaded) {
+      editor.init(SCRIPT_REF.current);
+      setEditor(editor);
+    }
 
     return () => {
-      editor.destroy();
-    }
+      // editor.destroy();
+    };
   }, []);
 
   const SCRIPT_REF = useRef(null);
 
   return (
-    <div>
+    <div style={{ margin: 'auto', width: '80%' }}>
       <div className={'editor'} ref={SCRIPT_REF}/>
+      <button onClick={() => editor.connect()}>Connect</button>
     </div>
   );
 };
+

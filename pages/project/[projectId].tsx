@@ -17,6 +17,7 @@ type TProjectModuleGridProps = {
 type TProjectModuleProps = {
   name: string,
   icon?: ReactElement,
+  link?: string,
 }
 
 export default function Project({ project }: TProjectProps) {
@@ -81,6 +82,7 @@ export default function Project({ project }: TProjectProps) {
         <ProjectModuleGrid>
           <ProjectModule name={'Editor'}
                          icon={<FiFileText size={20}/>}
+                         link={`/editor/${project.id}`}
           />
           <ProjectModule name={'Catalog'}
                          icon={<FiDatabase size={20}/>}
@@ -107,7 +109,9 @@ export function ProjectModuleGrid({ children }: TProjectModuleGridProps) {
   );
 }
 
-export function ProjectModule({ name, icon }: TProjectModuleProps) {
+export function ProjectModule({ name, icon, link }: TProjectModuleProps) {
+  const router = useRouter();
+
   const renderIcon = () => {
     if (icon) {
       return (
@@ -121,7 +125,7 @@ export function ProjectModule({ name, icon }: TProjectModuleProps) {
   };
 
   return (
-    <div className={'module__container'}>
+    <div className={'module__container'} onClick={() => router.push(link)}>
       <div className={'module__block'}>
         <div className={'module__heading'}>
           {renderIcon()}

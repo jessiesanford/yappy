@@ -7,7 +7,6 @@ import { SessionProvider } from 'next-auth/react';
 import { ModalProvider } from '../components/modal/modalProvider';
 import { ContextMenu } from '../components/contextMenu/contextMenu';
 import { ProtectedLayout } from '../components/layouts/';
-import LoadingSplash from '../components/global/loadingSplash';
 import { ProcessingIndicator } from '../components/processingIndicator/processingIndicator';
 import '../styles/index.scss';
 

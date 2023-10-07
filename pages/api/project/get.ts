@@ -16,15 +16,3 @@ export default async function (req: NextApiRequest, res: NextApiResponse<Data>) 
     res.status(400).json([]);
   }
 };
-
-// local - db
-// export default function handler(
-//   req: NextApiRequest,
-//   res: NextApiResponse<Data>
-// ) {
-//   excuteQuery({
-//     query: 'SELECT * FROM projects',
-//   }).then((queryResults) => {
-//     res.status(200).json(queryResults[0])
-//   });
-// }

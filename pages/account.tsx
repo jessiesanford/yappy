@@ -2,30 +2,32 @@ import { GetServerSidePropsContext } from 'next';
 import { getSession, useSession } from 'next-auth/react';
 import StudioLayout from '../components/layouts/studioLayout';
 import { AccountService } from '../services/accountService';
-import { useEffect } from 'react';
-import { getServerSession } from 'next-auth';
-import { authOptions } from './api/auth/[...nextauth]';
+import { useEffect, useState } from 'react';
+import { getUsersById } from './api/user/userApiHandler';
+import { User } from 'next-auth';
 
-
-
-export default function Account({ account } : { account: AccountService } ) {
-  const { data: session } = useSession();
-  const ACCOUNT = new AccountService(session?.user);
-  let user;
+export default function Account({ user }: { user: User }) {
+  const [account, setAccount] = useState<AccountService>();
 
   useEffect(() => {
-    ACCOUNT.init().then(() => {
-      user = ACCOUNT;
+    getUsersById(user?.id).then((users) => {
+      if (users.length > 0) {
+        setAccount(new AccountService(users[0]));
+      }
     });
   }, []);
 
-  if (!account) {
-    return null;
-  }
+  const renderAccountLoading = () => {
+    return (
+      <div>
+        Account Loading
+      </div>
+    );
+  };
 
-  return (
-    <StudioLayout title={'Account'}>
-      <div className={'account-container'}>
+  const renderAccountSettings = () => {
+    return (
+      <>
         <div className={'info-row'}>
           <div className={'info-row__header'}>
             Full Name
@@ -50,24 +52,25 @@ export default function Account({ account } : { account: AccountService } ) {
             {account.Email}
           </div>
         </div>
+      </>
+    )
+  }
+
+  return (
+    <StudioLayout title={'Account'}>
+      <div className={'account-container'}>
+        {!account ? renderAccountLoading() : renderAccountSettings()}
       </div>
     </StudioLayout>
   );
 }
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  // const session = await getServerSession(context.req, context.res, authOptions);
   const session = await getSession(context);
-  let accountService;
-
-  if (session) {
-    accountService = new AccountService(session.user.id);
-    await accountService.init();
-  }
 
   return {
     props: {
-      accountService,
+      user: session.user,
     }
   };
 }

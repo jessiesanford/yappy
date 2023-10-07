@@ -1,20 +1,21 @@
 import { GetServerSidePropsContext } from 'next';
-import { StudioLayout } from '../../components/layouts';
 import { TProjectItem } from '../../types/projectTypes';
-import { FiCheck, FiDatabase, FiEdit, FiEdit2, FiFileText, FiPackage, FiPieChart } from 'react-icons/fi';
-import { ReactElement, useState } from 'react';
-import { updateProject } from '../api/project/projectApiHandler';
-import ModuleLayout from "../../components/layouts/moduleLayout";
+import { FiCheck, FiEdit2, } from 'react-icons/fi';
+import { useEffect, useState } from 'react';
+import ModuleLayout from '../../components/layouts/moduleLayout';
 import { ScriptEditor } from './scriptEditor';
 
 type TProjectProps = {
   project: TProjectItem
 };
 
-export default function Project({ project }: TProjectProps) {
+export default function EditorModule({ project }: TProjectProps) {
   const [showNameTools, setShowNameTools] = useState(false);
   const [editNameMode, setEditNameMode] = useState(false);
   const [name, setName] = useState(project.name);
+
+  useEffect(() => {
+  }, []);
 
   const renderNameTools = () => {
     if (showNameTools) {

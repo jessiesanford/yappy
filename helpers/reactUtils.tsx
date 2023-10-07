@@ -7,7 +7,7 @@ export const useOutsideClick = (callback) => {
     const handleClick = (event: Event) => {
       const el: React.RefObject<HTMLDivElement> = ref.current;
       if (el && !el?.contains(event.target)) {
-        callback();
+        callback(event);
       }
     };
 

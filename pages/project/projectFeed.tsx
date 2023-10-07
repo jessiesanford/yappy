@@ -1,12 +1,12 @@
-import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
-import { getProjects } from "../api/project/projectApiHandler";
-import { ProjectItem } from "../../components/projectFeed/projectItem";
-import { useAppContext } from "../../components/appProvider";
-import { ProjectFeedEvents } from "../../static/events";
-import { ProjectFilters } from "../../store/studioStore";
+import { observer } from 'mobx-react-lite';
+import { useEffect, useState } from 'react';
+import { getProjects } from '../api/project/projectApiHandler';
+import { GhostProjectItem, ProjectItem } from '../../components/projectFeed/projectItem';
+import { useAppContext } from '../../components/appProvider';
+import { ProjectFeedEvents } from '../../static/events';
+import { ProjectFilters } from '../../store/studioStore';
 import { TProjectItem } from '../../types/projectTypes';
-import { CreateProjectModal } from "../../components/studio/createProjectModal";
+import { CreateProjectModal } from '../../components/studio/createProjectModal';
 
 export const ProjectFeed = observer(() => {
   const {
@@ -14,25 +14,29 @@ export const ProjectFeed = observer(() => {
   } = useAppContext();
 
   const [projects, setProjects] = useState([]);
+  const [projectsLoaded, setProjectsLoaded] = useState(false);
 
   function handleProjectFeedUpdated() {
     getProjects().then((projects) => {
-      projects = projects.sort((a: TProjectItem, b: TProjectItem) => {
-        return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
-      });
+      setTimeout(() => {
+        projects = projects.sort((a: TProjectItem, b: TProjectItem) => {
+          return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+        });
 
-      switch (store.Studio.projectFilter) {
-        case ProjectFilters.ALL:
-          projects = projects.filter((project: TProjectItem) => {
-            return !project.isTrashed;
-          });
-          break;
-        case ProjectFilters.TRASHED:
-          projects = projects.filter((project: TProjectItem) => {
-            return project.isTrashed;
-          });
-      }
-      setProjects(projects);
+        switch (store.Studio.projectFilter) {
+          case ProjectFilters.ALL:
+            projects = projects.filter((project: TProjectItem) => {
+              return !project.isTrashed;
+            });
+            break;
+          case ProjectFilters.TRASHED:
+            projects = projects.filter((project: TProjectItem) => {
+              return project.isTrashed;
+            });
+        }
+        setProjects(projects);
+        setProjectsLoaded(true);
+      }, 2000);
     });
   }
 
@@ -59,10 +63,22 @@ export const ProjectFeed = observer(() => {
 
   return (
     <div className={'project-list'}>
-      {renderProjectFeed()}
+      {!projectsLoaded ? <GhostProjectFeed/> : renderProjectFeed()}
     </div>
   );
 });
+
+const GhostProjectFeed = () => {
+  const ghostProjects = [];
+  for (let i = 0; i <= 5; i++) {
+    ghostProjects.push(<GhostProjectItem key={i} />)
+  }
+  return (
+    <>
+      {ghostProjects}
+    </>
+  );
+};
 
 const EmptyProjectFeedDisplay = () => {
   const {
@@ -80,5 +96,5 @@ const EmptyProjectFeedDisplay = () => {
         <button className={'outlined'}onClick={() => MODAL_STORE.showModal(CreateProjectModal, {})}>Create New Project</button>
       </div>
     </div>
-  )
-}
+  );
+};
