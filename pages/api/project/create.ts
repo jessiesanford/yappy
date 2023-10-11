@@ -5,7 +5,8 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 type Data = {
-  success: string
+  success?: string,
+  message?: string,
 }
 
 export default async function (req: NextApiRequest, res: NextApiResponse<Data>) {
@@ -19,6 +20,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse<Data>) 
         updatedBy,
       },
     });
-    res.status(200).json({ success: 'very true' });
+    res.status(200).json({ success: 'Project Created Successfully' });
+  } else {
+    return res.status(405).json({ message: 'Method Not Allowed' });
   }
 };

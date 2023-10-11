@@ -1,29 +1,25 @@
-import excuteQuery from '../../../lib/db';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 type Data = {
+  message?: string,
+  project?: Prisma.ProjectCreateInput,
 }
 
 export default async function (req: NextApiRequest, res: NextApiResponse<Data>) {
-  const { projectId } = req.query;
-  const PROJECT = await prisma.project.findUnique({
-    where: {
-      id: projectId
-    }
-  });
-  res.send(JSON.stringify(PROJECT, null, 2));
-};
+  if (req.method === 'GET') {
+    const { projectId } = req.query;
 
-// export default function handler(
-//   req: NextApiRequest,
-//   res: NextApiResponse<Data>
-// ) {
-//   excuteQuery({
-//     query: 'SELECT * FROM projects WHERE id = 1',
-//   }).then((queryResults) => {
-//     res.status(200).json(queryResults[0]);
-//   });
-// }
+    const PROJECT = await prisma.project.findUnique({
+      where: {
+        id: projectId
+      }
+    });
+    res.status(200).json({ project: PROJECT });
+  } else {
+    return res.status(405).json({ message: 'Method Not Allowed' });
+  }
+};

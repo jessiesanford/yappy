@@ -1,23 +1,29 @@
 import * as Y from 'yjs';
+import applyDevTools from 'prosemirror-dev-tools';
 import { WebsocketProvider } from 'y-websocket';
 import { WebrtcProvider } from 'y-webrtc';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
-import { ySyncPlugin, yCursorPlugin, yUndoPlugin, undo, redo } from 'y-prosemirror';
-import { keymap } from 'prosemirror-keymap';
-import { schema } from './schema';
+import { ySyncPlugin, yCursorPlugin, yUndoPlugin } from 'y-prosemirror';
+import { EditorSchema } from './schema/schema';
+import { EditorKeymap } from './keymap';
+import { NodeViewPlugin } from './plugins/nodeViewPlugin';
+import { handleDOMEvents } from './event/baseEvents';
 
 export class Editor {
   editorView: EditorView;
   loaded: boolean = false;
   provider: WebsocketProvider | WebrtcProvider;
+
   constructor() {
+    this.editorView = null;
+    this.provider = null;
   }
 
   setupProvider(ydoc) {
     if (!this.provider) {
-      // this.provider = new WebsocketProvider('ws://localhost:3000', 'helloWorld', ydoc);
-      this.provider = new WebrtcProvider('myRoom', ydoc);
+      this.provider = new WebsocketProvider('ws://localhost:3000', 'helloWorld', ydoc);
+      // this.provider = new WebrtcProvider('myRoom', ydoc);
     }
   }
 
@@ -26,24 +32,22 @@ export class Editor {
     const type = ydoc.getXmlFragment('prosemirror');
     this.setupProvider(ydoc);
 
+
     this.editorView = new EditorView(container, {
       state: EditorState.create({
-        schema,
+        schema: EditorSchema,
         plugins: [
           ySyncPlugin(type),
           yCursorPlugin(this.provider.awareness),
           yUndoPlugin(),
-          keymap({
-            'Mod-z': undo,
-            'Mod-y': redo,
-            'Mod-Shift-z': redo
-          })
-        ]
-          // .concat(exampleSetup({ schema }))
-      })
+          EditorKeymap,
+          NodeViewPlugin,
+        ],
+      }),
+      handleDOMEvents: handleDOMEvents,
     });
-
     this.loaded = true;
+    applyDevTools(this.editorView);
   }
 
   connect() {

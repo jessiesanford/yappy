@@ -30,14 +30,6 @@ export function StudioHeader() {
   const user = session?.user;
   const router = useRouter();
 
-  useEffect(() => {
-    window.user = user;
-
-    return () => {
-      delete window.user;
-    };
-  }, [user]);
-
   // gotta implement user menu
   const [userMenuHidden, setUserMenuHidden] = useState(true);
 

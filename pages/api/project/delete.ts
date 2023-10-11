@@ -20,6 +20,6 @@ export default async function (req: NextApiRequest, res: NextApiResponse<Data>) 
         id: id
       }
     });
-    res.status(200).json({ success: 'very true' });
+    res.status(200).json({ success: `Project ${id} deleted successfully.` });
   }
 };

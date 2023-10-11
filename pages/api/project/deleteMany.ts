@@ -26,6 +26,6 @@ export default async function (req: NextApiRequest, res: NextApiResponse<Data>) 
         }
       }
     });
-    res.status(200).json({ success: 'Endpoint Resolved Successfully' });
+    res.status(200).json({ success: `Project with ids ${ids.toString()}` });
   }
 };

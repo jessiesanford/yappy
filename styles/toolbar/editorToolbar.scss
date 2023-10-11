@@ -1,0 +1,26 @@
+.editor-toolbar {
+  background: #000000;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+
+  .toolbar-section {
+    display: flex;
+    align-items: center;
+  }
+
+  .toolbar-button {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+
+    .toolbar-button__icon {
+
+    }
+
+    .toolbar-button__label {
+
+    }
+
+  }
+}

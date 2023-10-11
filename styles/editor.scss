@@ -1,0 +1,84 @@
+.editor {
+
+  .ProseMirror {
+    &.ProseMirror-focused {
+      outline: none;
+    }
+  }
+
+  .ProseMirror-yjs-cursor {
+    position: relative;
+    margin-left: -1px;
+    margin-right: -1px;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-color: orange;
+    word-break: normal;
+    pointer-events: none;
+    text-transform: none;
+
+    & > div {
+      font-family: $defaultFont;
+      position: absolute;
+      top: -1.05em;
+      left: -1px;
+      font-size: 13px;
+      background-color: #fa8100;
+      font-style: normal;
+      font-weight: normal;
+      line-height: normal;
+      user-select: none;
+      color: white;
+      padding-left: 2px;
+      padding-right: 2px;
+      white-space: nowrap;
+    }
+  }
+
+  .page {
+    width: 9.5in;
+    height: 11in;
+    padding: 1in 1.5in 1in 1.5in;
+    box-sizing: border-box;
+    background: #fff;
+    margin: auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+
+    p {
+      font-family: 'Courier', serif;
+      color: #101010;
+      width: 460px;
+      margin: auto auto 10px auto;
+      font-size: 12pt;
+
+      &.placeholder::before {
+        display: block;
+        cursor: text;
+        position: absolute;
+        opacity: 0.2;
+      }
+    }
+
+    p.paragraph {
+      margin-left: calc(4in - 1.5in);
+      &.placeholder::before {
+        content: "Paragraph";
+      }
+    }
+
+    p.character {
+      text-transform: uppercase;
+      margin-left: calc(4.5in - 1.5in);
+      &.placeholder::before {
+        content: "Character";
+      }
+    }
+
+    p.dialogue {
+      margin-left: calc(4.5in - 1.5in);
+      &.placeholder::before {
+        content: "Dialogue";
+      }
+    }
+  }
+}

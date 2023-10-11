@@ -240,4 +240,8 @@ export function isDescendant(child, parent) {
   return false;
 }
 
-
+export function clone_safe_null (value, key, object, stack) {
+  if (_.isNil(value)) {
+    return null;
+  }
+}

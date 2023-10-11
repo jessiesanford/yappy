@@ -147,7 +147,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   const results = await fetch(`${server}/api/project/${query.projectId}`, {
     method: 'GET',
   });
-  const project = await results.json();
+  const { project } = await results.json();
 
   return {
     props: {
