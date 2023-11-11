@@ -1,8 +1,9 @@
-import { ResolvedData } from '../pages/editor/resolver/resolvedData';
-import { BaseIterator, EditorDepth } from '../pages/editor/resolver/baseIterator';
+import { ResolvedData } from '../components/editor/resolver/resolvedData';
+import { BaseIterator, EditorDepth } from '../components/editor/resolver/baseIterator';
 import { TextSelection, Transaction } from 'prosemirror-state';
-import { Mark, Node, Fragment } from 'prosemirror-model';
-import { EditorSchema } from '../pages/editor/schema/schema';
+import { Mark, Node, Fragment,  } from 'prosemirror-model';
+import { yCursorPluginKey } from "y-prosemirror";
+import { EditorSchema } from '../components/editor/schema/schema';
 import { clone_safe_null, generateId } from './baseUtils';
 import * as _ from 'lodash';
 
@@ -44,7 +45,7 @@ export function safeDeleteSelection(tr: Transaction, predicate: (data: ResolvedD
       tr.setNodeMarkup(
         iter.element.before,
         iter.element.type,
-        attrs(iter.PMNode(EditorDepth.Element), { id: generateId() })
+        mergeAttrs(iter.PMNode(EditorDepth.Element), { id: generateId() })
       );
     } else {
       tr.insert(iter.element.before, EditorSchema.nodes.cxgameplay.createAndFill({ id: generateId() }));
@@ -158,10 +159,22 @@ const attrs_safe_null = (objValue, srcValue) => {
  * @param {Object=} attrs
  * @return {Object|null}
  */
-function mergeAttrs(node: Node, attrs: _.Dictionary<any> = {}) {
+export function mergeAttrs(node: Node, attrs: _.Dictionary<any> = {}) {
   if (node instanceof Node) {
     return _.mergeWith(Clone(node.attrs), attrs, attrs_safe_null);
   } else {
     return null;
   }
+}
+
+/**
+ *
+ * Returns true if the transaction only had cursor updates
+ * @export
+ * @param {Transaction} tr
+ */
+export function isOnlyCollabCursorUpdate(tr: Transaction) {
+  if (tr.docChanged) return false;
+  const cursorMeta = tr.getMeta(yCursorPluginKey);
+  return Boolean(cursorMeta && cursorMeta.awarenessUpdated);
 }

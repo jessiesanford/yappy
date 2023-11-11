@@ -1,5 +1,6 @@
 import { ProjectFeedUpdated } from '../../../static/events';
 import { findUsersByEmail, getUserByEmail } from '../user/userApiHandler';
+import {buildQuery} from "../../../util/baseUtils";
 
 const dev = process.env.NODE_ENV !== 'production';
 const server = dev ? 'http://localhost:3000' : 'https://your_deployment.server.com';
@@ -32,10 +33,12 @@ export const getProjectsForUser = async (userId: number) => {
   });
 };
 
-export const searchUserProjects = async (queryString: string) => {
-  const results = await fetch(`${server}/api/project/search?text=${queryString}`, {
-    method: 'GET',
-  });
+export const searchUserProjects = async (queryString: string, limit?: number) => {
+  const query = buildQuery(`${server}/api/project/search`, {
+    text: queryString,
+    limit,
+  })
+  const results = await fetch(query, { method: 'GET' });
   return await results.json();
 }
 

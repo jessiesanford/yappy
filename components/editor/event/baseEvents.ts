@@ -52,6 +52,7 @@ export const handleDOMEvents = {
     }
     return false;
   },
+
   textInput(view, event) {
     if (view.props.isReadOnly) {
       event.stopPropagation();

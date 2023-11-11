@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { AppPages } from '../util/enums';
+import { AppPages } from '../static/enums';
 
 export enum ProjectFilters {
   ALL = 'ALL',

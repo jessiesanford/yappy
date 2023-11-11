@@ -1,5 +1,9 @@
 import {
-  Schema, Node, Node as ProsemirrorNode, DOMOutputSpec
+  Schema,
+  Node,
+  Node as ProsemirrorNode,
+  Mark as ProsemirrorMark,
+  DOMOutputSpec,
 } from 'prosemirror-model';
 
 const brDOM = ['br'];
@@ -64,12 +68,12 @@ const paragraph = {
     id: { default: null as string },
     ychange: { default: null }
   },
+  content: 'inline*',
+  group: 'block',
   parseDOM: [{
     tag: 'p.paragraph',
     getAttrs: () => {} // this will be used to get attributes on the node element
   }],
-  content: 'inline*',
-  group: 'block',
   toDOM(node: ProsemirrorNode) {
     return ['p', Object.assign({ class: node.type.name }, calcYchangeDomAttrs(node.attrs)), 0];
   },
@@ -77,17 +81,26 @@ const paragraph = {
 };
 
 const dialogue = {
-  attrs: { ychange: { default: null } },
+  attrs: {
+    id: { default: null as string },
+    ychange: { default: null } },
   content: 'inline*',
   group: 'block',
-  parseDOM: [{ tag: 'p' }],
-  toDOM(node: Node) {
-    return ['p', calcYchangeDomAttrs(node.attrs), 0];
-  }
+  parseDOM: [{
+    tag: 'p.paragraph',
+    getAttrs: () => {} // this will be used to get attributes on the node element
+  }],
+  toDOM(node: ProsemirrorNode) {
+    return ['p', Object.assign({ class: node.type.name }, calcYchangeDomAttrs(node.attrs)), 0];
+  },
+  placeholder: true,
 };
 
 const character = {
-  attrs: { ychange: { default: null } },
+  attrs: {
+    id: { default: null as string },
+    ychange: {default: null }
+  },
   content: 'inline*',
   group: 'block',
   parseDOM: [{ tag: 'p' }],
@@ -275,6 +288,19 @@ export const marks = {
     toDOM() {
       return strongDOM;
     }
+  },
+
+  underline: {
+    parseDOM: [{ tag: "u" }, {
+      style: "text-decoration",
+      getAttrs: (value: string) => value === "underline" && null
+    }],
+    toDOM: (mark: ProsemirrorMark, inline: boolean): DOMOutputSpec => ["span", { style: 'text-decoration: underline;' }]
+  },
+
+  strikethrough: {
+    parseDOM: [{ tag: "del" }, { tag: "b" }, { style: "text-decoration: line-through" }],
+    toDOM: (mark: ProsemirrorMark, inline: boolean): DOMOutputSpec => ["del"]
   },
 
   // :: MarkSpec Code font mark. Represented as a `<code>` element.

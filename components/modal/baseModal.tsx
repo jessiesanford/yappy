@@ -1,6 +1,6 @@
 import { ReactElement, useEffect, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
-import { KeyNames } from '../../util/enums';
+import { KeyNames } from '../../static/enums';
 import { useModalContext } from './modalProvider';
 import { makeDraggable } from '../../util/baseUtils';
 import { useAppContext } from '../appProvider';
@@ -8,7 +8,7 @@ import { useAppContext } from '../appProvider';
 type BaseModalProps = {
   title?: string;
   children: JSX.Element | JSX.Element[];
-  action?: () => void;
+  action?: Promise<any>;
   cancel?: () => void;
   renderModalHeading?: () => ReactElement;
   renderModalControls?: () => ReactElement;
@@ -69,11 +69,13 @@ export const BaseModal = observer((props: BaseModalProps) => {
     }
   }
 
-  const doModalAction = () => {
+  const doModalAction = async () => {
     handleModalClosing();
     if (props.action) {
-      props.action();
-      doAction();
+      const results = await props.action();
+      if (results.success) {
+        doAction();
+      }
     } else {
       doAction();
     }

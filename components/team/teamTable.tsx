@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { User } from '.prisma/client';
 import { findUsersByEmail } from '../../pages/api/user/userApiHandler';
+import { Dispatch, SetStateAction } from "react";
 
 export const TeamTable = () => {
   const [searchText, setSearchText] = useState(null);
@@ -13,7 +14,7 @@ export const TeamTable = () => {
   );
 };
 
-const UserSearch = ({ setSearchText }) => {
+const UserSearch = ({ setSearchText }: { setSearchText: Dispatch<SetStateAction<null>> }) => {
   return (
     <div>
       <input type={'text'}
@@ -26,7 +27,7 @@ const UserSearch = ({ setSearchText }) => {
   );
 };
 
-const UserSearchResults = ({ searchText }) => {
+const UserSearchResults = ({ searchText }: { searchText: string }) => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -42,7 +43,7 @@ const UserSearchResults = ({ searchText }) => {
   )
 }
 
-const UserRow = ({ user }) => {
+const UserRow = ({ user }: { user: User }) => {
   return (
     <div key={user.id} className={'user-row'}>
       <div className={'user-cell'}>{user.handle}</div>

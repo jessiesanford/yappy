@@ -44,8 +44,8 @@ export const LoadingSpinner2 = ({ size, color }: { size: string, color: string }
   `;
 
   const Component = styled.div`
-    width: ${() => size || '48px'};
-    height: ${() => size || '48px'};
+    width: ${(props) => size || '48px'};
+    height: ${(props) => size || '48px'};
     border: 2px solid ${() => color || '#ffffff'};
     border-bottom-color: transparent;
     border-radius: 50%;

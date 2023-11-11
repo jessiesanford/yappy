@@ -38,12 +38,17 @@ export const authOptions: NextAuthOptions = {
           },
         });
 
+        if (res.status === 401) {
+          console.log('HIT A 401')
+        }
+
         const user = await res.json();
 
         if (res.ok && user) {
           return user;
+        } else {
+          return null;
         }
-        return null;
       }
     }),
     // GithubProvider({

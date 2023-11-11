@@ -24,8 +24,14 @@ export default function Index({ user }: { user: any }) {
   });
 
   const submitLoginForm: SubmitHandler<LoginForm> = useCallback((data) => {
-    signIn('credentials', { email: data.email, password: data.password }).then((e) => {
-      router.push('/studio');
+    signIn('credentials', { email: data.email, password: data.password, redirect: false }).then((res) => {
+      if (res.ok) {
+        router.push('/studio');
+      }
+
+      if (res.error) {
+        console.log(res.error);
+      }
     }).catch((e) => {
       console.log(e);
     });

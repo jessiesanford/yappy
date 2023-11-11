@@ -15,3 +15,4 @@ export default function StudioLayout({ children, title }: any) {
     </BaseLayout>
   );
 }
+

@@ -32,3 +32,9 @@ export const KeyNames = {
   F11: 'F11',
   F12: 'F12',
 };
+
+export const ServerResponses = {
+  UNAUTHORIZED_ACCESS: 'Unauthorized Access',
+  INTERNAL_ERROR: 'Internal Server Error',
+  UNAUTHORIZED_METHOD: 'Unauthorized Method'
+}

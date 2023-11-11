@@ -1,12 +1,41 @@
 import { observer } from 'mobx-react-lite';
 import { useAppContext } from '../appProvider';
-import { useCallback, useRef } from 'react';
-import { useOutsideClick } from '../../helpers/reactUtils';
+import {useCallback, useEffect} from 'react';
+import { useOutsideClick } from '../../util/reactUtils';
 
 export const ContextMenu = observer(() => {
   const {
     store
   } = useAppContext();
+
+  const {
+    position,
+    hidden,
+    destroy,
+    reposition,
+  } = store.ContextMenu;
+
+  function handleWindowResize() {
+    reposition()
+  }
+
+  useEffect(() => {
+    if (contextMenuRef.current) {
+      let bb = contextMenuRef.current.getBoundingClientRect();
+      if (bb.bottom > window.innerHeight) {
+        // if the contextmenu is outside the y-boundary of the window, adjust the y-position
+        store.ContextMenu.setPosition({ x: position.x, y: window.innerHeight - bb.height - 20});
+      }
+    }
+  }, [position]);
+
+  useEffect(() => {
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    }
+  }, [])
 
   const handleClickOutside = useCallback(() => {
     store.ContextMenu.destroy();
@@ -15,11 +44,11 @@ export const ContextMenu = observer(() => {
   const contextMenuRef = useOutsideClick(handleClickOutside);
 
   const style = {
-    left: `${store.ContextMenu.position?.x}px`,
-    top: `${store.ContextMenu.position?.y}px`,
+    left: `${position?.x}px`,
+    top: `${position?.y}px`,
   };
 
-  if (!store.ContextMenu.hidden) {
+  if (!hidden) {
     return (
       <div className={'context-menu'}
            ref={contextMenuRef}

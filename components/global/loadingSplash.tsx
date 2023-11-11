@@ -1,4 +1,4 @@
-import { FiLoader, FiMoreVertical, FiShare, FiTrash } from 'react-icons/fi';
+import { FiLoader } from 'react-icons/fi';
 
 export default function LoadingSplash() {
   const loadingSplashStyle = {

@@ -50,3 +50,16 @@ export const getUsersByIds = async (ids: string[]) => {
   });
   return await res.json();
 }
+
+export const updatePassword = async (salt: string, hash: string) => {
+  const res = await fetch(`/api/user/updatePassword`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      hash,
+      salt,
+    }),
+  });
+  return await res.json();
+}
+

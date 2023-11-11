@@ -1,21 +1,23 @@
 import { useEffect, useState, ReactElement, useRef } from 'react';
-import { debounce, isDescendant } from '../../util/baseUtils';
-import { LoadingSpinner, LoadingSpinner2 } from './loading';
+import { isDescendant } from '../../util/baseUtils';
+import { LoadingSpinner2 } from './loading';
 import { FiSearch } from 'react-icons/fi';
-import { useOutsideClick } from '../../helpers/reactUtils';
+import { useOutsideClick } from '../../util/reactUtils';
 
 type TAutocompleteProps = {
-  pull: (queryString: string) => any,
+  searchFunction: (queryString: string, limit: number) => any,
   placeholder?: string,
   icon?: ReactElement,
 }
 
+// DEPRECIATED
 export function Autocomplete(props: TAutocompleteProps) {
   const [active, setActive] = useState(false);
   const [queryString, setQueryString] = useState('');
-  const [showResults, setShowResults] = useState(false);
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<Array<{ id: string, name: string }>>([]);
   const [fetching, setFetching] = useState(false);
+  const [fetchLimit, setFetchLimit] = useState(5);
+  const [queryEnd, setQueryEnd] = useState(false);
 
   useEffect(() => {
     setFetching(false);
@@ -23,13 +25,24 @@ export function Autocomplete(props: TAutocompleteProps) {
 
   useEffect(() => {
     if (queryString === '') {
+      // we treat an empty string as the default blank state
       setResults([]);
       setFetching(false);
+      setFetchLimit(5);
+      setQueryEnd(false);
     } else if (active) {
       setFetching(true);
-      debounce(generateResults, 500)();
+      setQueryEnd(false);
+
+      const debounceTimeout = setTimeout(async () => {
+        await generateResults();
+      }, 300);
+
+      return () => {
+        clearTimeout(debounceTimeout);
+      };
     }
-  }, [queryString, active]);
+  }, [queryString, fetchLimit, active]);
 
   const containerRef = useRef(null);
   const queryContainerRef = useOutsideClick((e) => {
@@ -44,8 +57,13 @@ export function Autocomplete(props: TAutocompleteProps) {
     if (queryString === '') {
       setResults([]);
     } else {
-      const results = await props.pull(queryString);
-      setResults(results);
+      const data = await props.searchFunction(queryString, fetchLimit);
+      setResults((prevState) => {
+        if (results.length === data.projects.length || data.projects.length < fetchLimit) {
+          setQueryEnd(true);
+        }
+        return data.projects;
+      });
       setFetching(false);
     }
   };
@@ -60,17 +78,28 @@ export function Autocomplete(props: TAutocompleteProps) {
 
   const renderResults = () => {
     if (active) {
-      return (
-        <div className={'autocomplete-results'}>
-          {results.map((result) => {
-            return (
-              <div key={result.id} className={'result-container'}>
-                {result.name}
-              </div>
-            )
-          })}
-        </div>
-      );
+      if (results.length > 0) {
+        return (
+          <div className={'autocomplete-results'}>
+            {results.map((result) => {
+              return (
+                <div key={result.id} className={'result-container'}>
+                  {result.name}
+                </div>
+              )
+            })}
+            {(results.length > 0 && !queryEnd) ? <div className={'result-container'} onClick={() => setFetchLimit(fetchLimit + 5)}>Load More Results...</div> : null}
+          </div>
+        );
+      } else if (results.length === 0 && queryString !== '' && !fetching) {
+        return (
+          <div className={'autocomplete-results'}>
+            <div className={'result-container'}>No results found.</div>
+          </div>
+        )
+      }
+    } else {
+      return null;
     }
   };
 

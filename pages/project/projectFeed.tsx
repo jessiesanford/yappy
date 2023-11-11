@@ -1,5 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
+import {FixedSizeList, VariableSizeList} from 'react-window';
+import AutoSizer from "react-virtualized-auto-sizer";
 import { getProjects } from '../api/project/projectApiHandler';
 import { GhostProjectItem, ProjectItem } from '../../components/projectFeed/projectItem';
 import { useAppContext } from '../../components/appProvider';
@@ -36,8 +38,12 @@ export const ProjectFeed = observer(() => {
         }
         setProjects(projects);
         setProjectsLoaded(true);
-      }, 2000);
+      }, 500);
     });
+  }
+
+  function fetchMoreProjects() {
+
   }
 
   useEffect(() => {
@@ -59,6 +65,28 @@ export const ProjectFeed = observer(() => {
     return projects.map((projectItem: ProjectItem) => {
       return <ProjectItem key={projectItem.id} data={projectItem}/>;
     });
+
+    // let containerHeight = document.querySelector('.sfds');
+
+    // return (
+      // <AutoSizer>
+      //   {({ height, width }) => {
+      //     return projectItems;
+      //   }}
+      // </AutoSizer>
+      // <VariableSizeList
+      //   height={1000} // Set the height of the list
+      //   width="100%" // Set the width to 100% to fill the parent element
+      //   itemCount={projectItems.length}
+      //   itemSize={(index) => 80}
+      // >
+      //   {({ index, style }) => (
+      //     <div style={style}>
+      //       {projectItems[index]}
+      //     </div>
+      //   )}
+      // </VariableSizeList>
+    // )
   };
 
   return (

@@ -2,7 +2,7 @@ import { useModalContext } from '../modal/modalProvider';
 import React from 'react';
 import { useAppContext } from '../appProvider';
 import { observer } from 'mobx-react-lite';
-import { AppPages } from '../../util/enums';
+import { AppPages } from '../../static/enums';
 import { useRouter } from 'next/router';
 import { FiPackage, FiSettings, FiTrash, FiUsers } from 'react-icons/fi';
 import { useSession } from 'next-auth/react';

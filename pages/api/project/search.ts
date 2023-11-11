@@ -1,11 +1,13 @@
 import { PrismaClient } from '@prisma/client';
-import { getSession, useSession } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const prisma = new PrismaClient();
 
 interface Data {
-
+  query: string,
+  projects: Array<any>,
+  count: number,
 }
 
 export default async function handler(
@@ -13,6 +15,7 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const text  = String(req.query.text) || '';
+  const limit = Number(req.query.limit) || 100;
 
   try {
     const session = await getSession( { req });
@@ -23,20 +26,23 @@ export default async function handler(
 
     const { id: userId } = session.user;
 
+    let count = await prisma.project.count();
     let projects = [];
+
     projects = await prisma.project.findMany({
+      take: limit,
       where: {
         OR: [
           {
             AND: [
               { createdBy: userId },
-              { name: { contains: text, mode: 'insensitive' } },
+              { name: { contains: text as string, mode: 'insensitive' } },
             ],
           },
           {
             AND: [
               { sharedUsers: { some: { id: userId } } },
-              { name: { contains: text, mode: 'insensitive' } },
+              { name: { contains: text as string, mode: 'insensitive' } },
             ],
           },
         ],
@@ -45,7 +51,8 @@ export default async function handler(
 
     res.status(200).json({
       query: text,
-      projects
+      projects,
+      count,
     });
 
   } catch (error) {

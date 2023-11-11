@@ -1,9 +1,9 @@
-import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
 import { HeaderNavItem } from './headerNavItem';
 import { FiActivity } from 'react-icons/fi';
+import useUser from "../../lib/useUser";
 
 type DropdownItemProps = {
   label: string,
@@ -26,8 +26,7 @@ const generateIntials = (name: string) => {
 }
 
 export function StudioHeader() {
-  const { data: session } = useSession();
-  const user = session?.user;
+  const { user } = useUser();
   const router = useRouter();
 
   // gotta implement user menu
@@ -53,7 +52,7 @@ export function StudioHeader() {
                             signOut().then(() => {
                               router.push('/studio');
                             }).catch((e) => {
-                              console.log(e);
+                              throw new Error(e);
                             });
                           }}/>
           </div>

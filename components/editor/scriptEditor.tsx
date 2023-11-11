@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Editor } from './editor';
-import { EditorToolbar } from '../../components/toolbar/editorToolbar';
+import { EditorToolbar } from '../toolbar/editorToolbar';
 
 export const ScriptEditor = () => {
   const [editor, setEditor ] = useState<Editor>(new Editor());
@@ -10,19 +10,14 @@ export const ScriptEditor = () => {
       editor.init(SCRIPT_REF.current);
       setEditor(editor);
     }
-
-    return () => {
-      // editor.destroy();
-    };
   }, []);
 
   const SCRIPT_REF = useRef(null);
 
   return (
-    <div style={{ margin: 'auto', width: '80%' }}>
-      <EditorToolbar/>
+    <div className={'editor-container'}>
+      <EditorToolbar editor={editor} />
       <div className={'editor'} ref={SCRIPT_REF}/>
-      <button onClick={() => editor.connect()}>Connect</button>
     </div>
   );
 };

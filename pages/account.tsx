@@ -1,13 +1,18 @@
-import { GetServerSidePropsContext } from 'next';
-import { getSession, useSession } from 'next-auth/react';
 import StudioLayout from '../components/layouts/studioLayout';
 import { AccountService } from '../services/accountService';
 import { useEffect, useState } from 'react';
 import { getUsersById } from './api/user/userApiHandler';
-import { User } from 'next-auth';
+import useUser from "../lib/useUser";
+import {useAppContext} from "../components/appProvider";
+import {ChangePasswordModal} from "../components/account/changePasswordModal";
+import Studio from "./studio";
 
-export default function Account({ user }: { user: User }) {
+export default function Account() {
+  const { user } = useUser();
   const [account, setAccount] = useState<AccountService>();
+  const {
+    store
+  } = useAppContext();
 
   useEffect(() => {
     getUsersById(user?.id).then((users) => {
@@ -15,7 +20,8 @@ export default function Account({ user }: { user: User }) {
         setAccount(new AccountService(users[0]));
       }
     });
-  }, []);
+  }, [user]);
+
 
   const renderAccountLoading = () => {
     return (
@@ -52,6 +58,12 @@ export default function Account({ user }: { user: User }) {
             {account.Email}
           </div>
         </div>
+        <div className={'info-row'}>
+          <div style={{ fontWeight: 'bold', fontSize: '16pt', marginBottom: '10px' }}>Account Options</div>
+          <div onClick={() => store.Modal.showModal(ChangePasswordModal, {})}>Change Password</div>
+
+
+        </div>
       </>
     )
   }
@@ -65,12 +77,15 @@ export default function Account({ user }: { user: User }) {
   );
 }
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const session = await getSession(context);
+Account.requireAuth = true;
 
-  return {
-    props: {
-      user: session.user,
-    }
-  };
-}
+
+// export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+//   const session = await getSession(context);
+//
+//   return {
+//     props: {
+//       user: session.user,
+//     }
+//   };
+// }

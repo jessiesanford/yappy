@@ -1,6 +1,25 @@
+.editor-container {
+  position: fixed;
+  z-index: 1010;
+  width: 500px;
+  top: 200px;
+  right: 200px;
+  margin-left: auto;
+  transition: opacity 0.2s ease-in;
+  overflow: hidden;
+  box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
+}
+
 .editor {
+  height: 700px;
+  margin: auto;
+  scroll-behavior: smooth;
+  overflow: auto;
+  position: relative;
 
   .ProseMirror {
+    overflow: hidden;
+
     &.ProseMirror-focused {
       outline: none;
     }
@@ -36,19 +55,26 @@
   }
 
   .page {
-    width: 9.5in;
-    height: 11in;
-    padding: 1in 1.5in 1in 1.5in;
+    padding: 40px 100px;
     box-sizing: border-box;
     background: #fff;
+    min-height: 700px;
     margin: auto;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+
+    &.normal {
+      width: 9.5in;
+      height: 11in;
+      padding: 1in 1.5in 1in 1.5in;
+    }
 
     p {
       font-family: 'Courier', serif;
       color: #101010;
-      width: 460px;
-      margin: auto auto 10px auto;
+      //width: 460px;
+      width: 300px;
+      position: relative;
+      margin-bottom: 10px;
       font-size: 12pt;
 
       &.placeholder::before {
@@ -60,7 +86,9 @@
     }
 
     p.paragraph {
-      margin-left: calc(4in - 1.5in);
+      //margin-left: calc(4in - 1.5in);
+      //margin-left: 100px;
+
       &.placeholder::before {
         content: "Paragraph";
       }
@@ -68,14 +96,15 @@
 
     p.character {
       text-transform: uppercase;
-      margin-left: calc(4.5in - 1.5in);
+      //margin-left: calc(4.5in - 1.5in);
+      margin-left: 100px;
       &.placeholder::before {
         content: "Character";
       }
     }
 
     p.dialogue {
-      margin-left: calc(4.5in - 1.5in);
+      margin-left: 100px;
       &.placeholder::before {
         content: "Dialogue";
       }

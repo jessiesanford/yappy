@@ -3,7 +3,7 @@ import { TProjectItem } from '../../types/projectTypes';
 import { FiCheck, FiEdit2, } from 'react-icons/fi';
 import { useEffect, useState } from 'react';
 import ModuleLayout from '../../components/layouts/moduleLayout';
-import { ScriptEditor } from './scriptEditor';
+import { ScriptEditor } from '../../components/editor/scriptEditor';
 
 type TProjectProps = {
   project: TProjectItem

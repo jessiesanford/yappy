@@ -7,7 +7,7 @@ import { GetServerSidePropsContext } from 'next';
 import { deleteProject, getProjects } from './api/project/projectApiHandler';
 import { useAppContext } from '../components/appProvider';
 import { BaseStudioToolbar } from '../components/studio/toolbar/baseStudioToolbar';
-import { AppPages } from "../util/enums";
+import { AppPages } from "../static/enums";
 import { ProjectFeed } from "./project/projectFeed";
 
 interface IProjectFeedContext {
@@ -25,14 +25,6 @@ function Studio(props: any) {
   const {
     store,
   } = useAppContext();
-
-  const [projects, setProjects] = useState(props.projects);
-
-  const handleProjectFeedUpdated = () => {
-    getProjects().then((projects) => {
-      setProjects(projects);
-    });
-  };
 
   const provided = {
     deleteProject,

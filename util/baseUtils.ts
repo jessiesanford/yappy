@@ -20,6 +20,19 @@ export const capitalizeEachWord = (str: string) => {
   }).join(' ');
 };
 
+export function buildQuery(url: string, params: { [key: string]: any }) {
+  let parsedUrl = url + '?';
+  let paramKeys = Object.keys(params);
+
+  paramKeys.forEach((key, index) => {
+    let paramValue = params[key] ? params[key] : '';
+    let paramStringForQuery = `${key}=${paramValue}`;
+    let isLast = index === paramKeys.length - 1;
+    parsedUrl = `${parsedUrl}${paramStringForQuery}${isLast ? '' : '&'}`;
+  })
+
+  return parsedUrl;
+}
 /**
  * Make draggable function with optional boundaries, and options for creating a dynamically updating
  * scrollable (or variable height; like the breakdown items) element
@@ -41,6 +54,7 @@ export function makeDraggable(dragSelector: string, opt_triggerSelectors: _.Many
     TOP: 0,
     LEFT: 0
   };
+
   let BOUNDARY = new Rectangle(document.body.getBoundingClientRect());
   function onMouseDown(e: MouseEvent) {
     const TARGET = e.target as HTMLElement;
@@ -194,8 +208,8 @@ export function stringToColor(str: string) {
 }
 
 
-export const hashPassword = (password: string = '') => {
-  const salt = crypto.randomBytes(16).toString('hex');
+export const hashPassword = (password: string = '', opt_salt?: string) => {
+  const salt = opt_salt || crypto.randomBytes(16).toString('hex');
   const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
   return { salt, hash };
 };
