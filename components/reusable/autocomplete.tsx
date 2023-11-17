@@ -2,7 +2,7 @@ import { useEffect, useState, ReactElement, useRef } from 'react';
 import { isDescendant } from '../../util/baseUtils';
 import { LoadingSpinner2 } from './loading';
 import { FiSearch } from 'react-icons/fi';
-import { useOutsideClick } from '../../util/reactUtils';
+import { useOutsideClick } from '../../util/';
 
 type TAutocompleteProps = {
   searchFunction: (queryString: string, limit: number) => any,

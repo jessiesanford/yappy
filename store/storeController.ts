@@ -1,6 +1,6 @@
 import { ContextMenuStore } from './contextMenuStore';
-import { StudioStore } from './studioStore';
-import { ModalStore } from "./modalStore";
+import { StudioStore } from './';
+import { ModalStore } from './';
 
 export class StoreController {
   contextMenuStore: ContextMenuStore = new ContextMenuStore();

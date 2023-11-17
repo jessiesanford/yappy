@@ -1,4 +1,5 @@
 import { EditorView } from 'prosemirror-view';
+import _ from "lodash";
 
 export const handleDOMEvents = {
   /**

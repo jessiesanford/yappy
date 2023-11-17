@@ -5,8 +5,8 @@ import { EditorView } from "prosemirror-view";
 // import { redo, undo } from "../plugins/gem/undo-plugin";
 import { BaseKeymap, DefaultModifiers, KBCmd, KeyStroke, Modifier } from "./baseKeymap";
 import { BaseIterator, EditorDepth } from "../resolver/baseIterator";
-import { generateId } from '../../../util/baseUtils';
-import { safeDeleteSelection } from "../../../util/pmUtils";
+import { generateId } from '../../../util/';
+import { safeDeleteSelection } from '../../../util/';
 
 
 const browser = { windows: 'windows', mac: false };

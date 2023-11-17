@@ -1,5 +1,5 @@
 import React, { createContext, ReactElement, useContext, useEffect } from 'react';
-import { StoreController } from '../store/storeController';
+import { StoreController } from '../store/';
 
 interface IAppContext {
   store: StoreController;
@@ -13,10 +13,6 @@ export const useAppContext = () => useContext(AppContext);
 
 export const AppProvider: React.FC<{children: ReactElement}> = ({ children }) => {
   const store = new StoreController();
-
-  useEffect(() => {
-    window.store = store;
-  });
 
   return (
     <AppContext.Provider value={{ store }}>

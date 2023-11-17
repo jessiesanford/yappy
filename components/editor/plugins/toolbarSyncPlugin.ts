@@ -1,9 +1,9 @@
 import * as _ from 'lodash';
 import { MarkType } from 'prosemirror-model';
 import { EditorState, Plugin, PluginKey } from "prosemirror-state";
-import { textElementChanged, textMarkToggled } from "../event/globalEvents";
+import { textElementChanged, textMarkToggled } from "../events/globalEvents";
 import { EditorKeys } from "../editorKeys";
-import { isOnlyCollabCursorUpdate } from "../../../util/pmUtils";
+import { isOnlyCollabCursorUpdate } from "../../../util/";
 import { Editor } from "../editor";
 
 export const ToolbarSyncPlugin = (editor: Editor) => new Plugin({

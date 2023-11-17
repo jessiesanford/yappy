@@ -1,7 +1,13 @@
 import { observer } from 'mobx-react-lite';
 import { useAppContext } from '../appProvider';
 import {useCallback, useEffect} from 'react';
-import { useOutsideClick } from '../../util/reactUtils';
+import { useOutsideClick } from '../../util';
+
+type TContextMenuOptionProps = {
+  icon?: string;
+  label: string;
+  onClick: () => void
+}
 
 export const ContextMenu = observer(() => {
   const {
@@ -16,15 +22,16 @@ export const ContextMenu = observer(() => {
   } = store.ContextMenu;
 
   function handleWindowResize() {
-    reposition()
+    reposition();
   }
 
   useEffect(() => {
     if (contextMenuRef.current) {
-      let bb = contextMenuRef.current.getBoundingClientRect();
-      if (bb.bottom > window.innerHeight) {
+      // @ts-ignore
+      const BB = contextMenuRef.current.getBoundingClientRect();
+      if (BB.bottom > window.innerHeight) {
         // if the contextmenu is outside the y-boundary of the window, adjust the y-position
-        store.ContextMenu.setPosition({ x: position.x, y: window.innerHeight - bb.height - 20});
+        store.ContextMenu.setPosition({ x: position.x, y: window.innerHeight - BB.height - 20});
       }
     }
   }, [position]);
@@ -34,8 +41,8 @@ export const ContextMenu = observer(() => {
 
     return () => {
       window.removeEventListener('resize', handleWindowResize);
-    }
-  }, [])
+    };
+  }, []);
 
   const handleClickOutside = useCallback(() => {
     store.ContextMenu.destroy();
@@ -64,7 +71,7 @@ export const ContextMenu = observer(() => {
   return null;
 });
 
-export const ContextMenuOption = (props) => {
+export const ContextMenuOption = (props: TContextMenuOptionProps) => {
   return (
     <div className={'context-menu__option'} onClick={props.onClick}>
       <div className={'context-menu__option-icon'}>

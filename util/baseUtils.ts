@@ -42,7 +42,7 @@ export function buildQuery(url: string, params: { [key: string]: any }) {
  * @param {object} opt_containerSelectors keep the draggable element within certain box boundaries
  *  left, right, top, bottom
  * all boundary numbers need to be pixel units
- * @param {function?} opt_callback opt_callback a callback function to execute on a drag mouse up event
+ * @param {function?} opt_callback opt_callback a callback function to execute on a drag mouse up events
  */
 export function makeDraggable(dragSelector: string, opt_triggerSelectors: _.Many<string> = null, opt_containerSelectors: _.Many<string> = null, opt_callback: (top: string) => void = _.stubObject) {
   const dragEl = document.querySelector<HTMLElement>(dragSelector);

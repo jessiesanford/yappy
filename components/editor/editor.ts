@@ -7,7 +7,7 @@ import { EditorView } from 'prosemirror-view';
 import { ySyncPlugin, yCursorPlugin, yUndoPlugin } from 'y-prosemirror';
 import { EditorSchema } from './schema/schema';
 import { NodeViewPlugin } from './plugins/nodeViewPlugin';
-import { handleDOMEvents } from './event/baseEvents';
+import { handleDOMEvents } from './events/baseEvents';
 import { Doc } from "yjs";
 import {EventTypes} from "../../static/enums";
 import * as _ from "lodash";

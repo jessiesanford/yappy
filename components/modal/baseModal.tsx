@@ -1,8 +1,7 @@
 import { ReactElement, useEffect, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
-import { KeyNames } from '../../static/enums';
 import { useModalContext } from './modalProvider';
-import { makeDraggable } from '../../util/baseUtils';
+import { makeDraggable } from '../../util/';
 import { useAppContext } from '../appProvider';
 
 type BaseModalProps = {

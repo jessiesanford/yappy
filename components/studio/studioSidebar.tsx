@@ -6,7 +6,7 @@ import { AppPages } from '../../static/enums';
 import { useRouter } from 'next/router';
 import { FiPackage, FiSettings, FiTrash, FiUsers } from 'react-icons/fi';
 import { useSession } from 'next-auth/react';
-import { ProjectFilters } from "../../store/studioStore";
+import { ProjectFilters } from "../../store/";
 
 
 export const StudioSidebar = observer((props) => {

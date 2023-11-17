@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Select, { SingleValue } from 'react-select';
 import { FiBold, FiEdit, FiItalic, FiSave, FiUnderline } from 'react-icons/fi';
-import { toolbarScriptElementChanged } from "../editor/event/globalEvents";
+import { toolbarScriptElementChanged } from "../editor/events/globalEvents";
 import { EventTypes } from "../../static/enums";
 import { ToolbarButtons } from "../editor/toolbar/toolbar";
 import { Editor } from "../editor/editor";

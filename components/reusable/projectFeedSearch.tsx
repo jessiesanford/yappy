@@ -3,8 +3,8 @@ import {useAutocomplete} from "../hooks/useAutocomplete";
 import {LoadingSpinner2} from "./loading";
 import {FiSearch} from "react-icons/fi";
 import {MouseEventHandler, useRef} from "react";
-import {useOutsideClick} from "../../util/reactUtils";
-import {isDescendant} from "../../util/baseUtils";
+import {useOutsideClick} from "../../util/";
+import {isDescendant} from "../../util/";
 import {useRouter} from "next/router";
 
 type TProjectFeedSearchProps = {
