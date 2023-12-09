@@ -1,9 +1,9 @@
 import { PrismaClient } from '@prisma/client';
-import { NextAPIRequest, NextAPIResponse } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 const prisma = new PrismaClient();
 
-export default async function ( req: NextAPIRequest, res: NextAPIResponse) {
+export default async function ( req: NextApiRequest, res: NextApiResponse) {
   const body = req.body;
   const { id, data } = body;
   const { name } = data;

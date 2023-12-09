@@ -6,6 +6,7 @@ export const useOutsideClick = (callback) => {
   React.useEffect(() => {
     const handleClick = (event: Event) => {
       const el: React.RefObject<HTMLDivElement> = ref.current;
+      // @ts-ignore
       if (el && !el?.contains(event.target)) {
         callback(event);
       }

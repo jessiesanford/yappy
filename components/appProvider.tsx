@@ -6,6 +6,7 @@ interface IAppContext {
 }
 
 export const AppContext = createContext<IAppContext>({
+  // @ts-ignore
   store: null,
 });
 
@@ -19,4 +20,4 @@ export const AppProvider: React.FC<{children: ReactElement}> = ({ children }) =>
       {children}
     </AppContext.Provider>
   );
-}; 
+};

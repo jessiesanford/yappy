@@ -7,7 +7,7 @@ import { useAppContext } from '../appProvider';
 type BaseModalProps = {
   title?: string;
   children: JSX.Element | JSX.Element[];
-  action?: Promise<any>;
+  action?: () => Promise<{ success: boolean; }>;
   cancel?: () => void;
   renderModalHeading?: () => ReactElement;
   renderModalControls?: () => ReactElement;

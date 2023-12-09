@@ -15,10 +15,11 @@ export const CreateProjectModal = () => {
 
   const [name, setName] = useState(capitalizeEachWord(words({exactly: 3, join: ' '})));
 
-  const action = () => {
-    createProject(name, user.id).then((res) => {
+  const action = async () => {
+    await createProject(name, user.id).then((res) => {
       ProjectFeedUpdated();
     });
+    return { success: true }
   };
 
   return (

@@ -5,14 +5,18 @@ import { NextApiRequest, NextApiResponse } from 'next';
 const prisma = new PrismaClient();
 
 interface Data {
-  query: string,
+  query?: string,
   projects: Array<any>,
   count: number,
 }
 
+interface Error {
+  error: string
+}
+
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<Data | Error>
 ) {
   const text  = String(req.query.text) || '';
   const limit = Number(req.query.limit) || 100;

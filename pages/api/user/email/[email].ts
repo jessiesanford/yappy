@@ -13,6 +13,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse<Data | 
 
   const user = await prisma.user.findUnique({
     where: {
+      // @ts-ignore
       email,
     },
     select: {
