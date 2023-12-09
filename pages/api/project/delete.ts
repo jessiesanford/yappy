@@ -1,7 +1,5 @@
-import excuteQuery from '../../../lib/db';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import moment from "moment";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 

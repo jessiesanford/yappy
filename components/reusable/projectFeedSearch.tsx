@@ -81,7 +81,7 @@ export function ProjectFeedSearch(props: TProjectFeedSearchProps) {
         resultItems = suggestions.map((item, index) => (
           <div
             key={index}
-            className={`result-container ` + (selectedIndex === index && "active")}
+            className={`result-container ${(selectedIndex === index && 'active')}`}
             onClick={(e: MouseEvent) => {
               bindOption.onClick(e);
               router.push(`/project/${item.id}`);

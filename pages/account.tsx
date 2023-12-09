@@ -2,10 +2,10 @@ import StudioLayout from '../components/layouts/studioLayout';
 import { AccountService } from '../services/accountService';
 import { useEffect, useState } from 'react';
 import { getUsersById } from './api/user/userApiHandler';
-import useUser from "../lib/useUser";
-import {useAppContext} from "../components/appProvider";
-import {ChangePasswordModal} from "../components/account/changePasswordModal";
-import Studio from "./studio";
+import useUser from '../lib/useUser';
+import {useAppContext} from '../components/appProvider';
+import {ChangePasswordModal} from '../components/account/changePasswordModal';
+import Studio from './studio';
 
 export default function Account() {
   const { user } = useUser();
@@ -15,6 +15,7 @@ export default function Account() {
   } = useAppContext();
 
   useEffect(() => {
+    // @ts-ignore
     getUsersById(user?.id).then((users) => {
       if (users.length > 0) {
         setAccount(new AccountService(users[0]));
@@ -39,7 +40,7 @@ export default function Account() {
             Full Name
           </div>
           <div className={'info-row__value'}>
-            {account.Name}
+            {account?.Name}
           </div>
         </div>
         <div className={'info-row'}>
@@ -47,7 +48,7 @@ export default function Account() {
             Handle
           </div>
           <div className={'info-row__value'}>
-            {account.Handle}
+            {account?.Handle}
           </div>
         </div>
         <div className={'info-row'}>
@@ -55,7 +56,7 @@ export default function Account() {
             Email
           </div>
           <div className={'info-row__value'}>
-            {account.Email}
+            {account?.Email}
           </div>
         </div>
         <div className={'info-row'}>
