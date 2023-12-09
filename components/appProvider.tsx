@@ -19,4 +19,4 @@ export const AppProvider: React.FC<{children: ReactElement}> = ({ children }) =>
       {children}
     </AppContext.Provider>
   );
-};
+}; 
