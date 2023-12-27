@@ -1,5 +1,5 @@
-import React, {useEffect, useRef, useState} from "react";
-import {KeyCodes} from "../../static/enums";
+import React, { Ref, useEffect, useRef, useState } from "react";
+import { KeyStroke } from "../../static/enums";
 
 type TUseAutoCompleteProps = {
   delay?: number,
@@ -22,8 +22,8 @@ export function useAutocomplete({ delay = 500, source, onChange }: TUseAutoCompl
   const [textValue, setTextValue] = useState("");
   const [fetchLimit, setFetchLimit] = useState(5);
   const [canShowMoreResults, setCanShowMoreResults] = useState(false);
-  const listRef = useRef();
-  const optionHeight = listRef?.current?.children[0]?.clientHeight
+  const listRef = useRef<HTMLDivElement>(null);
+  const optionHeight = listRef?.current?.children[0]?.clientHeight || 0;
 
   useEffect(() => {
     delayInvoke(() => {
@@ -49,7 +49,9 @@ export function useAutocomplete({ delay = 500, source, onChange }: TUseAutoCompl
 
   function selectOption(index: number) {
     if (index > -1) {
-      onChange(suggestions[index]);
+      if (onChange) {
+        onChange(suggestions[index]);
+      }
       setTextValue(suggestions[index].label);
     }
     clearSuggestions();
@@ -59,7 +61,7 @@ export function useAutocomplete({ delay = 500, source, onChange }: TUseAutoCompl
     if (searchTerm && source) {
       const sourceResults = await source(searchTerm, fetchLimit);
       setSuggestions(sourceResults.items);
-      setNoResults(sourceResults.items.length === 0)
+      setNoResults(sourceResults.items.length === 0);
       setCanShowMoreResults(sourceResults.count > fetchLimit);
     }
   }
@@ -93,39 +95,53 @@ export function useAutocomplete({ delay = 500, source, onChange }: TUseAutoCompl
     if (selectedIndex > 0) {
       setSelectedIndex(selectedIndex - 1)
     }
-    listRef.current.scrollTop = optionHeight
+    if (listRef.current) {
+      listRef.current.scrollTop = optionHeight;
+    }
   }
 
   function scrollDown() {
     if (selectedIndex < suggestions.length - 1) {
       setSelectedIndex(selectedIndex + 1)
     }
-    listRef.current.scrollTop = selectedIndex * optionHeight
+    if (listRef.current) {
+      listRef.current.scrollTop = selectedIndex * optionHeight;
+    }
   }
 
   function pageDown() {
-    setSelectedIndex(suggestions.length - 1)
-    listRef.current.scrollTop = suggestions.length * optionHeight
+    setSelectedIndex(suggestions.length - 1);
+    if (listRef.current) {
+      listRef.current.scrollTop = suggestions.length * optionHeight;
+    }
   }
 
   function pageUp() {
-    setSelectedIndex(0)
-    listRef.current.scrollTop = 0
+    setSelectedIndex(0);
+    if (listRef.current) {
+      listRef.current.scrollTop = 0
+    }
   }
 
-  function onKeyDown(e) {
+  function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>): void {
+
     const keyOperation = {
-      [KeyCodes.DOWN_ARROW]: scrollDown,
-      [KeyCodes.UP_ARROW]: scrollUp,
-      [KeyCodes.ENTER]: () => selectOption(selectedIndex),
-      [KeyCodes.ESCAPE]: clearSuggestions,
-      [KeyCodes.PAGE_DOWN]: pageDown,
-      [KeyCodes.PAGE_UP]: pageUp,
-    }
-    if (keyOperation[e.keyCode]) {
-      keyOperation[e.keyCode]()
+      [KeyStroke.DOWN]: scrollDown,
+      [KeyStroke.UP]: scrollUp,
+      [KeyStroke.ENTER]: () => selectOption(selectedIndex),
+      [KeyStroke.ESCAPE]: clearSuggestions,
+      [KeyStroke.PAGEDOWN]: pageDown,
+      [KeyStroke.PAGEUP]: pageUp,
+    };
+
+    let key = e.key as KeyStroke;
+
+    // @ts-ignore
+    if (keyOperation[key]) {
+      // @ts-ignore
+      keyOperation[key]();
     } else {
-      setSelectedIndex(-1)
+      setSelectedIndex(-1);
     }
   }
 
@@ -136,16 +152,20 @@ export function useAutocomplete({ delay = 500, source, onChange }: TUseAutoCompl
   return {
     bindOption: {
       onClick: (e: MouseEvent) => {
-        let nodes = Array.from(listRef.current.children);
-        selectOption(nodes.indexOf(e.target.closest("li")));
-        setActive(true);
+        const eventTarget = e.target as HTMLDivElement | null;
+        if (listRef.current && eventTarget) {
+          const nodes = Array.from(listRef.current.children);
+          // @ts-ignore - this is pissing me off
+          selectOption(nodes.indexOf(eventTarget.closest('li')));
+          setActive(true);
+        }
       }
     },
     bindInput: {
       value: textValue,
       onChange: (e: Event) => {
         if (e.target) {
-          onTextChange(e?.target?.value);
+          onTextChange((e?.target as HTMLInputElement)?.value);
         }
       },
       onKeyDown

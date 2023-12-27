@@ -3,7 +3,7 @@ import {useAutocomplete} from "../hooks/useAutocomplete";
 import {LoadingSpinner2} from "./loading";
 import {FiSearch} from "react-icons/fi";
 import {MouseEventHandler, useRef} from "react";
-import {useOutsideClick} from "../../util/";
+import { useOutsideClick } from "../../util/";
 import {isDescendant} from "../../util/";
 import {useRouter} from "next/router";
 
@@ -31,7 +31,7 @@ export function ProjectFeedSearch(props: TProjectFeedSearchProps) {
       try {
         const data = await searchUserProjects(searchQuery, fetchLimit);
         return {
-          items: data.projects.map((d) => ({id: d.id, label: d.name})),
+          items: data.projects.map((d: { id: string, name: string }) => ({id: d.id, label: d.name})),
           count: data.count,
         }
       } catch (e) {
@@ -46,7 +46,9 @@ export function ProjectFeedSearch(props: TProjectFeedSearchProps) {
   const containerRef = useRef(null);
   const router = useRouter();
 
-  const queryContainerRef = useOutsideClick((e: Event) => {
+  const queryContainerRef = useRef<HTMLDivElement>(null);
+
+  useOutsideClick(queryContainerRef, (e) => {
     const clickTarget = e.target;
     if (!isDescendant(clickTarget, containerRef.current)) {
       setActive(false);
@@ -82,7 +84,7 @@ export function ProjectFeedSearch(props: TProjectFeedSearchProps) {
           <div
             key={index}
             className={`result-container ${(selectedIndex === index && 'active')}`}
-            onClick={(e: MouseEvent) => {
+            onClick={(e) => {
               bindOption.onClick(e);
               router.push(`/project/${item.id}`);
             }}

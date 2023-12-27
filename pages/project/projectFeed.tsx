@@ -62,7 +62,7 @@ export const ProjectFeed = observer(() => {
     if (projects.length === 0) {
       return <EmptyProjectFeedDisplay/>;
     }
-    return projects.map((projectItem: ProjectItem) => {
+    return projects.map((projectItem: typeof ProjectItem) => {
       return <ProjectItem key={projectItem.id} data={projectItem}/>;
     });
 

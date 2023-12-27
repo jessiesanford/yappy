@@ -1,8 +1,7 @@
 import { useEffect, useState, ReactElement, useRef } from 'react';
-import { isDescendant } from '../../util/baseUtils';
+import { isDescendant, useOutsideClick } from '../../util';
 import { LoadingSpinner2 } from './loading';
 import { FiSearch } from 'react-icons/fi';
-import { useOutsideClick } from '../../util/';
 
 type TAutocompleteProps = {
   searchFunction: (queryString: string, limit: number) => any,
@@ -45,13 +44,16 @@ export function Autocomplete(props: TAutocompleteProps) {
   }, [queryString, fetchLimit, active]);
 
   const containerRef = useRef(null);
-  const queryContainerRef = useOutsideClick((e) => {
+  const queryContainerRef = useRef<HTMLDivElement>(null);
+
+  useOutsideClick(queryContainerRef, (e: Event) => {
     const clickTarget = e.target;
     if (!isDescendant(clickTarget, containerRef.current)) {
       setActive(false);
     }
   });
-  const inputRef = useRef(null);
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const generateResults = async () => {
     if (queryString === '') {

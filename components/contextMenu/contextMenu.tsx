@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { useAppContext } from '../appProvider';
-import {useCallback, useEffect} from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useOutsideClick } from '../../util';
 
 type TContextMenuOptionProps = {
@@ -48,7 +48,9 @@ export const ContextMenu = observer(() => {
     store.ContextMenu.destroy();
   }, []);
 
-  const contextMenuRef = useOutsideClick(handleClickOutside);
+  const contextMenuRef = useRef<HTMLDivElement>(null);
+
+  useOutsideClick(contextMenuRef, handleClickOutside);
 
   const style = {
     left: `${position?.x}px`,
