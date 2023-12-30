@@ -1,15 +1,13 @@
-import {searchUserProjects} from "../../pages/api/project/projectApiHandler";
-import {useAutocomplete} from "../hooks/useAutocomplete";
-import {LoadingSpinner2} from "./loading";
-import {FiSearch} from "react-icons/fi";
-import {MouseEventHandler, useRef} from "react";
+import { searchUserProjects } from "../../pages/api/project/projectApiHandler";
+import { useAutocomplete } from "../hooks/useAutocomplete";
+import { LoadingSpinner2 } from "./loading";
+import { FiSearch } from "react-icons/fi";
+import { useRef } from "react";
 import { useOutsideClick } from "../../util/";
-import {isDescendant} from "../../util/";
-import {useRouter} from "next/router";
+import { isDescendant } from "../../util/";
+import { useRouter } from "next/router";
 
-type TProjectFeedSearchProps = {
-
-}
+type TProjectFeedSearchProps = {}
 
 export function ProjectFeedSearch(props: TProjectFeedSearchProps) {
   const {
@@ -126,7 +124,9 @@ export function ProjectFeedSearch(props: TProjectFeedSearchProps) {
           <input type={'text'}
                  placeholder={'Search for projects...'}
                  ref={inputRef}
-                 {...bindInput}
+                 // @ts-ignore - event types are different here when compared to the hook I guess, can't figure it out right now
+                 onChange={bindInput.onChange}
+                 value={bindInput.value}
           />
         </div>
         <div className={'autocomplete-status'}>

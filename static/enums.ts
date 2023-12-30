@@ -118,6 +118,12 @@ export enum KeyStroke {
   ALT = 'Alt'
 }
 
+export enum TextAlign {
+  Left = 'left',
+  Center = 'center',
+  Right = 'right',
+}
+
 export enum AppPages {
   PROJECTS = 'projects',
   TRASH = 'trash',

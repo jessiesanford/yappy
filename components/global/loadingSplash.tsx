@@ -1,4 +1,5 @@
 import { FiLoader } from 'react-icons/fi';
+import { TextAlign } from "../../static";
 
 export default function LoadingSplash() {
   const loadingSplashStyle = {
@@ -15,7 +16,7 @@ export default function LoadingSplash() {
     height: '100px',
     backgroundColor: '#ffffff', // You can change the background color of the centered div
     borderRadius: '10px', // Add rounded corners to the div if desired
-    textAlign: 'center',
+    textAlign: TextAlign.Center,
     padding: '20px',
     display: 'flex',
     alignItems: 'center',

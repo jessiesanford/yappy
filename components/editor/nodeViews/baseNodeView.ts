@@ -79,15 +79,16 @@ export class BaseNodeView {
 
   update(node: Node) {
     let result = false;
-    this.prev_ = this.node_;
-    let next_ = node || this.prev_;
-    if (next_) {
+    const prev = this._node;
+    const next = node || prev;
+    if (next) {
       //I'm assuming the usual case, we clone attrs everytime.
-      result = this.type === next_.type.name;
-      if (result && (this.prev_ !== next_ || this.prev_.attrs !== next_.attrs)) {
-        this.node_ = next_;
-        if (this.node_.attrs.id) {
-          this.DOM.id !== this.node_.attrs.id && (this.DOM.id = this.node_.attrs.id);
+      // TODO: this is causing issues with the placeholder text, I think because id is null this.Type used to be this.type and always return false
+      result = this.Type === next.type.name;
+      if (result && (prev !== next || prev.attrs !== next.attrs)) {
+        this._node = next;
+        if (this.Node.attrs.id) {
+          this.DOM.id !== this.Node.attrs.id && (this.DOM.id = this.Node.attrs.id);
         } else {
           this.DOM.removeAttribute('id');
         }
@@ -97,7 +98,7 @@ export class BaseNodeView {
     return result;
   }
 
-  ignore(record?) {
+  ignore(record?: MutationRecord) {
     return false;
   }
 

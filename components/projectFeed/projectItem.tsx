@@ -6,8 +6,9 @@ import { useRouter } from 'next/router';
 import { convertDateFormat, stringToColor } from '../../util/baseUtils';
 import { trashProject, updateProject } from '../../pages/api/project/projectApiHandler';
 import { ShareProjectModal } from '../studio/shareProjectModal';
+import { Project } from "@prisma/client";
 
-export const ProjectItem = observer(({ data }: { data: any }) => {
+export const ProjectItem = observer(({ data }: { data: Project }) => {
   const router = useRouter();
   const [editNameMode, setEditNameMode] = useState(false);
   const [toolsHidden, setToolsHidden] = useState(true);
@@ -22,8 +23,8 @@ export const ProjectItem = observer(({ data }: { data: any }) => {
     toggleProjectItemSelected
   } = store.Studio;
 
-  const ctxAnchorRef = useRef(null);
-  const projectItemRef = useRef(null);
+  const ctxAnchorRef = useRef<HTMLDivElement>(null);
+  const projectItemRef = useRef<HTMLDivElement>(null);
   const [deleted, setDeleted] = useState(false);
 
   useEffect(() => {
@@ -64,13 +65,15 @@ export const ProjectItem = observer(({ data }: { data: any }) => {
       <div className={'project-item__ctx-anchor'}
            ref={ctxAnchorRef}
            onClick={(e) => {
-             const ctxSetupProps = {
-               id: 'projectItemContext',
-               options: ctxMenuOpts,
-               hidden: false,
-               target: ctxAnchorRef.current,
-             };
-             store.ContextMenu.setup(ctxSetupProps);
+             if (ctxAnchorRef.current) {
+               const ctxSetupProps = {
+                 id: 'projectItemContext',
+                 options: ctxMenuOpts,
+                 hidden: false,
+                 target: ctxAnchorRef.current,
+               };
+               store.ContextMenu.setup(ctxSetupProps);
+             }
            }}>
         <FiMoreVertical/>
       </div>
@@ -132,7 +135,7 @@ export const ProjectItem = observer(({ data }: { data: any }) => {
 
           </div>
           <div className={'project-item__desc'}>
-            {data.desc}
+            {data.description}
           </div>
           <div className={'project-item__updated-at'}>
             Last modified on {convertDateFormat(data.updatedAt)}

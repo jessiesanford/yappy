@@ -1,9 +1,11 @@
-import {toggleMark} from "prosemirror-commands";
-import * as history from "prosemirror-history";
-import {EditorView} from "prosemirror-view";
+import { toggleMark } from 'prosemirror-commands';
+import * as history from 'prosemirror-history';
+import { EditorView } from 'prosemirror-view';
+import { EditorState } from 'prosemirror-state';
+import { Mark, MarkType } from 'prosemirror-model';
 
-export function markActive(state, type) {
-  let {from, $from, to, empty} = state.selection;
+export function markActive(state: EditorState, type: Mark | MarkType) {
+  const {from, $from, to, empty} = state.selection;
   if (empty) {
     return type.isInSet(state.storedMarks || $from.marks());
   } else {
@@ -13,7 +15,7 @@ export function markActive(state, type) {
 
 export class Toolbar {
   static toggleBold(editorView: EditorView) {
-    const { from, to } = editorView.state.selection;
+    const {from, to} = editorView.state.selection;
     return editorView && toggleMark(editorView.state.schema.marks.strong)(editorView.state, editorView.dispatch);
   }
 
@@ -58,18 +60,20 @@ export class Toolbar {
   }
 }
 
+
 export const ToolbarButtons = {
-  UNDO: "editUndo",
-  UNDO_SECONDARY: "editUndoSecondary",
-  REDO: "editRedo",
-  REDO_SECONDARY: "editRedoSecondary",
-  FIND_REPLACE: "editFindReplace",
-  UNDERLINE: "formatUnderline",
-  UNDERLINE_SECONDARY: "formatUnderlineSecondary",
-  STRIKETHROUGH: "formatStrikethrough",
-  STRIKETHROUGH_SECONDARY: "formatStrikethroughSecondary",
-  BOLD: "formatBold",
-  BOLD_SECONDARY: "formatBoldSecondary",
-  ITALICS: "formatItalics",
-  ITALICS_SECONDARY: "formatItalicsSecondary",
+  UNDO: 'editUndo',
+  UNDO_SECONDARY: 'editUndoSecondary',
+  REDO: 'editRedo',
+  REDO_SECONDARY: 'editRedoSecondary',
+  FIND_REPLACE: 'editFindReplace',
+  UNDERLINE: 'formatUnderline',
+  UNDERLINE_SECONDARY: 'formatUnderlineSecondary',
+  STRIKETHROUGH: 'formatStrikethrough',
+  STRIKETHROUGH_SECONDARY: 'formatStrikethroughSecondary',
+  BOLD: 'formatBold',
+  BOLD_SECONDARY: 'formatBoldSecondary',
+  ITALICS: 'formatItalics',
+  ITALICS_SECONDARY: 'formatItalicsSecondary',
 };
+

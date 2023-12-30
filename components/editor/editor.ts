@@ -1,27 +1,27 @@
 import * as Y from 'yjs';
 import applyDevTools from 'prosemirror-dev-tools';
 import { WebsocketProvider } from 'y-websocket';
-import { WebrtcProvider } from 'y-webrtc';
 import { EditorState, Transaction, PluginKey } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { ySyncPlugin, yCursorPlugin, yUndoPlugin } from 'y-prosemirror';
 import { EditorSchema } from './schema/schema';
 import { NodeViewPlugin } from './plugins/nodeViewPlugin';
 import { handleDOMEvents } from './events/baseEvents';
-import { Doc } from "yjs";
-import {EventTypes} from "../../static/enums";
-import * as _ from "lodash";
-import {generateId} from "../../util/baseUtils";
-import {GameKeymap} from "./keymap/gameKeymap";
-import { keymap } from "prosemirror-keymap";
-import { ToolbarSyncPlugin } from "./plugins/toolbarSyncPlugin";
-import { Toolbar, ToolbarButtons } from "./toolbar/toolbar";
+import { Doc } from 'yjs';
+import {EventTypes} from '../../static';
+import * as _ from 'lodash';
+import { generateId, stringToColor, stringToHexColor } from '../../util';
+import {GameKeymap} from './keymap/gameKeymap';
+import { keymap } from 'prosemirror-keymap';
+import { ToolbarSyncPlugin } from './plugins/toolbarSyncPlugin';
+import { Toolbar, ToolbarButtons } from './toolbar/toolbar';
+import { BaseEditorView } from './baseEditorView';
 
 
 export class Editor {
-  editorView: EditorView;
+  editorView: EditorView | null;
   loaded: boolean = false;
-  provider: WebsocketProvider | WebrtcProvider | null;
+  provider: WebsocketProvider | null;
   keymap: GameKeymap;
 
   constructor() {
@@ -36,13 +36,28 @@ export class Editor {
     }
   }
 
+  setPresenceLabel(label: string) {
+    if (this.provider) {
+      this.provider.awareness.setLocalStateField('user', {
+        name: label,
+        color: stringToHexColor(label),
+      });
+    }
+  }
+
   init(container: Element) {
     const ydoc = new Y.Doc();
     const type = ydoc.getXmlFragment('prosemirror');
     this.setupProvider(ydoc);
 
     if (this.provider) {
-      this.editorView = new EditorView(container, {
+      // this.provider.awareness.setLocalStateField('color', { dark: '#000000', light: '#ffffff' });
+      this.provider.awareness.setLocalStateField('user', {
+        name: 'Testing User',
+        color: stringToHexColor(''),
+      });
+
+      this.editorView = new BaseEditorView(container, {
         state: EditorState.create({
           schema: EditorSchema,
           plugins: [
@@ -82,12 +97,10 @@ export class Editor {
 
   addListeners() {
     document.addEventListener(EventTypes.SCRIPT_ELEMENT_CHANGED, this.handleElementChangeEvent.bind(this));
-    document.addEventListener(EventTypes.TOOLBAR_MARK_TOGGLED, this.handleToolbarButtonClick.bind(this))
   }
 
   destroyListeners() {
     document.removeEventListener(EventTypes.SCRIPT_ELEMENT_CHANGED, this.handleElementChangeEvent.bind(this));
-    document.removeEventListener(EventTypes.TOOLBAR_MARK_TOGGLED, this.handleToolbarButtonClick.bind(this))
   }
 
   destroy() {
@@ -98,19 +111,19 @@ export class Editor {
     this.destroyListeners();
   }
 
-  handleElementChangeEvent(event: CustomEvent) {
-    const { detail } = event;
+  handleElementChangeEvent(event: Event) {
+    const { detail } = event as CustomEvent;
     if (this.editorView) {
       this.setSelectedElementType(this.editorView, detail.element);
     }
   }
 
   setSelectedElementType(view: EditorView, typeName: string, opt_tr?: Transaction) {
-    let state = view.state;
-    let tr = opt_tr || state.tr;
-    let selection = tr.selection;
-    let { $from, $to } = selection;
-    let type = state.schema.nodes[typeName];
+    const state = view.state;
+    const tr = opt_tr || state.tr;
+    const selection = tr.selection;
+    const { $from, $to } = selection;
+    const type = state.schema.nodes[typeName];
 
     if ($from.depth === 3) {
       if (selection.empty) {
@@ -126,26 +139,30 @@ export class Editor {
     }
   }
 
-  handleToolbarButtonClick(buttonKey) {
+
+
+  handleToolbarButtonClick(buttonKey: string) {
     // prevents editor from losing selection
     this.focus();
 
-    switch (buttonKey) {
-      case ToolbarButtons.BOLD:
-        return Toolbar.toggleBold(this.editorView);
-      case ToolbarButtons.ITALICS:
-        return Toolbar.toggleItalics(this.editorView);
-      case ToolbarButtons.UNDERLINE:
-        return Toolbar.toggleUnderline(this.editorView);
-      case ToolbarButtons.STRIKETHROUGH:
-        return Toolbar.toggleStrikethrough(this.editorView);
-      case ToolbarButtons.UNDO:
-        Toolbar.undoAction(this.editorView);
-        break;
-      case ToolbarButtons.REDO:
-      case ToolbarButtons.REDO_SECONDARY:
-        Toolbar.redoAction(this.editorView);
-        break;
+    if (this.editorView) {
+      switch (buttonKey) {
+        case ToolbarButtons.BOLD:
+          return Toolbar.toggleBold(this.editorView);
+        case ToolbarButtons.ITALICS:
+          return Toolbar.toggleItalics(this.editorView);
+        case ToolbarButtons.UNDERLINE:
+          return Toolbar.toggleUnderline(this.editorView);
+        case ToolbarButtons.STRIKETHROUGH:
+          return Toolbar.toggleStrikethrough(this.editorView);
+        case ToolbarButtons.UNDO:
+          Toolbar.undoAction(this.editorView);
+          break;
+        case ToolbarButtons.REDO:
+        case ToolbarButtons.REDO_SECONDARY:
+          Toolbar.redoAction(this.editorView);
+          break;
+      }
     }
   }
 

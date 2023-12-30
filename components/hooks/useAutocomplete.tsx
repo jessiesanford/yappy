@@ -151,7 +151,7 @@ export function useAutocomplete({ delay = 500, source, onChange }: TUseAutoCompl
 
   return {
     bindOption: {
-      onClick: (e: MouseEvent) => {
+      onClick: (e: React.MouseEvent<HTMLDivElement>) => {
         const eventTarget = e.target as HTMLDivElement | null;
         if (listRef.current && eventTarget) {
           const nodes = Array.from(listRef.current.children);
@@ -163,18 +163,17 @@ export function useAutocomplete({ delay = 500, source, onChange }: TUseAutoCompl
     },
     bindInput: {
       value: textValue,
-      onChange: (e: Event) => {
+      onChange: (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.target) {
           onTextChange((e?.target as HTMLInputElement)?.value);
         }
       },
-      onKeyDown
     },
     bindOptions: {
       ref: listRef
     },
     bindContainer: {
-      onClick: (e: MouseEvent) => {
+      onClick: (e: React.MouseEvent<HTMLDivElement>) => {
         setActive(true);
       }
     },

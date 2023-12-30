@@ -1,5 +1,5 @@
 import { EditorView } from 'prosemirror-view';
-import _ from "lodash";
+import _ from 'lodash';
 
 export const handleDOMEvents = {
   /**
@@ -18,9 +18,9 @@ export const handleDOMEvents = {
    * @param {KeyboardEvent} event
    * @return {boolean}
    */
-  mousedown(view, event) {
+  mousedown(view: EditorView, event: Event) {
     _.merge(view._props, {mouse: {active: true}});
-    let toEl = event.target;
+    const toEl = event.target as Element;
     if (toEl.classList.contains('ProseMirror')) {
       // need to stop clicks from making the cursor go offscreen... this can happen on
       // both the outside document class and page.
@@ -38,14 +38,14 @@ export const handleDOMEvents = {
    * @param {KeyboardEvent} event
    * @return {boolean}
    */
-  mouseup(view, event) {
+  mouseup(view: EditorView, event: Event) {
     _.merge(view._props, {mouse: {active: false}});
     return false;
   },
   // cut: handleCutCopy,
   // copy: handleCutCopy,
 
-  input(view, event) {
+  input(view: EditorView, event: Event) {
     if (view.props.isReadOnly) {
       event.stopPropagation();
       event.preventDefault();

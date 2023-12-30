@@ -69,6 +69,7 @@ export const authOptions: NextAuthOptions = {
     colorScheme: 'light',
   },
   session: {
+    // @ts-ignore - I don't know if removing this will caus auth to fail
     jwt: true
   },
   callbacks: {

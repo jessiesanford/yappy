@@ -1,18 +1,19 @@
 import { makeAutoObservable } from 'mobx';
+import { ReactElement } from "react";
+
+type CtxMenuOption = {
+  id: string,
+  label?: string,
+  icon?: ReactElement,
+  onClick?: () => void,
+}
 
 type SetupProps = {
   id: string,
   hidden: boolean,
   position?: { x: number, y: number },
   target: HTMLElement,
-  options: [],
-}
-
-type MenuOption = {
-  id: string,
-  label: string,
-  icon?: string,
-  onClick: () => void,
+  options: CtxMenuOption[],
 }
 
 function parsePosition(target: HTMLElement) {
@@ -34,7 +35,7 @@ export class ContextMenuStore {
   id: string | null = null;
   hidden: boolean = true;
   position: { x: number, y: number } = { x: 0, y: 0 };
-  options: MenuOption[] = [];
+  options: CtxMenuOption[] = [];
   target: HTMLElement | null = null;
 
   constructor() {
@@ -67,7 +68,7 @@ export class ContextMenuStore {
     this.target = target;
   }
 
-  setOptions = (options: []) => {
+  setOptions = (options: CtxMenuOption[]) => {
     this.options = options;
   };
 

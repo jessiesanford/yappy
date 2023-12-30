@@ -177,7 +177,7 @@ export function isValidEmail(str: string) {
 }
 
 // write a function that converts postgres timestamp to javascript date
-export function convertDateFormat(inputDate: string) {
+export function convertDateFormat(inputDate: Date) {
   const date = new Date(inputDate);
 
   const options = {
@@ -258,4 +258,27 @@ export function clone_safe_null (value, key, object, stack) {
   if (_.isNil(value)) {
     return null;
   }
+}
+
+export function stringToHexColor(str: string): string {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  const normalizedHash = (hash >>> 0) / (2**32 - 1);
+
+  const r = Math.floor(normalizedHash * 255);
+  const g = Math.floor(normalizedHash * 255);
+  const b = Math.floor(normalizedHash * 255);
+
+  // Convert RGB values to hexadecimal
+  const hexR = r.toString(16).padStart(2, '0');
+  const hexG = g.toString(16).padStart(2, '0');
+  const hexB = b.toString(16).padStart(2, '0');
+
+  // Concatenate the hex values
+  const hexColor = `#${hexR}${hexG}${hexB}`;
+
+  return hexColor;
 }

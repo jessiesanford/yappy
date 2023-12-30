@@ -1,3 +1,5 @@
+import { User } from '@prisma/client';
+
 const dev = process.env.NODE_ENV !== 'production';
 const server = dev ? 'http://localhost:3000' : 'https://your_deployment.server.com';
 
@@ -26,7 +28,7 @@ export const findUsersByEmail = async (searchText: string) => {
   return await res.json();
 };
 
-export const getUserByEmail = async (email: string) => {
+export const getUserByEmail = async (email: string): Promise<User> => {
   const res = await fetch(`${server}/api/user/getByEmail/${email}`, {
     method: 'GET',
   });

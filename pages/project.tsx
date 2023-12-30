@@ -1,19 +1,14 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ProjectItem } from '../components/projectFeed/projectItem';
 import { ProjectFeedEvents } from '../static/events';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]';
 import { GetServerSidePropsContext } from 'next';
-import { ProjectFeedMock } from '../static/projectMocks';
 import { getProjects, deleteProject } from './api/project/projectApiHandler';
-import { useAppContext } from '../components/appProvider';
 import { BaseLayout } from '../components/layouts';
+import { Project } from '@prisma/client';
 
 export default function Project(props: any) {
-  const {
-    store,
-  } = useAppContext();
-
   const [projects, setProjects] = useState(props.projects);
 
   useEffect(() => {
@@ -25,8 +20,8 @@ export default function Project(props: any) {
   }, []);
 
   const renderProjectFeed = () => {
-    return projects.map((projectItem) => {
-      return <ProjectItem key={projectItem.id} data={projectItem}/>;
+    return projects.map((project: Project) => {
+      return <ProjectItem key={project.id} data={project}/>;
     });
   };
 

@@ -1,6 +1,7 @@
 import { ProjectFeedUpdated } from '../../../static/events';
 import { findUsersByEmail, getUserByEmail } from '../user/userApiHandler';
 import {buildQuery} from "../../../util/baseUtils";
+import { PrismaClient, Project, User } from '@prisma/client';
 
 const dev = process.env.NODE_ENV !== 'production';
 const server = dev ? 'http://localhost:3000' : 'https://your_deployment.server.com';
@@ -18,9 +19,9 @@ export const createProject = async (name: string, userId: string) => {
   }).catch((e) => {
     console.log(e);
   });
-}
+};
 
-export const getProjects = async () => {
+export async function getProjects(): Promise<Project[]> {
   const results = await fetch(`${server}/api/project/get`, {
     method: 'GET',
   });
@@ -40,7 +41,7 @@ export const searchUserProjects = async (queryString: string, limit?: number) =>
   })
   const results = await fetch(query, { method: 'GET' });
   return await results.json();
-}
+};
 
 export const deleteProject = async (id: string) => {
   await fetch('/api/project/delete', {
@@ -64,7 +65,7 @@ export const deleteProjects = async (ids: string[]) => {
   ProjectFeedUpdated();
 };
 
-export const trashProject = async (id: number) => {
+export const trashProject = async (id: string) => {
   await fetch('/api/project/trash', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -98,7 +99,11 @@ export const restoreProjects = async(ids: string[]) => {
 }
 
 export const shareProject = async (projectId: string, emails: string[]) => {
-  const users = {};
+  type Users = {
+    [email: string]: User;
+  };
+
+  const users: Users = {};
 
   for (const email of emails) {
     const user = await getUserByEmail(email);
@@ -126,7 +131,7 @@ export const getProjectShares = async (projectId: string) => {
 };
 
 // write an api call to update a project
-export const updateProject = async (id: number, data: any = {}) => {
+export const updateProject = async (id: string, data: any = {}) => {
   await fetch('/api/project/update', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

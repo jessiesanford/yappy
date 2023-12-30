@@ -1,5 +1,6 @@
 import { Depth, ResolvedIterator } from './resolvedIterator';
 import { EditorSchema } from '../schema/schema';
+import { Transaction } from "prosemirror-state";
 /**
  * Extends functionality for GEM editor type
  * @inheritDoc {ResolvedIterator}
@@ -40,7 +41,7 @@ export class BaseIterator extends ResolvedIterator {
    * @param {Number|BaseIterator|ResolvedIterator|ResolvedData|ResolvedPos?} obj
    * @param {Number|null} opt_depth
    */
-  constructor(tr, obj, opt_depth = null) {
+  constructor(tr: Transaction, obj, opt_depth = null) {
     super(tr, obj, opt_depth);
   }
 }

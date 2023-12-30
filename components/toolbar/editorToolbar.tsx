@@ -58,8 +58,10 @@ export function EditorToolbar({ editor }: { editor: Editor }) {
     setStrikethroughActive(e.detail.strikethrough);
   }, []);
 
-  function onScriptElementChange(data: SingleValue<{ label: string, vNalue: string }>) {
-    toolbarScriptElementChanged(data.value);
+  function onScriptElementChange(data: SingleValue<{ label: string, value: string }>) {
+    if (data) {
+      toolbarScriptElementChanged(data.value);
+    }
   }
 
   return (

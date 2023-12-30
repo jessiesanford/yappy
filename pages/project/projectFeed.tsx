@@ -1,38 +1,36 @@
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
-import {FixedSizeList, VariableSizeList} from 'react-window';
-import AutoSizer from "react-virtualized-auto-sizer";
 import { getProjects } from '../api/project/projectApiHandler';
 import { GhostProjectItem, ProjectItem } from '../../components/projectFeed/projectItem';
 import { useAppContext } from '../../components/appProvider';
-import { ProjectFeedEvents } from '../../static/events';
-import { ProjectFilters } from '../../store/studioStore';
-import { TProjectItem } from '../../types/projectTypes';
-import { CreateProjectModal } from '../../components/studio/createProjectModal';
+import { ProjectFeedEvents } from '../../static';
+import { ProjectFilters } from '../../store';
+import { CreateProjectModal } from '../../components/studio';
+import { Project } from '@prisma/client';
 
 export const ProjectFeed = observer(() => {
   const {
     store
   } = useAppContext();
 
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [projectsLoaded, setProjectsLoaded] = useState(false);
 
   function handleProjectFeedUpdated() {
     getProjects().then((projects) => {
       setTimeout(() => {
-        projects = projects.sort((a: TProjectItem, b: TProjectItem) => {
+        projects = projects.sort((a: Project, b: Project) => {
           return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
         });
 
         switch (store.Studio.projectFilter) {
           case ProjectFilters.ALL:
-            projects = projects.filter((project: TProjectItem) => {
+            projects = projects.filter((project: Project) => {
               return !project.isTrashed;
             });
             break;
           case ProjectFilters.TRASHED:
-            projects = projects.filter((project: TProjectItem) => {
+            projects = projects.filter((project: Project) => {
               return project.isTrashed;
             });
         }
@@ -62,31 +60,10 @@ export const ProjectFeed = observer(() => {
     if (projects.length === 0) {
       return <EmptyProjectFeedDisplay/>;
     }
-    return projects.map((projectItem: typeof ProjectItem) => {
-      return <ProjectItem key={projectItem.id} data={projectItem}/>;
+    return projects.map((project: Project) => {
+      return <ProjectItem key={project.id} data={project}/>;
     });
 
-    // let containerHeight = document.querySelector('.sfds');
-
-    // return (
-      // <AutoSizer>
-      //   {({ height, width }) => {
-      //     return projectItems;
-      //   }}
-      // </AutoSizer>
-      // <VariableSizeList
-      //   height={1000} // Set the height of the list
-      //   width="100%" // Set the width to 100% to fill the parent element
-      //   itemCount={projectItems.length}
-      //   itemSize={(index) => 80}
-      // >
-      //   {({ index, style }) => (
-      //     <div style={style}>
-      //       {projectItems[index]}
-      //     </div>
-      //   )}
-      // </VariableSizeList>
-    // )
   };
 
   return (
@@ -99,7 +76,7 @@ export const ProjectFeed = observer(() => {
 const GhostProjectFeed = () => {
   const ghostProjects = [];
   for (let i = 0; i <= 5; i++) {
-    ghostProjects.push(<GhostProjectItem key={i} />)
+    ghostProjects.push(<GhostProjectItem key={i} />);
   }
   return (
     <>

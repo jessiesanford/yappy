@@ -1,5 +1,4 @@
-import { PluginKey } from "prosemirror-state";
-import { EditorSchema } from './schema/schema';
+import { PluginKey } from 'prosemirror-state';
 
 //Base Keys
 // export const CXBaseKeys = {
@@ -17,7 +16,6 @@ import { EditorSchema } from './schema/schema';
 //   ScriptInsights: new PluginKey<any, CXBaseSchema.Class>("cxScriptInsights"),
 //   Scrolling: new PluginKey<any, CXBaseSchema.Class>("cxScroller"),
 //   Transform: new PluginKey<any, CXBaseSchema.Class>("cxTransform"),
-//   UXToolbar: new PluginKey<any, CXBaseSchema.Class>("cxUXToolbar")
 // };
 
 //We need a place to do types for plugins properly.
@@ -34,5 +32,5 @@ export type TToolbarPluginState = {
 
 //GEM Keys
 export const EditorKeys = {
-  Toolbar: new PluginKey<TToolbarPluginState, CXGVRSchema.Class>("toolbarSync"),
+  Toolbar: new PluginKey<TToolbarPluginState>('toolbarSync'),
 };

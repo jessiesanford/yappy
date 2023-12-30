@@ -1,7 +1,7 @@
 import { FormEvent, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import BareLayout from '../components/layouts/bareLayout';
-import {signIn} from 'next-auth/react';
+import { signIn, SignInResponse } from 'next-auth/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { GetServerSidePropsContext } from 'next';
 import { getServerSession } from 'next-auth';
@@ -24,13 +24,15 @@ export default function Index({ user }: { user: any }) {
   });
 
   const submitLoginForm: SubmitHandler<LoginForm> = useCallback((data) => {
-    signIn('credentials', { email: data.email, password: data.password, redirect: false }).then((res) => {
-      if (res.ok) {
-        router.push('/studio');
-      }
+    signIn('credentials', { email: data.email, password: data.password, redirect: false }).then((res: SignInResponse | undefined) => {
+      if (res) {
+        if (res.ok) {
+          router.push('/studio');
+        }
 
-      if (res.error) {
-        console.log(res.error);
+        if (res.error) {
+          console.log(res.error);
+        }
       }
     }).catch((e) => {
       console.log(e);

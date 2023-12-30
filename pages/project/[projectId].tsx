@@ -1,14 +1,10 @@
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next';
 import { StudioLayout } from '../../components/layouts';
-import { TProjectItem } from '../../types/projectTypes';
-import { FiCheck, FiDatabase, FiEdit, FiEdit2, FiFileText, FiPackage, FiPieChart } from "react-icons/fi";
-import { ReactElement, useState } from "react";
-import { updateProject } from "../api/project/projectApiHandler";
-
-type TProjectProps = {
-  project: TProjectItem
-};
+import { FiCheck, FiDatabase, FiEdit2, FiFileText, FiPackage, FiPieChart } from 'react-icons/fi';
+import { ReactElement, useState } from 'react';
+import { updateProject } from '../api/project/projectApiHandler';
+import { Project as ProjectItem } from '@prisma/client'; // ...as ProjectItem because of some Project namespace error when accessing this
 
 type TProjectModuleGridProps = {
   children: JSX.Element[],
@@ -20,7 +16,7 @@ type TProjectModuleProps = {
   link?: string,
 }
 
-export default function Project({ project }: TProjectProps) {
+export default function Project({ project }: { project: ProjectItem }) {
   const [showNameTools, setShowNameTools] = useState(false);
   const [editNameMode, setEditNameMode] = useState(false);
   const [name, setName] = useState(project.name);
@@ -125,7 +121,11 @@ export function ProjectModule({ name, icon, link }: TProjectModuleProps) {
   };
 
   return (
-    <div className={'module__container'} onClick={() => router.push(link)}>
+    <div className={'module__container'} onClick={() => {
+      if (link) {
+        router.push(link);
+      }
+    }}>
       <div className={'module__block'}>
         <div className={'module__heading'}>
           {renderIcon()}

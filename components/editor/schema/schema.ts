@@ -5,14 +5,17 @@ import {
   Mark as ProsemirrorMark,
   DOMOutputSpec,
 } from 'prosemirror-model';
+import { AllAttrs, YChange } from '../../../types/prosemirrorTypes';
+import * as _ from "lodash";
 
 const brDOM = ['br'];
 
-const calcYchangeDomAttrs = (attrs, domAttrs = {}) => {
-  domAttrs = Object.assign({}, domAttrs);
+// todo: is this proper typing?
+const calcYchangeDomAttrs = (attrs: _.Dictionary<any> = {}, domAttrs: AllAttrs = {}) => {
   if (attrs.ychange !== null) {
     domAttrs.ychange_user = attrs.ychange.user;
     domAttrs.ychange_state = attrs.ychange.state;
+    domAttrs.ychange_color = '#000000'
   }
   return domAttrs;
 };
@@ -29,8 +32,8 @@ const sequence = {
   },
   parseDOM: [{
     tag: 'div.sequence',
-    getAttrs: dom => ({
-      id: dom.getAttribute('id'),
+    getAttrs: (node: HTMLElement) => ({
+      id: node.getAttribute('id'),
     })
   }],
   content: 'page{1}',
@@ -65,7 +68,7 @@ const page = {
 // as a `<p>` element.
 const paragraph = {
   attrs: {
-    id: { default: null as string },
+    id: { default: null as unknown as string },
     ychange: { default: null }
   },
   content: 'inline*',
@@ -82,7 +85,7 @@ const paragraph = {
 
 const dialogue = {
   attrs: {
-    id: { default: null as string },
+    id: { default: null as unknown as string },
     ychange: { default: null } },
   content: 'inline*',
   group: 'block',
@@ -98,7 +101,7 @@ const dialogue = {
 
 const character = {
   attrs: {
-    id: { default: null as string },
+    id: { default: null as unknown as string },
     ychange: {default: null }
   },
   content: 'inline*',
@@ -154,7 +157,7 @@ const heading = {
     { tag: 'h4', attrs: { level: 4 } },
     { tag: 'h5', attrs: { level: 5 } },
     { tag: 'h6', attrs: { level: 6 } }],
-  toDOM(node) {
+  toDOM(node: ProsemirrorNode) {
     return ['h' + node.attrs.level, calcYchangeDomAttrs(node.attrs), 0];
   }
 };
@@ -170,7 +173,7 @@ const code_block = {
   code: true,
   defining: true,
   parseDOM: [{ tag: 'pre', preserveWhitespace: 'full' }],
-  toDOM(node) {
+  toDOM(node: ProsemirrorNode) {
     return ['pre', calcYchangeDomAttrs(node.attrs), ['code', 0]];
   }
 };
@@ -195,7 +198,7 @@ const image = {
   draggable: true,
   parseDOM: [{
     tag: 'img[src]',
-    getAttrs(dom) {
+    getAttrs(dom: Element) {
       return {
         src: dom.getAttribute('src'),
         title: dom.getAttribute('title'),
@@ -258,7 +261,7 @@ export const marks = {
     inclusive: false,
     parseDOM: [{
       tag: 'a[href]',
-      getAttrs(dom) {
+      getAttrs(dom: Element) {
         return { href: dom.getAttribute('href'), title: dom.getAttribute('title') };
       }
     }],
@@ -283,8 +286,8 @@ export const marks = {
       // This works around a Google Docs misbehavior where
       // pasted content will be inexplicably wrapped in `<b>`
       // tags with a font-weight normal.
-      { tag: 'b', getAttrs: node => node.style.fontWeight !== 'normal' && null },
-      { style: 'font-weight', getAttrs: value => /^(bold(er)?|[5-9]\d{2,})$/.test(value) && null }],
+      { tag: 'b', getAttrs: (node: HTMLElement) => node.style.fontWeight !== 'normal' && null },
+      { style: 'font-weight', getAttrs: (value: string) => /^(bold(er)?|[5-9]\d{2,})$/.test(value) && null }],
     toDOM() {
       return strongDOM;
     }
@@ -331,4 +334,10 @@ export const marks = {
 //
 // To reuse elements from this schema, extend or read from its
 // `spec.nodes` and `spec.marks` [properties](#model.Schema.spec).
+/**
+ * TODO: attempt to fix this later, I think prosemirror is actually typed wrong because this spits out nonsense
+ * essentially it doesn't matter if we're using the correct type here (NodeSpec -> ParseDOM -> getAttrs(node: HTMLELement)
+ * it still complains about a bunch of things
+ */
+// @ts-ignore
 export const EditorSchema = new Schema({ nodes, marks });

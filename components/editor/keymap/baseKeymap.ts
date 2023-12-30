@@ -341,15 +341,15 @@ DefaultModifiers.push(Modifier.CONTROL);
 
 
 function onSaveRequest(state: EditorState, dispatch: EditorView['dispatch'], view: EditorView) {
-  if (dispatch) {
+  // if (dispatch) {
     // CXBaseEvents.fireSaveRequestEvent(view);
-  }
+  // }
   return true;
 }
 function onPrintRequest(state: EditorState, dispatch: EditorView['dispatch'], view: EditorView) {
-  if (dispatch) {
+  // if (dispatch) {
     // CXBaseEvents.firePrintEvent(view);
-  }
+  // }
   return true;
 }
 function onHardBreak(state: EditorState, dispatch: EditorView['dispatch']) {

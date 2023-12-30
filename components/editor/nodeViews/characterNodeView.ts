@@ -12,7 +12,7 @@ export class CharacterNodeView extends BaseNodeView {
     }
   }
 
-  ignore(record) {
+  ignore(record: MutationRecord) {
     if (record.type === 'attributes' && record.attributeName === 'class') {
       return true;
     } else {
