@@ -1,9 +1,14 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 const prisma = new PrismaClient();
 
-export default async function handler(req, res) {
-  const { projectId } = req.query;
+type Data = {
+
+}
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+  const projectId = req.query.projectId as string;
 
   try {
     const projectShares = await prisma.projectShare.findMany({

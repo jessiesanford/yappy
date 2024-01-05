@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { ProjectFeedUpdated } from '../../static/events';
 import { createProject } from '../../pages/api/handlers/projectApiHandler';
 import { useSession } from 'next-auth/react';
-import { capitalizeEachWord } from "../../util";
+import { capitalizeEachWord } from "../../util/baseUtils";
 
 export const CreateProjectModal = () => {
   const router = useRouter();

@@ -1,6 +1,5 @@
-import {EventTypes} from "../../../static/enums";
-import { Mark } from "prosemirror-model";
-import { ToolbarButtons } from "../toolbar/toolbar";
+import {EventTypes} from '../../../static';
+import { ToolbarButtons } from '../toolbar/toolbar';
 
 function dispatch(name: EventTypes, data: any) {
   const event = new CustomEvent(name, {

@@ -10,7 +10,7 @@ import { handleDOMEvents } from './events/baseEvents';
 import { Doc } from 'yjs';
 import {EventTypes} from '../../static';
 import * as _ from 'lodash';
-import { generateId, stringToHexColor } from '../../util';
+import { generateId, stringToHexColor } from '../../util/baseUtils';
 import { GameKeymap } from './keymap/gameKeymap';
 import { keymap } from 'prosemirror-keymap';
 import { ToolbarSyncPlugin } from './plugins/toolbarSyncPlugin';

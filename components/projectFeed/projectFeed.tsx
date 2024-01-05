@@ -1,12 +1,15 @@
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
-import { getProjects } from '../../pages/api/handlers/projectApiHandler';
+import { getProjects, getProjectsForUser } from '../../pages/api/handlers/projectApiHandler';
 import { GhostProjectItem, ProjectItem } from './projectItem';
 import { useAppContext } from '../appProvider';
 import { ProjectFeedEvents } from '../../static';
 import { ProjectFilters } from '../../store';
 import { CreateProjectModal } from '../studio';
 import { Project } from '@prisma/client';
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:3001');
 
 export const ProjectFeed = observer(() => {
   const {
@@ -15,9 +18,10 @@ export const ProjectFeed = observer(() => {
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectsLoaded, setProjectsLoaded] = useState(false);
+  const feedObserver = useState();
 
   function handleProjectFeedUpdated() {
-    getProjects().then((projects) => {
+    getProjectsForUser(1).then((projects) => {
       setTimeout(() => {
         projects = projects.sort((a: Project, b: Project) => {
           return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
@@ -38,10 +42,6 @@ export const ProjectFeed = observer(() => {
         setProjectsLoaded(true);
       }, 500);
     });
-  }
-
-  function fetchMoreProjects() {
-
   }
 
   useEffect(() => {

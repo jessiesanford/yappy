@@ -43,6 +43,8 @@ export const handleDOMEvents = {
     _.merge(view._props, {mouse: {active: false}});
     return false;
   },
+
+
   // cut: handleCutCopy,
   // copy: handleCutCopy,
 

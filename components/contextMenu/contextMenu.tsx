@@ -1,7 +1,8 @@
 import { observer } from 'mobx-react-lite';
 import { useAppContext } from '../appProvider';
 import { useCallback, useEffect, useRef } from 'react';
-import { useOutsideClick } from '../../util';
+import { useOutsideClick } from '../hooks/useClickOutside';
+import { isDescendant } from "../../util/baseUtils";
 
 type TContextMenuOptionProps = {
   icon?: string;
@@ -20,6 +21,8 @@ export const ContextMenu = observer(() => {
     destroy,
     reposition,
   } = store.ContextMenu;
+
+  const contextMenuRef = useRef<HTMLDivElement>(null);
 
   function handleWindowResize() {
     reposition();
@@ -43,11 +46,11 @@ export const ContextMenu = observer(() => {
     };
   }, []);
 
-  const handleClickOutside = useCallback(() => {
-    store.ContextMenu.destroy();
+  const handleClickOutside = useCallback((e: Event) => {
+    if (!isDescendant(e.target, store.contextMenuStore.target)) {
+      store.ContextMenu.destroy();
+    }
   }, []);
-
-  const contextMenuRef = useRef<HTMLDivElement>(null);
 
   useOutsideClick(contextMenuRef, handleClickOutside);
 

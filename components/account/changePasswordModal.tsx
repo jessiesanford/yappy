@@ -9,8 +9,7 @@ export const ChangePasswordModal = () => {
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
   const action = async () => {
-    // TODO: this is a security risk, overfetched data, need to just get the salt for a new password
-    const res = await fetch('/api/user/getAccount', {
+    const res = await fetch('/api/user/getSalt', {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });

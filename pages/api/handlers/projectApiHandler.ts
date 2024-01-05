@@ -113,7 +113,7 @@ export const shareProject = async (projectId: string, emails: string[]) => {
     }
   }
 
-  await fetch('/api/project/share', {
+  const res = await fetch('/api/project/share', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -122,6 +122,7 @@ export const shareProject = async (projectId: string, emails: string[]) => {
       users,
     }),
   });
+  return await res.json();
 };
 
 export const getProjectShares = async (projectId: string) => {

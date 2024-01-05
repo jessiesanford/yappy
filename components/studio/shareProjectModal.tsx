@@ -68,11 +68,12 @@ export const ShareProjectModal = (props) => {
     return re.test(email);
   };
 
-  const action = () => {
+  const action = async () => {
     if (email) {
       handleAddEmail();
     }
-    shareProject(props.projectId, emails);
+    const res = await shareProject(props.projectId, emails);
+    return { success: !!res.success };
   };
 
   return (

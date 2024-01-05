@@ -4,8 +4,8 @@ import { EditorState, NodeSelection, TextSelection, Transaction } from 'prosemir
 import { EditorView } from 'prosemirror-view';
 import { BaseKeymap, DefaultModifiers, KBCmd, KeyStroke, Modifier } from './baseKeymap';
 import { BaseIterator, EditorDepth } from '../resolver/baseIterator';
-import { generateId } from '../../../util/';
-import { safeDeleteSelection } from '../../../util/';
+import { generateId } from '../../../util/baseUtils';
+import { safeDeleteSelection } from '../../../util/pmUtils';
 import { keymap } from "prosemirror-keymap";
 // import { redo, undo } from "../plugins/gem/undo-plugin";
 

@@ -1,7 +1,7 @@
 import { ReactElement, useEffect, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useModalContext } from './modalProvider';
-import { makeDraggable } from '../../util/';
+import { makeDraggable } from '../../util/baseUtils';
 import { useAppContext } from '../appProvider';
 
 type BaseModalProps = {
@@ -27,9 +27,9 @@ export const BaseModal = observer((props: BaseModalProps) => {
 
   const MODAL_STORE = store.Modal;
 
-  const scrimRef = useRef(null);
-  const headingRef = useRef(null);
-  const modalRef = useRef(null);
+  const scrimRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown)
