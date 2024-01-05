@@ -7,9 +7,9 @@ export class ResolvedDocument {
   private readonly before_ = null;
   private readonly after_ = null;
   private readonly index_ = null;
-  protected node_: ProsemirrorNode;
-  private start_: number;
-  private end_: number;
+  protected node_: ProsemirrorNode | undefined;
+  private start_: number | undefined;
+  private end_: number | undefined;
   /**
    * ResolvedDocument type
    * @param {ResolvedPos|ResolvedDocument|null} pos

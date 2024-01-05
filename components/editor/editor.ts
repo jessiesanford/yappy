@@ -10,8 +10,8 @@ import { handleDOMEvents } from './events/baseEvents';
 import { Doc } from 'yjs';
 import {EventTypes} from '../../static';
 import * as _ from 'lodash';
-import { generateId, stringToColor, stringToHexColor } from '../../util';
-import {GameKeymap} from './keymap/gameKeymap';
+import { generateId, stringToHexColor } from '../../util';
+import { GameKeymap } from './keymap/gameKeymap';
 import { keymap } from 'prosemirror-keymap';
 import { ToolbarSyncPlugin } from './plugins/toolbarSyncPlugin';
 import { Toolbar, ToolbarButtons } from './toolbar/toolbar';
@@ -65,7 +65,7 @@ export class Editor {
             yCursorPlugin(this.provider.awareness),
             ToolbarSyncPlugin(this),
             yUndoPlugin(),
-            _.merge(keymap(this.keymap), { key: new PluginKey('cxKeyMap') }.key),
+            _.merge(keymap(this.keymap), { key: new PluginKey('keyMap') }.key),
             NodeViewPlugin,
           ],
         }),

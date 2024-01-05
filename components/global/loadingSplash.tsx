@@ -1,5 +1,5 @@
 import { FiLoader } from 'react-icons/fi';
-import { TextAlign } from "../../static";
+import { TextAlign } from '../../static';
 
 export default function LoadingSplash() {
   const loadingSplashStyle = {

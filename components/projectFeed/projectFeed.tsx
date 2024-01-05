@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
-import { getProjects } from '../api/project/projectApiHandler';
-import { GhostProjectItem, ProjectItem } from '../../components/projectFeed/projectItem';
-import { useAppContext } from '../../components/appProvider';
+import { getProjects } from '../../pages/api/handlers/projectApiHandler';
+import { GhostProjectItem, ProjectItem } from './projectItem';
+import { useAppContext } from '../appProvider';
 import { ProjectFeedEvents } from '../../static';
 import { ProjectFilters } from '../../store';
-import { CreateProjectModal } from '../../components/studio';
+import { CreateProjectModal } from '../studio';
 import { Project } from '@prisma/client';
 
 export const ProjectFeed = observer(() => {

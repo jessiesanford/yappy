@@ -5,8 +5,8 @@ import {
   Mark as ProsemirrorMark,
   DOMOutputSpec,
 } from 'prosemirror-model';
-import { AllAttrs, YChange } from '../../../types/prosemirrorTypes';
-import * as _ from "lodash";
+import { AllAttrs } from '../../../types/prosemirrorTypes';
+import * as _ from 'lodash';
 
 const brDOM = ['br'];
 

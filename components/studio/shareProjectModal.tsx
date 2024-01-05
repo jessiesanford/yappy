@@ -1,10 +1,10 @@
 import { BaseModal } from '../modal/baseModal';
 import React, { useEffect, useRef, useState } from 'react';
-import { getProjects, shareProject } from '../../pages/api/project/projectApiHandler';
+import { getProjects, shareProject } from '../../pages/api/handlers/projectApiHandler';
 import { useAppContext } from '../appProvider';
 import { FiCrosshair, FiDelete, FiPlus, FiTrash, FiX } from 'react-icons/fi';
-import { getProjectShares } from '../../pages/api/project/projectApiHandler';
-import { getUserByEmail, getUsersByIds } from '../../pages/api/user/userApiHandler';
+import { getProjectShares } from '../../pages/api/handlers/projectApiHandler';
+import { getUserByEmail, getUsersByIds } from '../../pages/api/handlers/userApiHandler';
 
 export const ShareProjectModal = (props) => {
   const {

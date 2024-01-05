@@ -42,16 +42,16 @@ export function EditorToolbar({ editor }: { editor: Editor }) {
   }, []);
 
   const handleResize = () => {
-    // adjustAbsolutePosOnResize('.gvr-ssv');
+    // adjustAbsolutePosOnResize('.CLASSNAME-HERE');
   };
 
-  const handleElementChange = useCallback((e) => {
+  const handleElementChange = useCallback((e: CustomEvent) => {
     const { element } = e.detail;
     setTextElementType(element);
     setTextElementDisabled(false);
   }, []);
 
-  const handleMarkToggled = useCallback((e) => {
+  const handleMarkToggled = useCallback((e: CustomEvent) => {
     setBoldActive(e.detail.bold);
     setItalicsActive(e.detail.italics);
     setUnderlineActive(e.detail.underline);

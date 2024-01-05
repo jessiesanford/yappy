@@ -13,7 +13,7 @@ import { ResolvedDocument } from './resolvedDocument';
 export class ResolvedIterator {
   private tr_: Transaction;
   private depth_: number;
-  private data_: ResolvedData;
+  private data_: ResolvedData | null;
   private steps_: number;
 
   /**
@@ -30,7 +30,9 @@ export class ResolvedIterator {
    * @return {Number}
    */
   get depth() {
-    return Math.max(this.depth_, this.data_.depth);
+    if (this.data_) {
+      return Math.max(this.depth_, this.data_.depth);
+    }
   }
 
   /**

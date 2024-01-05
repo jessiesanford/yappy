@@ -3,9 +3,8 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-type Data = {
+type Data = {}
 
-}
 export default async function (req: NextApiRequest, res: NextApiResponse<Data>) {
   const body = req.body;
   const { ids } = body;

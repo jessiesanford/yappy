@@ -1,6 +1,6 @@
 import { CreateProjectModal } from '../index';
 import { FiPlusCircle, FiTrash } from 'react-icons/fi';
-import { searchUserProjects, trashProjects } from '../../../pages/api/project/projectApiHandler';
+import { searchUserProjects, trashProjects } from '../../../pages/api/handlers/projectApiHandler';
 import React from 'react';
 import { StudioToolbarButton } from './baseStudioToolbar';
 import { useAppContext } from '../../appProvider';

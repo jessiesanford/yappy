@@ -12,4 +12,6 @@ export class BaseEditorView extends EditorView {
   isReadOnly() {
     return this.readOnly;
   }
+
+
 }

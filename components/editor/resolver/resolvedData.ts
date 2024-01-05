@@ -1,7 +1,7 @@
-import { Depth } from "./resolvedIterator";
-import { ResolvedDocument } from "./resolvedDocument";
-import { ResolvedNode } from "./resolvedNode";
-import { ResolvedPos } from "prosemirror-model";
+import { Depth } from './resolvedIterator';
+import { ResolvedDocument } from './resolvedDocument';
+import { ResolvedNode } from './resolvedNode';
+import { ResolvedPos } from 'prosemirror-model';
 
 type ResolvedArray = [ResolvedDocument?, ...ResolvedNode[]];
 
@@ -87,7 +87,7 @@ export class ResolvedData {
       return;
     }
     /** @type {ResolvedNode|null} */
-    let node = this.getNode(depth) as ResolvedNode;
+    const node = this.getNode(depth) as ResolvedNode;
     node.index = node.index + 1;
     node.before = node.after;
     node.start = node.before + 1;
@@ -105,7 +105,7 @@ export class ResolvedData {
       return;
     }
     /** @type {ResolvedNode|null} */
-    let node = this.getNode(depth) as ResolvedNode;
+    const node = this.getNode(depth) as ResolvedNode;
     node.index = node.index - 1;
     node.after = node.before;
     node.end = node.after - 1;
@@ -121,9 +121,9 @@ export class ResolvedData {
    * @return {ProsemirrorNode}
    */
   PMNodeBefore<D extends number = 0>(depth: D = Depth.Document as D) {
-    let parent = this.getNode(depth - 1);
+    const parent = this.getNode(depth - 1);
     if (depth > Depth.Document && parent.nodeCount > 1) {
-      let node = this.getNode(depth) as ResolvedNode;
+      const node = this.getNode(depth) as ResolvedNode;
       return parent.maybeChild(node.index - 1);
     } else {
       return null;
@@ -137,9 +137,9 @@ export class ResolvedData {
    * @return {ProsemirrorNode}
    */
   PMNodeAfter<D extends number = 0>(depth: D = Depth.Document as D) {
-    let parent = this.getNode(depth - 1);
+    const parent = this.getNode(depth - 1);
     if (depth > Depth.Document && parent.nodeCount > 1) {
-      let node = this.getNode(depth) as ResolvedNode;
+      const node = this.getNode(depth) as ResolvedNode;
       return parent.maybeChild(node.index + 1);
     } else {
       return null;
@@ -160,7 +160,7 @@ export class ResolvedData {
    * @return {Object<String, *>|ProsemirrorNode.attrs}
    */
   attrs<D extends number>(depth: D) {
-    let rn = this.getNode(depth);
+    const rn = this.getNode(depth);
     return rn ? rn.attrs : null;
   }
   
@@ -169,7 +169,7 @@ export class ResolvedData {
    * @return {NodeType|null}
    */
   type<D extends number>(depth: D) {
-    let rn = this.getNode(depth);
+    const rn = this.getNode(depth);
     return rn ? rn.type : null;
   }
   
@@ -178,7 +178,7 @@ export class ResolvedData {
    * @return {string|null}
    */
   textContent<D extends number>(depth: D) {
-    let rn = this.getNode(depth);
+    const rn = this.getNode(depth);
     return rn ? rn.textContent : null;
   }
   
@@ -187,7 +187,7 @@ export class ResolvedData {
    * @return {Number}
    */
   before<D extends number>(depth: D) {
-    let rn = this.getNode(depth) as ResolvedNode;
+    const rn = this.getNode(depth) as ResolvedNode;
     return rn ? rn.before : null;
   }
   
@@ -197,7 +197,7 @@ export class ResolvedData {
    * @return {Number}
    */
   start<D extends number>(depth: D) {
-    let rn = this.getNode(depth);
+    const rn = this.getNode(depth);
     return rn ? rn.start : null;
   }
   
@@ -207,7 +207,7 @@ export class ResolvedData {
    * @return {ProsemirrorNode}
    */
   firstChild<D extends number>(depth: D) {
-    let pmn = this.PMNode(depth);
+    const pmn = this.PMNode(depth);
     return pmn ? pmn.firstChild : null;
   }
   
@@ -217,7 +217,7 @@ export class ResolvedData {
    * @return {ProsemirrorNode}
    */
   PMNode<D extends number>(depth: D) {
-    let rn = this.getNode(depth);
+    const rn = this.getNode(depth);
     return rn ? rn.PMNode : null;
   }
   
@@ -227,7 +227,7 @@ export class ResolvedData {
    * @return {ProsemirrorNode}
    */
   lastChild<D extends number>(depth: D) {
-    let pmn = this.PMNode(depth);
+    const pmn = this.PMNode(depth);
     return pmn ? pmn.lastChild : null;
   }
   
@@ -237,7 +237,7 @@ export class ResolvedData {
    * @return {Number}
    */
   nodeSize<D extends number>(depth: D) {
-    let pmn = this.PMNode(depth);
+    const pmn = this.PMNode(depth);
     return pmn ? pmn.nodeSize : null;
   }
   
@@ -247,12 +247,12 @@ export class ResolvedData {
    * @return {Number}
    */
   nodeCount<D extends number>(depth: D) {
-    let node = this.getNode(depth);
+    const node = this.getNode(depth);
     return node ? node.nodeCount : null;
   }
   
   childCount<D extends number>(depth: D) {
-    let node = this.getNode(depth);
+    const node = this.getNode(depth);
     return node ? node.childCount : null;
   }
   
@@ -262,7 +262,7 @@ export class ResolvedData {
    * @return {any}
    */
   content<D extends number>(depth: D) {
-    let pmn = this.PMNode(depth);
+    const pmn = this.PMNode(depth);
     return pmn ? pmn.content : null;
   }
   
@@ -272,7 +272,7 @@ export class ResolvedData {
    * @return {Number}
    */
   index<D extends number>(depth: D) {
-    let rn = this.getNode(depth) as ResolvedNode;
+    const rn = this.getNode(depth) as ResolvedNode;
     return rn ? rn.index : null;
   }
   
@@ -282,7 +282,7 @@ export class ResolvedData {
    * @return {Number}
    */
   end<D extends number>(depth: D) {
-    let rn = this.getNode(depth);
+    const rn = this.getNode(depth);
     return rn ? rn.end : null;
   }
   
@@ -292,7 +292,7 @@ export class ResolvedData {
    * @return {Number}
    */
   after<D extends number>(depth: D) {
-    let rn = this.getNode(depth) as ResolvedNode;
+    const rn = this.getNode(depth) as ResolvedNode;
     return rn ? rn.after : null;
   }
   
@@ -321,14 +321,14 @@ export class ResolvedData {
     if (this === ResolvedData.NULL) {
       return this;
     }
-    let rd = new ResolvedData();
+    const rd = new ResolvedData();
     rd.pointer_ = this.pointer_;
-    for (let i in this.data_) {
+    for (const i in this.data_) {
       if (this.data_.hasOwnProperty(i)) {
         rd.data_[i] = this.data_[i].clone();
       }
     }
-    for (let j in this.destroyed_) {
+    for (const j in this.destroyed_) {
       rd.destroyed_[j] = this.destroyed_[j] && this.destroyed_[j].clone();
     }
     return rd;
@@ -369,7 +369,7 @@ export class ResolvedData {
     if (this === ResolvedData.NULL) {
       return;
     }
-    for (let depth in this.destroyed_) {
+    for (const depth in this.destroyed_) {
       if (this.destroyed_[depth] && !this.data_[depth]) {
         this.data_[depth] = this.destroyed_[depth];
       }
@@ -561,18 +561,18 @@ export class ResolvedData {
   }
 }
 
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === 'development') {
   /**
    * Console Debugger visualization of the ResolvedData and what nodes it points to at each depth
    */
   ResolvedData.prototype['print'] = function () {
     let str = '';
     for (let i = 0; i < this.depth; ++i) {
-      let node = this.getNode(i);
-      let child = this.getNode(i + 1);
-      str = (`${(child.index === 0 ? `` : `${child.index > 1 ? `0.. ` : `0, `}`)}`);
+      const node = this.getNode(i);
+      const child = this.getNode(i + 1);
+      str = (`${(child.index === 0 ? '' : `${child.index > 1 ? '0.. ' : '0, '}`)}`);
       str = (`${str}[${child.index}]`);
-      str = (`${str}${(child.index === node.nodeCount - 1 ? `` : `${child.index < node.nodeCount - 2 ? ` ..${node.nodeCount - 1}` : `, ${node.nodeCount - 1}`}`)}`);
+      str = (`${str}${(child.index === node.nodeCount - 1 ? '' : `${child.index < node.nodeCount - 2 ? ` ..${node.nodeCount - 1}` : `, ${node.nodeCount - 1}`}`)}`);
       str = (`Depth[${i + 1}]: ${str['padEnd'](20, ' ')}`);
       str = (`${str}\nNodeType@{i=${child.index}}: ${child.type.name}\nNodeAttrs@{i=${child.index}}: ${JSON.stringify(child.attrs)}`);
       console.log(str);
@@ -586,7 +586,7 @@ if (process.env.NODE_ENV === "development") {
    */
   ResolvedData.prototype['check'] = function (tr, opt_depth = this.depth) {
     let ResolvedPos, ResolvedNode, res = opt_depth >= 0;
-    let chk = (depth) => {
+    const chk = (depth) => {
       ResolvedNode = this.getNode(depth);
       ResolvedPos = ResolvedNode && tr.doc.resolve(ResolvedNode.start);
       return res && ResolvedPos && ResolvedPos.start() === ResolvedNode.start &&

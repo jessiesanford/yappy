@@ -1,4 +1,4 @@
-import { searchUserProjects } from "../../pages/api/project/projectApiHandler";
+import { searchUserProjects } from "../../pages/api/handlers/projectApiHandler";
 import { useAutocomplete } from "../hooks/useAutocomplete";
 import { LoadingSpinner2 } from "./loading";
 import { FiSearch } from "react-icons/fi";

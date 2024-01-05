@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { User } from '.prisma/client';
-import { findUsersByEmail } from '../../pages/api/user/userApiHandler';
+import { findUsersByEmail } from '../../pages/api/handlers/userApiHandler';
 import { Dispatch, SetStateAction } from "react";
 
 export const TeamTable = () => {

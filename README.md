@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a next.js project I'm using to work on real time collaboration services such as rich text editors.
 
 ## Getting Started
 

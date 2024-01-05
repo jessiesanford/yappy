@@ -1,9 +1,9 @@
 import { Plugin } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { Node } from 'prosemirror-model';
-import { ParagraphNodeView } from '../nodeViews/paragraphNodeView';
-import { CharacterNodeView } from '../nodeViews/characterNodeView';
-import {DialogueNodeView} from "../nodeViews/dialogueNodeView";
+import { ParagraphNodeView } from '../nodeViews';
+import { CharacterNodeView } from '../nodeViews';
+import { DialogueNodeView } from '../nodeViews';
 
 export const NodeViewPlugin = new Plugin({
   props: {

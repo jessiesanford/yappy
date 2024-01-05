@@ -4,7 +4,7 @@ import { ProjectFeedEvents } from '../static/events';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]';
 import { GetServerSidePropsContext } from 'next';
-import { getProjects, deleteProject } from './api/project/projectApiHandler';
+import { getProjects, deleteProject } from './api/handlers/projectApiHandler';
 import { BaseLayout } from '../components/layouts';
 import { Project } from '@prisma/client';
 

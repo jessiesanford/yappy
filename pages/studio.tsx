@@ -4,11 +4,11 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { ProjectItem } from '../components/projectFeed/projectItem';
 import { ProjectFeedEvents } from '../static/events';
 import { GetServerSidePropsContext } from 'next';
-import { deleteProject, getProjects } from './api/project/projectApiHandler';
+import { deleteProject, getProjects } from './api/handlers/projectApiHandler';
 import { useAppContext } from '../components/appProvider';
 import { BaseStudioToolbar } from '../components/studio/toolbar/baseStudioToolbar';
 import { AppPages } from "../static/enums";
-import { ProjectFeed } from "./project/projectFeed";
+import { ProjectFeed } from "../components/projectFeed/projectFeed";
 
 interface IProjectFeedContext {
   deleteProject: (id: number) => Promise<void>;

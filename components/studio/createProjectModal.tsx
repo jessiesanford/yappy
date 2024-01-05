@@ -4,7 +4,7 @@ import { BaseModal } from '../modal/baseModal';
 import words from 'random-words';
 import { useRouter } from 'next/router';
 import { ProjectFeedUpdated } from '../../static/events';
-import { createProject } from '../../pages/api/project/projectApiHandler';
+import { createProject } from '../../pages/api/handlers/projectApiHandler';
 import { useSession } from 'next-auth/react';
 import { capitalizeEachWord } from "../../util";
 

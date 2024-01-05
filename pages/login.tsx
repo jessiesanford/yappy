@@ -1,6 +1,6 @@
 import { FormEvent, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import BareLayout from '../components/layouts/bareLayout';
+import { BareLayout } from '../components/layouts';
 import { signIn, SignInResponse } from 'next-auth/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { GetServerSidePropsContext } from 'next';

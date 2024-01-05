@@ -1,7 +1,7 @@
 import StudioLayout from '../components/layouts/studioLayout';
 import { AccountService } from '../services/accountService';
 import { useEffect, useState } from 'react';
-import { getUsersById } from './api/user/userApiHandler';
+import { getUsersById } from './api/handlers/userApiHandler';
 import useUser from '../lib/useUser';
 import {useAppContext} from '../components/appProvider';
 import {ChangePasswordModal} from '../components/account/changePasswordModal';

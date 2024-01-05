@@ -4,7 +4,7 @@ import { FiCheck, FiEdit, FiEdit2, FiMoreVertical, FiShare, FiTrash } from 'reac
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 import { convertDateFormat, stringToColor } from '../../util/baseUtils';
-import { trashProject, updateProject } from '../../pages/api/project/projectApiHandler';
+import { trashProject, updateProject } from '../../pages/api/handlers/projectApiHandler';
 import { ShareProjectModal } from '../studio/shareProjectModal';
 import { Project } from "@prisma/client";
 

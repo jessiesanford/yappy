@@ -27,7 +27,6 @@ export const ContextMenu = observer(() => {
 
   useEffect(() => {
     if (contextMenuRef.current) {
-      // @ts-ignore
       const BB = contextMenuRef.current.getBoundingClientRect();
       if (BB.bottom > window.innerHeight) {
         // if the contextmenu is outside the y-boundary of the window, adjust the y-position

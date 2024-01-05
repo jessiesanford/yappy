@@ -1,6 +1,6 @@
 import { StudioToolbarButton } from './baseStudioToolbar';
 import { FiRotateCcw, FiTrash } from 'react-icons/fi';
-import { deleteProjects, restoreProjects } from '../../../pages/api/project/projectApiHandler';
+import { deleteProjects, restoreProjects } from '../../../pages/api/handlers/projectApiHandler';
 import React from 'react';
 import { useAppContext } from '../../appProvider';
 import { observer } from "mobx-react-lite";

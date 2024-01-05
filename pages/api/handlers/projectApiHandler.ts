@@ -1,5 +1,5 @@
 import { ProjectFeedUpdated } from '../../../static/events';
-import { findUsersByEmail, getUserByEmail } from '../user/userApiHandler';
+import { findUsersByEmail, getUserByEmail } from './userApiHandler';
 import {buildQuery} from "../../../util/baseUtils";
 import { PrismaClient, Project, User } from '@prisma/client';
 
@@ -32,13 +32,14 @@ export const getProjectsForUser = async (userId: number) => {
   const results = await fetch(`${server}/api/project/getForUser/${userId}`, {
     method: 'GET'
   });
+  return await results.json();
 };
 
 export const searchUserProjects = async (queryString: string, limit?: number) => {
   const query = buildQuery(`${server}/api/project/search`, {
     text: queryString,
     limit,
-  })
+  });
   const results = await fetch(query, { method: 'GET' });
   return await results.json();
 };

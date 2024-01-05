@@ -1,12 +1,13 @@
-import * as _ from "lodash";
-import { NodeType, Schema } from "prosemirror-model";
-import { EditorState, NodeSelection, TextSelection, Transaction } from "prosemirror-state";
-import { EditorView } from "prosemirror-view";
-// import { redo, undo } from "../plugins/gem/undo-plugin";
-import { BaseKeymap, DefaultModifiers, KBCmd, KeyStroke, Modifier } from "./baseKeymap";
-import { BaseIterator, EditorDepth } from "../resolver/baseIterator";
+import * as _ from 'lodash';
+import { NodeType, Schema } from 'prosemirror-model';
+import { EditorState, NodeSelection, TextSelection, Transaction } from 'prosemirror-state';
+import { EditorView } from 'prosemirror-view';
+import { BaseKeymap, DefaultModifiers, KBCmd, KeyStroke, Modifier } from './baseKeymap';
+import { BaseIterator, EditorDepth } from '../resolver/baseIterator';
 import { generateId } from '../../../util/';
 import { safeDeleteSelection } from '../../../util/';
+import { keymap } from "prosemirror-keymap";
+// import { redo, undo } from "../plugins/gem/undo-plugin";
 
 
 const browser = { windows: 'windows', mac: false };
@@ -31,6 +32,16 @@ export class GameKeymap extends BaseKeymap {
   }
 
 }
+
+export const GameKeyMap_ = (view: EditorView) => keymap({
+  'Tab': (state, dispatch) => {
+    // return onGameEditorTabKeyPress(state, dispatch, view);
+    return true;
+  },
+  'Shift-Tab': (state, dispatch) => {
+    return true;
+  }
+});
 
 export const changeScriptElement = (state: EditorState, dispatch: EditorView['dispatch'], type: NodeType) => {
   const tr = state.tr;
@@ -93,14 +104,14 @@ function handleRedo(state: EditorState, dispatch: EditorView['dispatch'], view: 
  * @param {EditorView} view
  */
 function handleDepth(state: EditorState, dispatch: EditorView['dispatch'], view: EditorView) {
-  let tr = state.tr;
-  let viewTr = view.state.tr;
+  const tr = state.tr;
+  const viewTr = view.state.tr;
   // the selection is at cxpage node if its at depth 2
   if (viewTr.curSelection.$anchor.depth === 2 || viewTr.selection.$anchor.depth === 2) {
     // find a leaf node to put the cursor so enter/delete (and others) function as intended.
     // this also feels illegal and wrong
     tr.deleteSelection();
-    let sel = TextSelection.between(viewTr.curSelection.$anchor, viewTr.curSelection.$head);
+    const sel = TextSelection.between(viewTr.curSelection.$anchor, viewTr.curSelection.$head);
     viewTr.setSelection(sel);
     dispatch(viewTr);
   }
@@ -111,7 +122,7 @@ function onGameEditorEnterKeyPress(state: EditorState, dispatch: (tr: Transactio
 }
 
 function onGameEditorShiftEnterKeyPress(state: EditorState, dispatch: EditorView['dispatch'], view: EditorView) {
-  let anchorNode = state.selection instanceof NodeSelection ? state.selection.node : state.selection.$anchor.node();
+  const anchorNode = state.selection instanceof NodeSelection ? state.selection.node : state.selection.$anchor.node();
   if (!anchorNode.type.spec.isPrimary && anchorNode.type.name !== 'cxinteractive') {
     dispatch(state.tr.replaceSelectionWith(state.schema.nodes.hard_break.create({})).scrollIntoView());
   }
@@ -156,23 +167,21 @@ function onGameEditorBackspaceKeyPress(state: EditorState, dispatch: EditorView[
     tr.setSelection(TextSelection.create(tr.doc, iter.start()));
   };
 
-  let selection = state.selection;
-  let tr = state.tr.setMeta('editor_delete', true);
-  let iter = new BaseIterator(tr, selection.$from);
+  const selection = state.selection;
+  const tr = state.tr.setMeta('editor_delete', true);
+  const iter = new BaseIterator(tr, selection.$from);
   if (selection.empty) {
     if (selection.$from.depth >= 3 && selection.$to.depth >= 3) {
-      let NODE_START = selection.$from.start(2) === selection.$from.pos - (selection.$from.depth - 2);
-      let NODE_END = selection.$from.end(2) === selection.$from.pos + (selection.$from.depth - 2);
-      let ELEMENT_START = selection.$from.start() === selection.$from.pos;
-      let ELEMENT_END = selection.$from.end() === selection.$from.pos;
+      const NODE_START = selection.$from.start(2) === selection.$from.pos - (selection.$from.depth - 2);
+      const NODE_END = selection.$from.end(2) === selection.$from.pos + (selection.$from.depth - 2);
+      const ELEMENT_START = selection.$from.start() === selection.$from.pos;
+      const ELEMENT_END = selection.$from.end() === selection.$from.pos;
       let PREVENT = false;
       if (ELEMENT_START) {
         // let iterClone = new BaseIterator(tr, selection.$from);
         PREVENT = iter.hasPrev(EditorDepth.Element) && iter.prev(EditorDepth.Element);
         switch (PREVENT ? iter.element.type : null) {
           // case CXGVRSchema.Class.Nodes.cxbranch:
-          // case CXGVRSchema.Class.Nodes.cxinteractive_branch:
-          // case CXGVRSchema.Class.Nodes.cxdualdialog:
           //   PREVENT = true;
           //   break;
           default:
@@ -187,8 +196,8 @@ function onGameEditorBackspaceKeyPress(state: EditorState, dispatch: EditorView[
           tr.join(selection.$from.before());
         } else if (ELEMENT_START) {
           if (iter.type() === state.schema.nodes.cxcharacter_item) {
-            let pos = iter.end();
-            let selection = TextSelection.create(tr.doc, pos);
+            const pos = iter.end();
+            const selection = TextSelection.create(tr.doc, pos);
             tr.setSelection(selection);
           } else {
             tr.join(selection.$from.before());
@@ -209,7 +218,7 @@ function onGameEditorBackspaceKeyPress(state: EditorState, dispatch: EditorView[
       }
     }
   } else {
-    let pos = selection.$from.pos;
+    const pos = selection.$from.pos;
     safeDeleteSelection(tr, (data) => {
       switch (data.type(EditorDepth.Element)) {
         case state.schema.nodes.paragraph:
@@ -244,15 +253,15 @@ function insertNewParagraph(state: EditorState, dispatch: any, nextType: NodeTyp
     // tr.setNodeMarkup(anchor.before(), (opt_emptyType || nextType), { id: selected.attrs.id });
   } else if (anchor.pos === anchor.start()) {
     // at the beginning of an element -- insert gameplay element before
-    let node = nextType.createAndFill({id: generateId()});
-    let pos = tr.selection.$anchor.before();
+    const node = nextType.createAndFill({id: generateId()});
+    const pos = tr.selection.$anchor.before();
     tr.insert(pos, node);
     tr.setSelection(TextSelection.create(tr.doc, pos + 1));
   } else if (anchor.pos === anchor.end() || opt_forceNewLine) {
     // at the end of the line -- next type inserted after
     // culprit
-    let node = nextType.createAndFill({id: generateId()});
-    let pos = tr.selection.$anchor.after();
+    const node = nextType.createAndFill({id: generateId()});
+    const pos = tr.selection.$anchor.after();
     tr.insert(pos, node);
     tr.setSelection(TextSelection.create(tr.doc, pos + 1)).scrollIntoView();
     // convert character nodes into character item nodes to reflect catalog link

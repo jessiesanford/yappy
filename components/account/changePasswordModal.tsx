@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BaseModal } from '../modal/baseModal';
-import { updatePassword } from "../../pages/api/user/userApiHandler";
+import { updatePassword } from "../../pages/api/handlers/userApiHandler";
 import {hashPassword} from "../../util/baseUtils";
 
 export const ChangePasswordModal = () => {

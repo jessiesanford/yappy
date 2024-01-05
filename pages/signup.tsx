@@ -5,7 +5,7 @@ import {
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import BareLayout from '../components/layouts/bareLayout';
-import { isEmailUnique, isHandleUnique } from './api/user/userApiHandler';
+import { isEmailUnique, isHandleUnique } from './api/handlers/userApiHandler';
 import crypto, { Sign } from 'crypto';
 import { hashPassword } from '../util/baseUtils';
 import { GetServerSidePropsContext } from 'next';

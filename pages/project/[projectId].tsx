@@ -3,7 +3,7 @@ import { GetServerSidePropsContext } from 'next';
 import { StudioLayout } from '../../components/layouts';
 import { FiCheck, FiDatabase, FiEdit2, FiFileText, FiPackage, FiPieChart } from 'react-icons/fi';
 import { ReactElement, useState } from 'react';
-import { updateProject } from '../api/project/projectApiHandler';
+import { updateProject } from '../api/handlers/projectApiHandler';
 import { Project as ProjectItem } from '@prisma/client'; // ...as ProjectItem because of some Project namespace error when accessing this
 
 type TProjectModuleGridProps = {

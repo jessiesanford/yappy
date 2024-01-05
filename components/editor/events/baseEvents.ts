@@ -1,5 +1,6 @@
 import { EditorView } from 'prosemirror-view';
 import _ from 'lodash';
+import { BaseEditorView } from "../baseEditorView";
 
 export const handleDOMEvents = {
   /**
@@ -54,7 +55,7 @@ export const handleDOMEvents = {
     return false;
   },
 
-  textInput(view, event) {
+  textInput(view: BaseEditorView, event: Event) {
     if (view.props.isReadOnly) {
       event.stopPropagation();
       event.preventDefault();

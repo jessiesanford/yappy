@@ -1,4 +1,4 @@
-import { getUsersById } from '../pages/api/user/userApiHandler';
+import { getUsersById } from '../pages/api/handlers/userApiHandler';
 import { User } from 'next-auth';
 
 export class AccountService {
