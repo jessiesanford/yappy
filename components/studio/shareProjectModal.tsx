@@ -1,28 +1,29 @@
 import { BaseModal } from '../modal/baseModal';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { getProjects, shareProject } from '../../pages/api/handlers/projectApiHandler';
 import { useAppContext } from '../appProvider';
 import { FiCrosshair, FiDelete, FiPlus, FiTrash, FiX } from 'react-icons/fi';
 import { getProjectShares } from '../../pages/api/handlers/projectApiHandler';
 import { getUserByEmail, getUsersByIds } from '../../pages/api/handlers/userApiHandler';
+import { ProjectShare } from '@prisma/client';
 
-export const ShareProjectModal = (props) => {
+export const ShareProjectModal = ({ projectId } : { projectId: string }) => {
   const {
     store
   } = useAppContext();
 
   const [email, setEmail] = useState('');
   const [emails, setEmails] = useState([]);
-  const [error, setError] = useState(null);
-  const emailInputRef = useRef();
+  const [error, setError] = useState('');
+  const emailInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    getProjectShares(props.projectId).then(async (shares) => {
-      const userIds = shares.filter((share) => share.userId).reduce((result, obj) => {
+    getProjectShares(projectId).then(async (shares) => {
+      const userIds = shares.filter((share: ProjectShare) => share.userId).reduce((result, obj) => {
         result.push(obj.userId);
         return result;
       }, []);
-      const emails = shares.filter((share) => share.email);
+      const emails = shares.filter((share: ProjectShare) => share.email);
       const users = await getUsersByIds(userIds);
       const userEmails = users.reduce((result, obj) => {
         result.push(obj.email);
@@ -32,11 +33,11 @@ export const ShareProjectModal = (props) => {
     });
   }, []);
 
-  const handleInputChange = (e: InputEvent) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
 
-  const handleInputKeydown = (e: KeyboardEvent) => {
+  const handleInputKeydown = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.stopPropagation();
       handleAddEmail();
@@ -46,7 +47,6 @@ export const ShareProjectModal = (props) => {
   const handleAddEmail = () => {
     const formattedEmail = email.trim().toLowerCase();
     if (!validateEmail(formattedEmail)) {
-      // store.Modal.setError({ msg: 'Invalid email address.', hidden: false });
       setError('Invalid email address.');
       return;
     } else if (formattedEmail.trim() !== '') {
@@ -54,11 +54,11 @@ export const ShareProjectModal = (props) => {
         setEmails([...emails, formattedEmail]);
       }
       setEmail('');
-      setError(null);
+      setError('');
     }
   };
 
-  const handleRemoveEmail = (index) => {
+  const handleRemoveEmail = (index: number) => {
     const updatedList = emails.filter((_, i) => i !== index);
     setEmails(updatedList);
   };
@@ -72,7 +72,7 @@ export const ShareProjectModal = (props) => {
     if (email) {
       handleAddEmail();
     }
-    const res = await shareProject(props.projectId, emails);
+    const res = await shareProject(projectId, emails);
     return { success: !!res.success };
   };
 
@@ -83,13 +83,17 @@ export const ShareProjectModal = (props) => {
       actionLabel={'Share'}
     >
       <div className={'modal-content'}>
-        <div className={'email-share-container'} onClick={() => emailInputRef.current.focus()}>
+        <div className={'email-share-container'} onClick={() => {
+          if (emailInputRef.current) {
+            emailInputRef.current.focus();
+          }
+        }}>
           <div className={'email-input-container'}>
             <input
               type="text"
               value={email}
-              onChange={handleInputChange}
-              onKeyDown={handleInputKeydown}
+              onChange={(e) => handleInputChange(e)}
+              onKeyDown={(e) => handleInputKeydown(e)}
               placeholder="Enter email"
               ref={emailInputRef}
             />

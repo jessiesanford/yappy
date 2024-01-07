@@ -1,8 +1,5 @@
 import { Node as ProsemirrorNode, ResolvedPos } from "prosemirror-model";
 
-/**
- * Resolved celtx Document at depth 0
- */
 export class ResolvedDocument {
   private readonly before_ = null;
   private readonly after_ = null;

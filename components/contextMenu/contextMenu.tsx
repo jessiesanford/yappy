@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react-lite';
 import { useAppContext } from '../appProvider';
-import { useCallback, useEffect, useRef } from 'react';
+import { ReactElement, useCallback, useEffect, useRef } from 'react';
 import { useOutsideClick } from '../hooks/useClickOutside';
 import { isDescendant } from "../../util/baseUtils";
 
 type TContextMenuOptionProps = {
-  icon?: string;
+  icon?: ReactElement;
   label: string;
   onClick: () => void
 }
@@ -75,7 +75,7 @@ export const ContextMenu = observer(() => {
   return null;
 });
 
-export const ContextMenuOption = (props: TContextMenuOptionProps) => {
+export const ContextMenuOption = (props: Partial<TContextMenuOptionProps>) => {
   return (
     <div className={'context-menu__option'} onClick={props.onClick}>
       <div className={'context-menu__option-icon'}>

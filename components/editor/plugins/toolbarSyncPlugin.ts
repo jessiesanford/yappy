@@ -1,10 +1,10 @@
 import * as _ from 'lodash';
 import { MarkType } from 'prosemirror-model';
-import { EditorState, Plugin, PluginKey } from "prosemirror-state";
-import { textElementChanged, textMarkToggled } from "../events/globalEvents";
-import { EditorKeys } from "../editorKeys";
-import { isOnlyCollabCursorUpdate } from "../../../util/pmUtils";
-import { Editor } from "../editor";
+import { EditorState, Plugin, PluginKey } from 'prosemirror-state';
+import { textElementChanged, textMarkToggled } from '../events/globalEvents';
+import { EditorKeys } from '../editorKeys';
+import { isOnlyCollabCursorUpdate } from '../../../util/pmUtils';
+import { Editor } from '../editor';
 
 export const ToolbarSyncPlugin = (editor: Editor) => new Plugin({
   key: EditorKeys.Toolbar,
@@ -15,7 +15,7 @@ export const ToolbarSyncPlugin = (editor: Editor) => new Plugin({
        * a collab transaction comes through without them
        */
       if (tr.getMeta('collabTransaction')) {
-        return newState.tr.setStoredMarks(oldState.storedMarks)
+        return newState.tr.setStoredMarks(oldState.storedMarks);
       }
     }
     return null;
@@ -33,20 +33,19 @@ export const ToolbarSyncPlugin = (editor: Editor) => new Plugin({
           textElementChanged(newData.nodeTypeName);
         }
       }
-    }
+    };
   },
   state: {
     init: (config, instance) => {
       return {
         marksData: buildMarksData(instance),
         nodeTypeName: instance.selection.$anchor.node(3)?.type.name || null
-      }
+      };
     },
     apply: (tr, val, oldState, newState) => {
       if (isOnlyCollabCursorUpdate(tr)) return val;
       const pluginState: typeof val = _.cloneDeep(val);
       const selectionChanged = !oldState.selection.eq(newState.selection);
-      // const isCurrEditor = editor.settings.nodeId === editor.Delegate.ActiveLaneController?.TargetSequenceId;
       const isCurrEditor = true;
       const storedMarksChanged = !_.isEqual(oldState.storedMarks, newState.storedMarks);
       const selectionMarksChanged = !_.isEqual(
@@ -69,7 +68,7 @@ export const ToolbarSyncPlugin = (editor: Editor) => new Plugin({
 
 const checkTypeForMarks = (state: EditorState, type: MarkType) => {
   if (state.selection.empty) {
-    let setMark = type.isInSet(
+    const setMark = type.isInSet(
       state.storedMarks || _.uniqBy(
         _.compact(
           state.selection.$from.marks().concat(state.selection.$to.marks())
@@ -78,9 +77,9 @@ const checkTypeForMarks = (state: EditorState, type: MarkType) => {
     );
     return setMark ? setMark.type === type : false;
   } else {
-    return state.doc.rangeHasMark(state.selection.from, state.selection.to, type)
+    return state.doc.rangeHasMark(state.selection.from, state.selection.to, type);
   }
-}
+};
 
 const buildMarksData = (state: EditorState) => {
   return {
@@ -88,5 +87,5 @@ const buildMarksData = (state: EditorState) => {
     italics: checkTypeForMarks(state, state.schema.marks.em),
     underline: checkTypeForMarks(state, state.schema.marks.underline),
     strikethrough: checkTypeForMarks(state, state.schema.marks.strikethrough)
-  }
-}
+  };
+};

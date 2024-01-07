@@ -6,8 +6,7 @@ import { BaseKeymap, DefaultModifiers, KBCmd, KeyStroke, Modifier } from './base
 import { BaseIterator, EditorDepth } from '../resolver/baseIterator';
 import { generateId } from '../../../util/baseUtils';
 import { safeDeleteSelection } from '../../../util/pmUtils';
-import { keymap } from "prosemirror-keymap";
-// import { redo, undo } from "../plugins/gem/undo-plugin";
+// import { redo, undo } from "../plugins/undo-plugin";
 
 
 const browser = { windows: 'windows', mac: false };
@@ -32,16 +31,6 @@ export class GameKeymap extends BaseKeymap {
   }
 
 }
-
-export const GameKeyMap_ = (view: EditorView) => keymap({
-  'Tab': (state, dispatch) => {
-    // return onGameEditorTabKeyPress(state, dispatch, view);
-    return true;
-  },
-  'Shift-Tab': (state, dispatch) => {
-    return true;
-  }
-});
 
 export const changeScriptElement = (state: EditorState, dispatch: EditorView['dispatch'], type: NodeType) => {
   const tr = state.tr;
@@ -93,7 +82,7 @@ function handleRedo(state: EditorState, dispatch: EditorView['dispatch'], view: 
 
 /**
  * After undo and redo the selection sometimes gets in the incorrect depth of 2
- * on a cxpage element; this causes enter/delete keystrokes to not work, this places
+ * on a page element; this causes enter/delete keystrokes to not work, this places
  * the selection in the correct depth so these keystrokes still work as intended
  *
  * Note this looks at the view state to find out the depth and the current selection
@@ -106,7 +95,7 @@ function handleRedo(state: EditorState, dispatch: EditorView['dispatch'], view: 
 function handleDepth(state: EditorState, dispatch: EditorView['dispatch'], view: EditorView) {
   const tr = state.tr;
   const viewTr = view.state.tr;
-  // the selection is at cxpage node if its at depth 2
+  // the selection is at page node if its at depth 2
   if (viewTr.curSelection.$anchor.depth === 2 || viewTr.selection.$anchor.depth === 2) {
     // find a leaf node to put the cursor so enter/delete (and others) function as intended.
     // this also feels illegal and wrong
@@ -123,7 +112,7 @@ function onGameEditorEnterKeyPress(state: EditorState, dispatch: (tr: Transactio
 
 function onGameEditorShiftEnterKeyPress(state: EditorState, dispatch: EditorView['dispatch'], view: EditorView) {
   const anchorNode = state.selection instanceof NodeSelection ? state.selection.node : state.selection.$anchor.node();
-  if (!anchorNode.type.spec.isPrimary && anchorNode.type.name !== 'cxinteractive') {
+  if (!anchorNode.type.spec.isPrimary) {
     dispatch(state.tr.replaceSelectionWith(state.schema.nodes.hard_break.create({})).scrollIntoView());
   }
   return true;
@@ -162,7 +151,7 @@ function onGameEditorShiftTabKeyPress(state: EditorState, dispatch: EditorView['
 
 function onGameEditorBackspaceKeyPress(state: EditorState, dispatch: EditorView['dispatch'], view: EditorView) {
   const replaceCharacterItem = (tr: Transaction, iter: BaseIterator) => {
-    const character = state.schema.nodes.cxcharacter.createAndFill({id: generateId(), catalog_id: generateId()});
+    const character = state.schema.nodes.character.createAndFill({id: generateId(), catalog_id: generateId()});
     tr.replaceRangeWith(iter.start(), iter.end(), character);
     tr.setSelection(TextSelection.create(tr.doc, iter.start()));
   };
@@ -181,9 +170,6 @@ function onGameEditorBackspaceKeyPress(state: EditorState, dispatch: EditorView[
         // let iterClone = new BaseIterator(tr, selection.$from);
         PREVENT = iter.hasPrev(EditorDepth.Element) && iter.prev(EditorDepth.Element);
         switch (PREVENT ? iter.element.type : null) {
-          // case CXGVRSchema.Class.Nodes.cxbranch:
-          //   PREVENT = true;
-          //   break;
           default:
             PREVENT = false;
             break;
@@ -195,7 +181,7 @@ function onGameEditorBackspaceKeyPress(state: EditorState, dispatch: EditorView[
         if (ELEMENT_START && ELEMENT_END) {
           tr.join(selection.$from.before());
         } else if (ELEMENT_START) {
-          if (iter.type() === state.schema.nodes.cxcharacter_item) {
+          if (iter.type() === state.schema.nodes.character_item) {
             const pos = iter.end();
             const selection = TextSelection.create(tr.doc, pos);
             tr.setSelection(selection);
@@ -204,13 +190,13 @@ function onGameEditorBackspaceKeyPress(state: EditorState, dispatch: EditorView[
           }
         } else if (ELEMENT_END) {
           // special case for character items, need to delete the entire element and replace with a character node
-          if (iter.type() === state.schema.nodes.cxcharacter_item) {
+          if (iter.type() === state.schema.nodes.character_item) {
             replaceCharacterItem(tr, iter);
           } else {
             tr.deleteRange(selection.$from.pos - 1, selection.$from.pos);
           }
         } else {
-          if (iter.type() === state.schema.nodes.cxcharacter_item) {
+          if (iter.type() === state.schema.nodes.character_item) {
             replaceCharacterItem(tr, iter);
           }
           tr.deleteRange(selection.$from.pos - 1, selection.$from.pos);
@@ -249,44 +235,25 @@ function insertNewParagraph(state: EditorState, dispatch: any, nextType: NodeTyp
   const types = state.schema.nodes;
 
   if (selected.content.size === 0) {
-    // start of empty -- change node to next type
-    // tr.setNodeMarkup(anchor.before(), (opt_emptyType || nextType), { id: selected.attrs.id });
   } else if (anchor.pos === anchor.start()) {
-    // at the beginning of an element -- insert gameplay element before
     const node = nextType.createAndFill({id: generateId()});
     const pos = tr.selection.$anchor.before();
     tr.insert(pos, node);
     tr.setSelection(TextSelection.create(tr.doc, pos + 1));
   } else if (anchor.pos === anchor.end() || opt_forceNewLine) {
-    // at the end of the line -- next type inserted after
-    // culprit
     const node = nextType.createAndFill({id: generateId()});
     const pos = tr.selection.$anchor.after();
     tr.insert(pos, node);
     tr.setSelection(TextSelection.create(tr.doc, pos + 1)).scrollIntoView();
-    // convert character nodes into character item nodes to reflect catalog link
-    // if (type === schema.nodes.character) {
-    //   let newCharacterItem = schema.nodes.cxcharacter_item.create(
-    //     {
-    //       id: selected.attrs.id,
-    //       catalog_id: generateId()
-    //     },
-    //     selected.content.content
-    //   );
-    //   tr.replaceRangeWith(anchor.before(), anchor.after(), newCharacterItem);
-    // }
   } else {
-    // in the middle of an element
     tr.split(sel);
     tr.setNodeMarkup(sel + 1, void 0, {id: generateId()});
-    tr.removeMark(sel + 1, sel + 1 + tr.doc.nodeAt(sel + 1).nodeSize, type.schema.marks.cxbreakdown);
   }
 
   tr.scrollIntoView();
 
   if (dispatch) {
     dispatch(tr);
-    // shift the editor down to bottom of scrollable content when new elements are inserted near end of scrollHeight
   }
 
   return true;

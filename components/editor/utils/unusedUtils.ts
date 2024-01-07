@@ -174,7 +174,7 @@ function brokenClipboardAPI() {
   return browser && (browser.ie && browser.ie_version < 15 || browser.ios && browser.webkit_version < 604);
 }
 
-export const FuckYouUtils = {
+export const UnusedUtils = {
   posFromElement,
   captureCopy,
   platform,
@@ -182,5 +182,5 @@ export const FuckYouUtils = {
 };
 
 if (process.env.NODE_ENV === "development") {
-  global.$PMUtils = FuckYouUtils;
+  global.$PMUtils = UnusedUtils;
 }

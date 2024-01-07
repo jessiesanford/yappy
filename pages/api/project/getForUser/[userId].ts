@@ -1,9 +1,10 @@
-import { PrismaClient } from "@prisma/client";
-import { getSession } from "next-auth/react";
+import { PrismaClient } from '@prisma/client';
+import { getSession } from 'next-auth/react';
+import { NextApiRequest, NextApiResponse } from "next";
 
 const prisma = new PrismaClient();
 
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const session = await getSession( { req });
   let userId;
 
@@ -16,29 +17,19 @@ export default async function handler(req, res) {
   const userProjects = await prisma.user
     .findUnique({
       where: { id: userId},
-    }).projects();
+    }).projects() || [];
 
-  const sharedProjects = await prisma.projectShare
+  const projectShares = await prisma.projectShare
     .findMany({
-      where: {
-        userId
-      },
-    })
+      where: { userId },
+    });
 
-  let sP = sharedProjects.map((projectShare) => projectShare.project());
-  let allProjects = [userProjects, ...sP];
+  const sharedProjectIds = projectShares.map((projectShare) => projectShare.projectId);
 
-  // const projects = await prisma.project.findMany({
-  //   where: {
-  //     OR: [
-  //       {
-  //         createdBy: userId
-  //       }, // Projects owned by the user
-  //       {
-  //         sharedWith: { some: { shared_with_id: userId } } }, // Projects shared with the user
-  //     ],
-  //   },
-  // });
-
-  res.status(200).json(userProjects);
+  // Get projects based on the extracted project IDs
+  const sharedProjects = await prisma.project.findMany({
+    where: { id: { in: sharedProjectIds } },
+  });
+  
+  res.status(200).json(userProjects.concat(sharedProjects));
 }

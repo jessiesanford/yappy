@@ -14,10 +14,10 @@ export function safeDeleteSelection(tr: Transaction, predicate: (data: ResolvedD
   let selection = tr.selection;
   let fromPos = selection.from;
   let toPos = selection.to;
-  if (selection.$from.node().type === EditorSchema.nodes.cxcharacter_item) {
+  if (selection.$from.node().type === EditorSchema.nodes.character_item) {
     fromPos = selection.$from.before();
   }
-  if (selection.$to.node().type === EditorSchema.nodes.cxcharacter_item) {
+  if (selection.$to.node().type === EditorSchema.nodes.character_item) {
     toPos = selection.$to.after();
   }
   let all = isAllSelection(tr, predicate);
@@ -48,7 +48,7 @@ export function safeDeleteSelection(tr: Transaction, predicate: (data: ResolvedD
         mergeAttrs(iter.PMNode(EditorDepth.Element), { id: generateId() })
       );
     } else {
-      tr.insert(iter.element.before, EditorSchema.nodes.cxgameplay.createAndFill({ id: generateId() }));
+      tr.insert(iter.element.before, EditorSchema.nodes.action.createAndFill({ id: generateId() }));
       tr.setSelection(TextSelection.create(tr.doc, iter.element.before + 1));
     }
   }

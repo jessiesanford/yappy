@@ -1,38 +1,25 @@
-import { Depth, ResolvedIterator } from './resolvedIterator';
+import { ResolvedIterator } from './resolvedIterator';
 import { EditorSchema } from '../schema/schema';
 import { Transaction } from 'prosemirror-state';
 import { ResolvedData } from './resolvedData';
 import { ResolvedPos } from 'prosemirror-model';
+import { ResolvedNode } from './resolvedNode';
+
 /**
- * Extends functionality for GEM editor type
+ * Extends functionality for editor type
  * @inheritDoc {ResolvedIterator}
  */
 export class BaseIterator extends ResolvedIterator {
-  /**
-   * ResolvedNode that is a sequence
-   * @see {@link ResolvedNode}
-   * @return {ResolvedNode|null}
-   */
-  get sequence() {
+  get sequence() : ResolvedNode | null {
     const node = this.data.getNode(EditorDepth.Sequence);
     return node && node.type === EditorSchema.nodes.sequence ? node : null;
   }
   
-  /**
-   * ResolvedNode that is a page
-   * @see {@link ResolvedNode}
-   * @return {ResolvedNode|null}
-   */
-  get page() {
+  get page() : ResolvedNode | null {
     return this.data.getNode(EditorDepth.Page) || null;
   }
-
-  /**
-   * ResolvedNode that is a element
-   * @see {@link ResolvedNode}
-   * @return {ResolvedNode|null}
-   */
-  get element() {
+  
+  get element() : ResolvedNode | null {
     return this.data.getNode(EditorDepth.Element) || null;
   }
   

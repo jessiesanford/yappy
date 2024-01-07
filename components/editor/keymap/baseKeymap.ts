@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import { chainCommands, exitCode, toggleMark } from 'prosemirror-commands';
 import { redo, undo } from 'prosemirror-history';
-import { FuckYouUtils } from '../utils/fuckYouUtils';
+import { UnusedUtils } from '../utils/unusedUtils';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { Schema } from 'prosemirror-model';
@@ -341,15 +341,9 @@ DefaultModifiers.push(Modifier.CONTROL);
 
 
 function onSaveRequest(state: EditorState, dispatch: EditorView['dispatch'], view: EditorView) {
-  // if (dispatch) {
-    // CXBaseEvents.fireSaveRequestEvent(view);
-  // }
   return true;
 }
 function onPrintRequest(state: EditorState, dispatch: EditorView['dispatch'], view: EditorView) {
-  // if (dispatch) {
-    // CXBaseEvents.firePrintEvent(view);
-  // }
   return true;
 }
 function onHardBreak(state: EditorState, dispatch: EditorView['dispatch']) {

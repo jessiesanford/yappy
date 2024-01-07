@@ -2,75 +2,72 @@ import { EditorView } from 'prosemirror-view';
 import { DOMSerializer, Node } from 'prosemirror-model';
 
 export class BaseNodeView {
-  _dom: HTMLElement;
-  _contentDOM: HTMLElement | null;
-  _node: Node;
-  _type: string;
-  _editorView: EditorView;
+  dom: HTMLElement;
+  contentDOM: HTMLElement | null;
+  node: Node;
+  type: string;
+  editorView: EditorView;
 
   get DOM() {
-    return this._dom;
+    return this.dom;
   }
 
-  get contentDOM() {
-    return this._contentDOM;
+  get ContentDOM() {
+    return this.contentDOM;
   }
 
   get View() {
-    return this._editorView;
+    return this.editorView;
   }
 
   get Node() {
-    return this._node;
+    return this.node;
   }
 
   get Type() {
-    return this._type;
+    return this.type;
   }
 
-  constructor(node: Node, view: EditorView, getPos?: () => number | undefined) {
-    this._node = node;
-    this._type = this._node.type.name;
-    this._editorView = view;
-    this._dom = this.createDOM();
-    this._contentDOM = this._node.type.isInline || this._node.type.name == 'comment' ? null : this._dom.querySelector(`.${this._type}-content`) || this._dom;
+  constructor(node: Node, view: EditorView) {
+    this.node = node;
+    this.type = this.node.type.name;
+    this.editorView = view;
+    this.dom = this.createDOM();
+    this.contentDOM = this.node.type.isInline || this.node.type.name == 'comment' ? null : this.dom.querySelector(`.${this.type}-content`) || this.dom;
 
     if (this.Node.type.spec.placeholder) {
       if (this.Node.content.size && this.DOM.classList.contains('placeholder')) {
         this.DOM.classList.remove('placeholder');
-      } else if (!this._node.content.size && !this.DOM.classList.contains('placeholder')) {
+      } else if (!this.node.content.size && !this.DOM.classList.contains('placeholder')) {
         this.DOM.classList.add('placeholder');
       }
     }
   }
 
   createDOM() {
-    const schema = this._editorView.state.schema;
+    const schema = this.editorView.state.schema;
 
     // what does this do?
     if (!schema.cached.domSerializer) {
       schema.cached.domSerializer = DOMSerializer.fromSchema(schema);
     }
 
-    const isMark = schema.marks[this._type];
+    const isMark = schema.marks[this.type];
 
     if (isMark) {
-      const mark = schema.marks[this._type].create(this._node.attrs);
+      const mark = schema.marks[this.type].create(this.node.attrs);
       return schema.cached.domSerializer.serializeMark(mark);
     } else {
-      const node = schema.nodes[this._type].create(this._node.attrs, this._node.content);
+      const node = schema.nodes[this.type].create(this.node.attrs, this.node.content);
       return schema.cached.domSerializer.serializeNode(node);
     }
   }
 
   create() {
-    // if (this.config_.listeners) {
-    //   this.addListeners_();
-    // } //This function should not be overriden
-    this.contentDOM && (this.contentDOM.innerHTML = '');
+    this.ContentDOM && (this.ContentDOM.innerHTML = '');
     return {
       dom: this.DOM,
-      contentDOM: this.contentDOM,
+      contentDOM: this.ContentDOM,
       update: (node: Node) => this.update(node),
       destroy: () => this.destroy(),
       ignoreMutation: (record: any) => this.ignore(record)
@@ -79,14 +76,14 @@ export class BaseNodeView {
 
   update(node: Node) {
     let result = false;
-    const prev = this._node;
+    const prev = this.node;
     const next = node || prev;
     if (next) {
       //I'm assuming the usual case, we clone attrs everytime.
       // TODO: this is causing issues with the placeholder text, I think because id is null this.Type used to be this.type and always return false
       result = this.Type === next.type.name;
       if (result && (prev !== next || prev.attrs !== next.attrs)) {
-        this._node = next;
+        this.node = next;
         if (this.Node.attrs.id) {
           this.DOM.id !== this.Node.attrs.id && (this.DOM.id = this.Node.attrs.id);
         } else {

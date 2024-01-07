@@ -29,7 +29,6 @@ export const handleDOMEvents = {
       event.preventDefault();
       return true;
     }
-    // const autocomplete = view.props['cxScriptEditor'].getAutoCompletePlugin();
     // autocomplete && autocomplete.resetComponent();
     return false;
   },

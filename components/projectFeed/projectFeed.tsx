@@ -9,7 +9,8 @@ import { CreateProjectModal } from '../studio';
 import { Project } from '@prisma/client';
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3001');
+// TODO: implement real time updates with socket.io
+// const socket = io('http://localhost:3001');
 
 export const ProjectFeed = observer(() => {
   const {
@@ -18,7 +19,6 @@ export const ProjectFeed = observer(() => {
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectsLoaded, setProjectsLoaded] = useState(false);
-  const feedObserver = useState();
 
   function handleProjectFeedUpdated() {
     getProjectsForUser(1).then((projects) => {

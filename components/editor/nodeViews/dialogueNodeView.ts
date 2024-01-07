@@ -4,7 +4,7 @@ import { Node } from 'prosemirror-model';
 
 export class DialogueNodeView extends BaseNodeView {
   constructor(node: Node, view: EditorView, getPos: () => void) {
-    super(node, view, getPos);
+    super(node, view);
     if (this.Type === 'dialogue') {
       // we're good!
     } else {

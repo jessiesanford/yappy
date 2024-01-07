@@ -1,5 +1,6 @@
 import { useEffect, useState, ReactElement, useRef } from 'react';
-import { isDescendant, useOutsideClick } from '../../util';
+import { isDescendant } from '../../util/baseUtils';
+import { useOutsideClick } from '../hooks/useClickOutside';
 import { LoadingSpinner2 } from './loading';
 import { FiSearch } from 'react-icons/fi';
 
