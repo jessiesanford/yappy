@@ -4,7 +4,7 @@ import { Node as ProsemirrorNode, ResolvedPos } from "prosemirror-model";
  * Resolved nodes depth > 0
  */
 export class ResolvedNode {
-  private node_: ProsemirrorNode;
+  private node_: ProsemirrorNode | null;
   private index_: number;
   private before_: number;
   private start_: number;
@@ -88,7 +88,8 @@ export class ResolvedNode {
    * @return {Number}
    */
   get nodeCount() {
-    return this.PMNode && ResolvedChildren[this.PMNode.type.name] ? this.PMNode.childCount : -1;
+    // there was a conditional in here (&& ResolvedChildren[this.PMNode.type.name]) I don't think it serves a purpose
+    return this.PMNode ? this.PMNode.childCount : -1;
   }
   
   /**

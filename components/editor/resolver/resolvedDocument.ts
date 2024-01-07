@@ -1,4 +1,4 @@
-import { Node as ProsemirrorNode, ResolvedPos } from "prosemirror-model";
+import { Node as ProsemirrorNode, ResolvedPos } from 'prosemirror-model';
 
 export class ResolvedDocument {
   private readonly before_ = null;
@@ -22,7 +22,7 @@ export class ResolvedDocument {
         this.start_ = pos.start_;
         this.end_ = pos.end_;
       } else {
-        throw new Error("Invalid Input");
+        throw new Error('Invalid Input');
       }
     }
   }

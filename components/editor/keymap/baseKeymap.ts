@@ -343,9 +343,7 @@ DefaultModifiers.push(Modifier.CONTROL);
 function onSaveRequest(state: EditorState, dispatch: EditorView['dispatch'], view: EditorView) {
   return true;
 }
-function onPrintRequest(state: EditorState, dispatch: EditorView['dispatch'], view: EditorView) {
-  return true;
-}
+
 function onHardBreak(state: EditorState, dispatch: EditorView['dispatch']) {
   dispatch(state.tr.replaceSelectionWith(state.schema.nodes.hard_break.create({})).scrollIntoView());
   return true;

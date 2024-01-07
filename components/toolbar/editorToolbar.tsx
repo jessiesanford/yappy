@@ -30,20 +30,12 @@ export function EditorToolbar({ editor }: { editor: Editor }) {
 
     document.addEventListener(EventTypes.TEXT_MARK_TOGGLED, handleMarkToggled);
     document.addEventListener(EventTypes.TEXT_ELEMENT_UPDATED, handleElementChange);
-    // window.addEventListener('resize', handleResize);
-    // window.addEventListener('resize', makeDraggable);
 
     return () => {
       document.removeEventListener(EventTypes.TEXT_MARK_TOGGLED, handleMarkToggled);
       document.removeEventListener(EventTypes.TEXT_ELEMENT_UPDATED, handleElementChange);
-      // window.removeEventListener('resize', handleResize);
-      // window.removeEventListener('resize', makeDraggable);
     };
   }, []);
-
-  const handleResize = () => {
-    // adjustAbsolutePosOnResize('.CLASSNAME-HERE');
-  };
 
   const handleElementChange = useCallback((e: CustomEvent) => {
     const { element } = e.detail;

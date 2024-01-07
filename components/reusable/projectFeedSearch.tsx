@@ -1,11 +1,11 @@
-import { searchUserProjects } from "../../pages/api/handlers/projectApiHandler";
-import { useAutocomplete } from "../hooks/useAutocomplete";
-import { LoadingSpinner2 } from "./loading";
-import { FiSearch } from "react-icons/fi";
-import { useRef } from "react";
-import { useOutsideClick } from "../../components/hooks/useClickOutside";
-import { isDescendant } from "../../util/baseUtils";
-import { useRouter } from "next/router";
+import { searchUserProjects } from '../../pages/api/handlers/projectApiHandler';
+import { useAutocomplete } from '../hooks/useAutocomplete';
+import { LoadingSpinner2 } from './loading';
+import { FiSearch } from 'react-icons/fi';
+import { useRef } from 'react';
+import { useOutsideClick } from '../hooks/useClickOutside';
+import { isDescendant } from '../../util/baseUtils';
+import { useRouter } from 'next/router';
 
 type TProjectFeedSearchProps = {}
 
@@ -31,12 +31,12 @@ export function ProjectFeedSearch(props: TProjectFeedSearchProps) {
         return {
           items: data.projects.map((d: { id: string, name: string }) => ({id: d.id, label: d.name})),
           count: data.count,
-        }
+        };
       } catch (e) {
         return {
           items: [],
           count: 0,
-        }
+        };
       }
     }
   });
@@ -71,7 +71,7 @@ export function ProjectFeedSearch(props: TProjectFeedSearchProps) {
         Load More...
       </div>
     );
-  }
+  };
 
   const renderResults = () => {
     if (isActive) {
@@ -91,9 +91,9 @@ export function ProjectFeedSearch(props: TProjectFeedSearchProps) {
               <div>{suggestions[index].label}</div>
             </div>
           </div>
-        ))
+        ));
         if (canShowMoreResults) {
-          resultItems.push(renderLoadMoreElement())
+          resultItems.push(renderLoadMoreElement());
         }
       }
 
@@ -102,7 +102,7 @@ export function ProjectFeedSearch(props: TProjectFeedSearchProps) {
           {resultItems}
           {noResults ? <div className={'result-container'}>No Results Found.</div> : null}
         </div>
-      )
+      );
     } else {
       return null;
     }
@@ -115,7 +115,7 @@ export function ProjectFeedSearch(props: TProjectFeedSearchProps) {
            if (inputRef.current) {
              inputRef.current?.focus();
            }
-           bindContainer.onClick(e)
+           bindContainer.onClick(e);
          }}
     >
       <div className={`autocomplete-query ${isActive ? 'active' : null}`}>
@@ -135,5 +135,5 @@ export function ProjectFeedSearch(props: TProjectFeedSearchProps) {
       </div>
       {renderResults()}
     </div>
-  )
+  );
 }
