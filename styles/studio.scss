@@ -1,0 +1,143 @@
+.studio-container {
+  margin-left: 240px;
+  max-height: calc(100vh - 60px);
+  overflow: auto;
+  color: #202020;
+}
+
+.project-list {
+  padding: 10px;
+}
+
+.project-item {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  position: relative;
+  color: #202020;
+  margin: 5px 0;
+  border-bottom: 1px solid #d0d0d0;
+  transition: all 0.2s ease-in;
+  overflow: hidden;
+  height: 80px;
+
+  &:hover {
+    background: #fafafa;
+    cursor: pointer;
+  }
+
+  .project-item__select {
+    background: #fff;
+    display: flex;
+    align-self: stretch;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 10px;
+
+    &.selected {
+      background: #e0e0e0;
+    }
+  }
+
+  .project-item__content {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+
+    .project-item__img-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: #fff;
+      margin-right: 20px;
+      border-radius: 50%;
+
+      .project-item__img img {
+        max-width: 60px;
+      }
+    }
+
+    .project-item__name {
+      display: flex;
+      align-items: center;
+      font-size: 16pt;
+
+      input {
+        border: 1px solid #e0e0e0;
+      }
+
+      .edit-anchor {
+        font-size: 12pt;
+      }
+    }
+
+    .project-item__desc {
+      font-size: 10pt;
+      color: #a0a0a0;
+    }
+
+    .project-item__updated-at {
+      font-size: 10pt;
+      color: #a0a0a0;
+    }
+  }
+
+  .project-item__ghost-content {
+    opacity: 0;
+    animation: skeleton-loading 2s infinite;
+  }
+
+  .project-item__ghost-name {
+    background: #eaeaea;
+    height: 10px;
+    width: 200px;
+    margin-bottom: 10px;
+  }
+
+  .project-item__ghost-desc {
+    background: #eaeaea;
+    margin-bottom: 10px;
+    height: 5px;
+    width: 400px;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  .project-item__ctx-anchor {
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 12pt;
+    color: #202020;
+    padding: 5px;
+    border-radius: 5px;
+  }
+}
+
+.empty-project-feed {
+  padding: 40px;
+  text-align: center;
+
+  .empty-project-feed__heading {
+    font-size: 24pt;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+}
+
+@keyframes skeleton-loading {
+  0% {
+    opacity: 0; /* Initial background color */
+  }
+  50% {
+    opacity: 1; /* Midpoint background color */
+  }
+  100% {
+    opacity: 0; /* Final background color */
+  }
+}

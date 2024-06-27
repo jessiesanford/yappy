@@ -1,0 +1,11 @@
+
+// default input styling for every input, override when necessary
+input {
+  padding: 5px;
+  border-radius: 3px;
+  font-size: 12pt;
+  width: 100%;
+  margin: auto;
+  font-family: $defaultFont;
+  border: 1px solid #e0e0e0;
+}

@@ -1,0 +1,17 @@
+.navbar {
+    background: #101010;
+    color: #fff;
+}
+
+.navbar__content {
+    margin: auto 0px;
+    display: flex;
+}
+
+.navbar__panel {
+    margin-left: auto;
+}
+
+.push {
+    flex: 1;
+}

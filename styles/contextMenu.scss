@@ -1,0 +1,38 @@
+$zIndexCtxMenu: 10500;
+
+.context-menu {
+  width: 200px;
+  position: absolute;
+  z-index: $z-index-popover;
+  font-size: 10pt;
+
+  .context-menu__option {
+    background: #0a0a0a;
+    display: flex;
+    align-items: center;
+    color: #e0e0e0;
+    padding: 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+    border-bottom: 1px solid #202020;
+    transition: background-color 0.1s ease-in;
+
+    &:first-of-type {
+      border-radius: 4px 4px 0 0;
+    }
+
+    &:last-of-type {
+      border-bottom: none;
+      border-radius: 0 0 4px 4px;
+    }
+
+    &:hover {
+      background: #202020;
+    }
+
+    .context-menu__option-icon {
+      display: flex;
+      margin-right: 10px;
+    }
+  }
+}

@@ -1,0 +1,17 @@
+.account-container {
+  background: #fff;
+  margin: 20px auto;
+  padding: 20px;
+  width: 80%;
+  box-shadow: $smallBoxShadow;
+
+  .info-row {
+    padding: 10px;
+    border-bottom: 1px solid #d0d0d0;
+
+    .info-row__header {
+      margin-bottom: 10px;
+      font-size: 14pt;
+    }
+  }
+}

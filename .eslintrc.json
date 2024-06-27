@@ -1,0 +1,11 @@
+{
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "semi": ["warn", "always"],
+    "quotes": ["warn", "single"],
+    "prefer-const": ["warn"],
+    "comma-dangle": "off",
+    "no-unreachable": "error",
+    "import/no-anonymous-default-export": "off"
+  }
+}

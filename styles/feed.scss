@@ -1,0 +1,63 @@
+.project-view {
+  height: 100vh;
+  background:#303030;
+  padding: 20px;
+  .project-heading {
+    margin: 20px 0;
+    height: 50px;
+    display: flex;
+    align-items: center;
+
+    .project-name {
+      font-size: 18pt;
+    }
+
+    .project-tool {
+      cursor: pointer;
+    }
+
+    input {
+      padding: 10px;
+    }
+  }
+}
+
+.project-modules__container {
+  padding: 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  .module__container {
+    width: 50%;
+    box-sizing: border-box;
+    flex: 1;
+
+    .module__block {
+      height: 100%;
+      padding: 20px;
+      background: #fff;
+      border: 1px solid #d0d0d0;
+      color: #000000;
+      box-sizing: border-box;
+      cursor: pointer;
+      transition: background-color 0.15s ease-in;
+
+      &:hover {
+        background: #f0f0f0;
+      }
+
+      .module__heading {
+        display: flex;
+        align-items: center;
+
+        .module__icon {
+          display: flex;
+          align-items: center;
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+}
+

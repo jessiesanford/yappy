@@ -1,0 +1,113 @@
+.editor-container {
+  position: fixed;
+  z-index: 1010;
+  width: 500px;
+  top: 200px;
+  right: 200px;
+  margin-left: auto;
+  transition: opacity 0.2s ease-in;
+  overflow: hidden;
+  box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
+}
+
+.editor {
+  height: 700px;
+  margin: auto;
+  scroll-behavior: smooth;
+  overflow: auto;
+  position: relative;
+
+  .ProseMirror {
+    overflow: hidden;
+
+    &.ProseMirror-focused {
+      outline: none;
+    }
+  }
+
+  .ProseMirror-yjs-cursor {
+    position: relative;
+    margin-left: -1px;
+    margin-right: -1px;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-color: orange;
+    word-break: normal;
+    pointer-events: none;
+    text-transform: none;
+
+    & > div {
+      font-family: $defaultFont;
+      position: absolute;
+      top: -1.05em;
+      left: -1px;
+      font-size: 13px;
+      background-color: #fa8100;
+      font-style: normal;
+      font-weight: normal;
+      line-height: normal;
+      user-select: none;
+      color: white;
+      padding-left: 2px;
+      padding-right: 2px;
+      white-space: nowrap;
+    }
+  }
+
+  .page {
+    padding: 40px 100px;
+    box-sizing: border-box;
+    background: #fff;
+    min-height: 700px;
+    margin: auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+
+    &.normal {
+      width: 9.5in;
+      height: 11in;
+      padding: 1in 1.5in 1in 1.5in;
+    }
+
+    p {
+      font-family: 'Courier', serif;
+      color: #101010;
+      //width: 460px;
+      width: 300px;
+      position: relative;
+      margin-bottom: 10px;
+      font-size: 12pt;
+
+      &.placeholder::before {
+        display: block;
+        cursor: text;
+        position: absolute;
+        opacity: 0.2;
+      }
+    }
+
+    p.paragraph {
+      //margin-left: calc(4in - 1.5in);
+      //margin-left: 100px;
+
+      &.placeholder::before {
+        content: "Paragraph";
+      }
+    }
+
+    p.character {
+      text-transform: uppercase;
+      //margin-left: calc(4.5in - 1.5in);
+      margin-left: 100px;
+      &.placeholder::before {
+        content: "Character";
+      }
+    }
+
+    p.dialogue {
+      margin-left: 100px;
+      &.placeholder::before {
+        content: "Dialogue";
+      }
+    }
+  }
+}

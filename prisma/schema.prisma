@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String         @id @default(cuid())
+  handle          String         @unique
+  email           String         @unique
+  name            String?
+  hash            String
+  salt            String
+  registeredAt    DateTime       @default(now())
+  lastActiveAt    DateTime?
+  projects        Project[]      @relation(name: "createdBy")
+  updatedProjects Project[]      @relation(name: "updatedBy")
+  ProjectShare    ProjectShare[]
+  sharedProjects  Project[]      @relation("sharedUsers")
+}
+
+model Project {
+  id          String  @id @default(cuid())
+  image       String?
+  name        String
+  color       String?
+  description String
+
+  createdUser User   @relation("createdBy", fields: [createdBy], references: [id])
+  createdBy   String
+  updatedUser User   @relation("updatedBy", fields: [updatedBy], references: [id])
+  updatedBy   String
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  isTrashed  Boolean  @default(false)
+  isArchived Boolean  @default(false)
+
+  sharedUsers  User[]         @relation("sharedUsers")
+  ProjectShare ProjectShare[]
+}
+
+model ProjectShare {
+  id        String  @id @default(cuid())
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId String
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  inviteEmail String?
+
+  @@unique([projectId, userId])
+}

@@ -1,0 +1,40 @@
+.studio-toolbar {
+  background: #e0e0e0;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  //position: absolute;
+  width: 100%;
+  height: 50px;
+  z-index: $z-index-layer1;
+
+  button.create-project {
+    margin-right: 10px;
+  }
+
+  .studio-toolbar__button {
+    background: $ourBlue;
+    padding: 5px 8px;
+    border-radius: 3px;
+    display: flex;
+    width: fit-content;
+    color: #fff;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: all 0.1s ease-in;
+
+    &.disabled {
+      background: #a0a0a0;
+      color: #404040;
+      cursor: default;
+
+      &:hover {
+        filter: none;
+      }
+    }
+
+    &:hover {
+      filter: brightness(1.2);
+    }
+  }
+}

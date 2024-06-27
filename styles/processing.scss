@@ -1,0 +1,51 @@
+.processing-indicator {
+  position: absolute;
+  top: 25%;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: $z-index-processing;
+  width: 400px;
+  border-radius: 5px;
+  background: #0070f3;
+  padding: 10px;
+  text-align: center;
+}
+
+@keyframes dot-fade {
+  0%, 100% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+}
+
+.processing-dots {
+  display: flex;
+  font-size: 12pt;
+}
+
+.processing-dot {
+  display: block;
+  animation: dot-fade 0.5s infinite;
+}
+
+.dot-1 {
+  animation-delay: 0s;
+}
+
+.dot-2 {
+  animation-delay: 0.15s;
+}
+
+.dot-3 {
+  animation-delay: 0.25s;
+}

@@ -1,0 +1,41 @@
+.editor-toolbar {
+  background: #000000;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  height: 60px;
+
+  .toolbar-section {
+    cursor: grab;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+  }
+
+  .toolbar-button {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 2px;
+
+    &.active {
+      background: #007bff;
+    }
+
+    .toolbar-button__icon {
+      display: flex;
+      align-self: center;
+    }
+
+    .toolbar-button__label {
+
+    }
+
+  }
+
+  .toolbar-element-select {
+    width: 100%;
+  }
+}
